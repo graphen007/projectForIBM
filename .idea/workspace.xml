@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d80bd710-649e-4d8c-b90a-bb8a52956ddc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/github.com/hyperledger/fabric" afterPath="$PROJECT_DIR$/src/github.com/hyperledger/fabric" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/GOPATH__goProjects_.xml" afterPath="$PROJECT_DIR$/.idea/libraries/GOPATH__goProjects_.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
+    <list id="51e67f5d-9234-4aa4-9a99-854c0c993a88" name="Failed commit: Default" comment="working commit ass this">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/github.com/hyperledger/fabric" afterPath="$PROJECT_DIR$/src/github.com/hyperledger/fabric" />
     </list>
     <ignored path="goProjects.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,9 +28,11 @@
       <file leaf-file-name="chaincode_start.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/graphen007/start/chaincode_start.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="22">
+              <caret line="15" column="22" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
+              <folding>
+                <element signature="e#612#693#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -585,7 +588,14 @@
       <option name="project" value="LOCAL" />
       <updated>1478793152073</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="working commit">
+      <created>1478967184333</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1478967184333</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -632,7 +642,8 @@
     <MESSAGE value="it build!" />
     <MESSAGE value="borked commit" />
     <MESSAGE value="working commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="working commit" />
+    <MESSAGE value="working commit ass this" />
+    <option name="LAST_COMMIT_MESSAGE" value="working commit ass this" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -647,7 +658,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#612#693#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -673,7 +686,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#612#693#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -699,7 +714,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#612#693#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -725,9 +742,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/graphen007/start/chaincode_start.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="22">
+          <caret line="15" column="22" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
+          <folding>
+            <element signature="e#612#693#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
