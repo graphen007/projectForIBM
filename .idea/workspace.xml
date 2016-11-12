@@ -1,29 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d80bd710-649e-4d8c-b90a-bb8a52956ddc" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/.gitignore" afterPath="$PROJECT_DIR$/src/github.com/graphen007/.gitignore" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/LICENSE" afterPath="$PROJECT_DIR$/src/github.com/graphen007/LICENSE" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/LearnChaincodeREST.postman_collection.json" afterPath="$PROJECT_DIR$/src/github.com/graphen007/LearnChaincodeREST.postman_collection.json" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/README.md" afterPath="$PROJECT_DIR$/src/github.com/graphen007/README.md" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/README_zh-cn.md" afterPath="$PROJECT_DIR$/src/github.com/graphen007/README_zh-cn.md" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/docs/setup.md" afterPath="$PROJECT_DIR$/src/github.com/graphen007/docs/setup.md" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/finished/chaincode_finished.go" afterPath="$PROJECT_DIR$/src/github.com/graphen007/finished/chaincode_finished.go" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/imgs/branch.png" afterPath="$PROJECT_DIR$/src/github.com/graphen007/imgs/branch.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/imgs/branches.PNG" afterPath="$PROJECT_DIR$/src/github.com/graphen007/imgs/branches.PNG" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/imgs/deploy_example.PNG" afterPath="$PROJECT_DIR$/src/github.com/graphen007/imgs/deploy_example.PNG" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/imgs/deploy_response.PNG" afterPath="$PROJECT_DIR$/src/github.com/graphen007/imgs/deploy_response.PNG" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/imgs/fork.png" afterPath="$PROJECT_DIR$/src/github.com/graphen007/imgs/fork.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/imgs/invoke_example.PNG" afterPath="$PROJECT_DIR$/src/github.com/graphen007/imgs/invoke_example.PNG" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/imgs/invoke_response.PNG" afterPath="$PROJECT_DIR$/src/github.com/graphen007/imgs/invoke_response.PNG" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/imgs/query2_response.PNG" afterPath="$PROJECT_DIR$/src/github.com/graphen007/imgs/query2_response.PNG" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/imgs/query_example.PNG" afterPath="$PROJECT_DIR$/src/github.com/graphen007/imgs/query_example.PNG" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/imgs/query_response.PNG" afterPath="$PROJECT_DIR$/src/github.com/graphen007/imgs/query_response.PNG" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/imgs/registrar_post.png" afterPath="$PROJECT_DIR$/src/github.com/graphen007/imgs/registrar_post.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/imgs/registrar_post_response.png" afterPath="$PROJECT_DIR$/src/github.com/graphen007/imgs/registrar_post_response.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/start/chaincode_start.go" afterPath="$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/graphen007/start/start.exe" afterPath="$PROJECT_DIR$/src/github.com/graphen007/start/start.exe" />
+    <list default="true" id="d80bd710-649e-4d8c-b90a-bb8a52956ddc" name="Default" comment="working commit ass this">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/github.com/hyperledger/fabric" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/github.com/graphen007/finished/chaincode_finished.go" afterPath="$PROJECT_DIR$/src/github.com/graphen007/finished/chaincode_finished.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" afterPath="$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" />
     </list>
     <ignored path="goProjects.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -46,10 +28,10 @@
       <file leaf-file-name="chaincode_start.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22">
-              <caret line="15" column="22" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
+            <state relative-caret-position="242">
+              <caret line="25" column="45" selection-start-line="25" selection-start-column="45" selection-end-line="25" selection-end-column="45" />
               <folding>
-                <element signature="e#612#693#0" expanded="true" />
+                <element signature="e#612#694#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -71,7 +53,7 @@
             <state relative-caret-position="2354">
               <caret line="112" column="1" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
               <folding>
-                <element signature="e#590#671#0" expanded="true" />
+                <element signature="e#590#672#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -92,8 +74,8 @@
       <list>
         <option value="$PROJECT_DIR$/src/github.com/graphen007/finished/chaincode_finished.go" />
         <option value="$PROJECT_DIR$/src/github.com/graphen007/.gitignore" />
-        <option value="$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" />
         <option value="$PROJECT_DIR$/src/graphen007/start/chaincode_start.go" />
+        <option value="$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" />
       </list>
     </option>
   </component>
@@ -579,7 +561,14 @@
       <option name="project" value="LOCAL" />
       <updated>1478967607145</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="working commit ass this">
+      <created>1478967702849</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1478967702849</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -631,7 +620,9 @@
     <option name="LAST_COMMIT_MESSAGE" value="working commit ass this" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="antWorkspaceConfiguration">
@@ -644,7 +635,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#612#693#0" expanded="true" />
+            <element signature="e#612#694#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -662,7 +653,7 @@
         <state relative-caret-position="2354">
           <caret line="112" column="1" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
           <folding>
-            <element signature="e#590#671#0" expanded="true" />
+            <element signature="e#590#672#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -672,7 +663,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#612#693#0" expanded="true" />
+            <element signature="e#612#694#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -690,7 +681,7 @@
         <state relative-caret-position="2464">
           <caret line="112" column="1" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
           <folding>
-            <element signature="e#590#671#0" expanded="true" />
+            <element signature="e#590#672#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -700,7 +691,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#612#693#0" expanded="true" />
+            <element signature="e#612#694#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -712,7 +703,7 @@
         <state relative-caret-position="2354">
           <caret line="112" column="1" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
           <folding>
-            <element signature="e#590#671#0" expanded="true" />
+            <element signature="e#590#672#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -727,10 +718,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="15" column="22" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
+        <state relative-caret-position="242">
+          <caret line="25" column="45" selection-start-line="25" selection-start-column="45" selection-end-line="25" selection-end-column="45" />
           <folding>
-            <element signature="e#612#693#0" expanded="true" />
+            <element signature="e#612#694#0" expanded="true" />
           </folding>
         </state>
       </provider>
