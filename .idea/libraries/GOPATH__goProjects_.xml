@@ -14,7 +14,6 @@
       <root url="file://C:/Go/src/encoding" />
       <root url="file://C:/Go/src/sync" />
       <root url="file://C:/Go/src/crypto" />
-      <root url="file://C:/Go/src/shim" />
       <root url="file://C:/Go/src/strconv" />
       <root url="file://C:/Go/src/unicode" />
       <root url="file://C:/Go/src/cmd" />
@@ -61,7 +60,6 @@
       <root url="file://C:/Go/src/encoding" />
       <root url="file://C:/Go/src/sync" />
       <root url="file://C:/Go/src/crypto" />
-      <root url="file://C:/Go/src/shim" />
       <root url="file://C:/Go/src/strconv" />
       <root url="file://C:/Go/src/unicode" />
       <root url="file://C:/Go/src/cmd" />
