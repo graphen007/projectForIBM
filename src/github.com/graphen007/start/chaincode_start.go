@@ -137,14 +137,14 @@ func (t *SimpleChaincode) read_list(stub *shim.ChaincodeStub, args []string) ([]
 	if err != nil {
 		return nil, errors.New("Failed to get intList")
 	}
-	var integer integerDefine
-	err = json.Unmarshal(intList, &integer)
+	var intToReturn integerDefine
+	err = json.Unmarshal(intList, &intToReturn)
 	if err != nil{
 		fmt.Println("you dun goofed")
 	}
 
 
-	return integer, nil
+	return intToReturn, nil
 }
 func (t *SimpleChaincode) init_integer(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	var user string

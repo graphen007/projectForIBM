@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d80bd710-649e-4d8c-b90a-bb8a52956ddc" name="Default" comment="working commit ass this">
+    <list default="true" id="d80bd710-649e-4d8c-b90a-bb8a52956ddc" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" afterPath="$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" />
     </list>
@@ -26,8 +26,8 @@
       <file leaf-file-name="chaincode_start.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="650">
-              <caret line="155" column="99" selection-start-line="155" selection-start-column="99" selection-end-line="155" selection-end-column="99" />
+            <state relative-caret-position="606">
+              <caret line="146" column="26" selection-start-line="146" selection-start-column="26" selection-end-line="146" selection-end-column="26" />
               <folding>
                 <element signature="e#612#710#0" expanded="true" />
               </folding>
@@ -656,7 +656,14 @@
       <option name="project" value="LOCAL" />
       <updated>1479121597547</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="working commit ass this">
+      <created>1479122929725</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1479122929725</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -844,8 +851,8 @@
     <entry file="file://$PROJECT_DIR$/src/github.com/hyperledger/fabric/core/chaincode/shim/java/src/main/java/example/Example.java" />
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="650">
-          <caret line="155" column="99" selection-start-line="155" selection-start-column="99" selection-end-line="155" selection-end-column="99" />
+        <state relative-caret-position="606">
+          <caret line="146" column="26" selection-start-line="146" selection-start-column="26" selection-end-line="146" selection-end-column="26" />
           <folding>
             <element signature="e#612#710#0" expanded="true" />
           </folding>
