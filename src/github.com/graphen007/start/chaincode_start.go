@@ -92,8 +92,9 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 	}else if function == "read_list"{
 		return t.read_list(stub,args)
 	}
-	fmt.Println("query did not find func: " + function)
 
+
+	fmt.Println("query did not find func: " + function)
 	return nil, errors.New("Received unknown function query")
 }
 
@@ -134,14 +135,11 @@ func (t *SimpleChaincode) read(stub *shim.ChaincodeStub, args []string) ([]byte,
 
 func (t *SimpleChaincode) read_list(stub *shim.ChaincodeStub, args []string) ([]byte, error){
 
-	intList, err := stub.GetState(integerIndexname)
+	intList, err := stub.GetState(args[0])
 	if err != nil {
 		return nil, errors.New("Failed to get intList")
 	}
-
-
 	var integerIndex []string
-
 
 	err = json.Unmarshal(intList, &integerIndex)
 	if err != nil{
