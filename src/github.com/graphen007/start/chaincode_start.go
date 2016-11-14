@@ -22,6 +22,7 @@ import (
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
+	
 )
 
 
@@ -113,7 +114,7 @@ func (t *SimpleChaincode) write(stub *shim.ChaincodeStub, args []string) ([]byte
 	}
 	return nil, nil
 }
-func (t *SimpleChaincode) read(stub *shim.ChaincodeStub, args []string) (integerDefine, error) {
+func (t *SimpleChaincode) read(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	var name, jsonResp string
 	var err error
 
@@ -142,9 +143,21 @@ func (t *SimpleChaincode) read_list(stub *shim.ChaincodeStub, args []string) ([]
 	if err != nil{
 		fmt.Println("you dun goofed")
 	}
+	var res = integerDefine{}
+	for i:= range integerIndexname {
+		intAsBytes, err := stub.GetState(integerIndexname[i])
+		if err != nil{
+			return nil, errors.New("You suck!")
+		}
+
+		json.Unmarshal(intAsBytes, &res)
 
 
-	return intToReturn, nil
+
+	}
+
+
+	return res, nil
 }
 func (t *SimpleChaincode) init_integer(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	var user string
