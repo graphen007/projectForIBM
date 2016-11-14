@@ -134,12 +134,13 @@ func (t *SimpleChaincode) init_integer(stub *shim.ChaincodeStub, args []string) 
 	var err error
 	//var err error
 	fmt.Println("Creating the Int")
-	if len(args) != 2 {
+	if len(args) != 3 {
 		return nil, errors.New("Gimme more arguments, 2 to be exact, User and number pliz")
 	}
 
 	user = args[0]
 	number = args[1]
+	name:= args[2]
 
 	intAsBytes, err := stub.GetState(number)
 	if err != nil{
@@ -156,8 +157,8 @@ func (t *SimpleChaincode) init_integer(stub *shim.ChaincodeStub, args []string) 
 
 
 
-	str := `{"user": "` + user + `", "number": "` + number + `"}`  		//build the Json element
-	err = stub.PutState(user, []byte(str))					// store int with key
+	str := `{"user": "` + user + `", "number": "` + number + `"name": "` + name + `"}`  		//build the Json element
+	err = stub.PutState(name, []byte(str))					// store int with key
 	if err != nil{
 		return nil, err
 	}
