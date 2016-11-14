@@ -158,7 +158,7 @@ func (t *SimpleChaincode) init_integer(stub *shim.ChaincodeStub, args []string) 
 
 
 	str := `{"user": "` + user + `", "number": "` + number + `"name": "` + name + `"}`  		//build the Json element
-	err = stub.PutState(name, []byte(str))					// store int with key
+	err = stub.PutState(name, []byte(str))								// store int with key
 	if err != nil{
 		return nil, err
 	}
@@ -174,7 +174,7 @@ func (t *SimpleChaincode) init_integer(stub *shim.ChaincodeStub, args []string) 
 	json.Unmarshal(intAsBytes, &integerIndex)
 
 	//append it to the list
-	integerIndex = append(integerIndex, number)
+	integerIndex = append(integerIndex, name)
 	jsonAsBytes, _ := json.Marshal(integerIndex)
 	err = stub.PutState(integerIndexname, jsonAsBytes)
 
