@@ -21,10 +21,24 @@ import (
 	"fmt"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"encoding/json"
 )
+
 
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
+}
+
+var integerIndexname = "_integerindex"
+
+type allIntegers struct {
+	AllInts []integerDefine `json:"all_integers"`
+}
+
+type integerDefine struct{
+	User string `json:"user"`
+	TheNumber string `json:"number"`
+
 }
 
 // ============================================================================================================================
@@ -57,6 +71,8 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
 		return t.Init(stub, "init", args)
 	} else if function == "write" {
 		return t.write(stub, args)
+	} else if function == "init_integer"{
+		return t.init_integer(stub,args)
 	}
 	fmt.Println("invoke did not find func: " + function)
 
@@ -110,4 +126,59 @@ func (t *SimpleChaincode) read(stub *shim.ChaincodeStub, args []string) ([]byte,
 	}
 
 	return valAsbytes, nil
+}
+
+func (t *SimpleChaincode) init_integer(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+	var user string
+	var number string
+	var err error
+	//var err error
+	fmt.Println("Creating the Int")
+	if len(args) != 2 {
+		return nil, errors.New("Gimme more arguments, 2 to be exact, User and number pliz")
+	}
+
+	user = args[0]
+	number = args[1]
+
+	intAsBytes, err := stub.GetState(number)
+	if err != nil{
+		return nil, errors.New("Failed to get integer")
+	}
+
+	res := integerDefine{} 						// Get the above defined marble struct
+	json.Unmarshal(intAsBytes, &res)
+	if res.TheNumber == number {
+		fmt.Println("The number already exists: " + number)
+		fmt.Println(res)
+		return nil, errors.New("This number already exists")
+	}
+
+
+
+	str := `{"user": "` + user + `", "number": "` + number + `"}`  		//build the Json element
+	err = stub.PutState(user, []byte(str))					// store int with key
+	if err != nil{
+		return nil, err
+	}
+
+
+	//get the int index
+	intAsBytes, err = stub.GetState(integerIndexname)
+	if err != nil{
+		return nil, errors.New("you fucked up")
+	}
+
+	var integerIndex[]string
+	json.Unmarshal(intAsBytes, &integerIndex)
+
+	//append it to the list
+	integerIndex = append(integerIndex, number)
+	jsonAsBytes, _ := json.Marshal(integerIndex)
+	err = stub.PutState(integerIndexname, jsonAsBytes)
+
+
+	fmt.Println("Ended of creation")
+
+	return nil, nil
 }
