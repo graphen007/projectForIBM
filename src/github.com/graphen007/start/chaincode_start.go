@@ -38,6 +38,7 @@ type allIntegers struct {
 type integerDefine struct{
 	User string `json:"user"`
 	TheNumber string `json:"number"`
+	Name string `json:"name"`
 
 }
 
@@ -87,6 +88,8 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 	// Handle different functions
 	if function == "read" {                            //read a variable
 		return t.read(stub, args)
+	}else if function =="read_list"{
+		return t.read_list(stub,args)
 	}
 	fmt.Println("query did not find func: " + function)
 
@@ -128,6 +131,21 @@ func (t *SimpleChaincode) read(stub *shim.ChaincodeStub, args []string) ([]byte,
 	return valAsbytes, nil
 }
 
+func (t *SimpleChaincode) read_list(stub *shim.ChaincodeStub, args []string) ([]byte, error){
+
+	intList, err := stub.GetState(integerIndexname)
+	if err != nil {
+		return nil, errors.New("Failed to get intList")
+	}
+	var integer integerDefine
+	err = json.Unmarshal(intList, &integer)
+	if err != nil{
+		fmt.Println("you dun goofed")
+	}
+
+
+	return integer, nil
+}
 func (t *SimpleChaincode) init_integer(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	var user string
 	var number string
