@@ -147,22 +147,18 @@ func (t *SimpleChaincode) read_list(stub *shim.ChaincodeStub, args []string) ([]
 	if err != nil{
 		fmt.Println("you dun goofed")
 	}
-
-	var res = integerDefine{}
+	var intAsBytes []byte
 		for i:= range integerIndex {
-		intAsBytes, err := stub.GetState(integerIndex[i])
+		intAsBytes, err = stub.GetState(integerIndex[i])
 		if err != nil{
 			return nil, errors.New("You suck!")
 		}
-
-		json.Unmarshal(intAsBytes, &res)
-
 
 
 	}
 
 
-	return res, nil
+	return intAsBytes, nil
 }
 func (t *SimpleChaincode) init_integer(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	var user string
