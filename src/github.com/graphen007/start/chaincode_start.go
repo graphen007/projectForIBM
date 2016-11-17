@@ -172,7 +172,7 @@ func (t *SimpleChaincode) transfer_money(stub *shim.ChaincodeStub, args []string
 	}
 	res := integerDefine{}
 	json.Unmarshal(intAsBytes, &res)										//un stringify it aka JSON.parse()
-	res.TheNumber = res.TheNumber -  number
+	res.TheNumber = (res.TheNumber - number)
 
 
 	jsonAsBytes, _ := json.Marshal(res)
@@ -187,7 +187,7 @@ func (t *SimpleChaincode) transfer_money(stub *shim.ChaincodeStub, args []string
 	}
 	res = integerDefine{}
 	json.Unmarshal(intAsBytes, &res)										//un stringify it aka JSON.parse()
-	res.TheNumber = res.TheNumber +  number
+	res.TheNumber = (res.TheNumber +  number)
 
 
 	jsonAsBytes, _ = json.Marshal(res)
