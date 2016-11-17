@@ -157,6 +157,10 @@ func (t *SimpleChaincode) read_list(stub *shim.ChaincodeStub, args []string) ([]
 
 	return finalList, nil
 }
+func (t *SimpleChaincode) change_user(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+	return nil, nil;
+}
+
 func (t *SimpleChaincode) init_integer(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	var user string
 	var number string
