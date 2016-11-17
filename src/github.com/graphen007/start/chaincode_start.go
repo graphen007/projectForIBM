@@ -23,6 +23,7 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
 
+	"strconv"
 )
 
 
@@ -38,7 +39,7 @@ type allIntegers struct {
 
 type integerDefine struct{
 	User string `json:"user"`
-	TheNumber string `json:"number"`
+	TheNumber int64 `json:"number"`
 	Name string `json:"name"`
 
 }
@@ -75,6 +76,8 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
 		return t.write(stub, args)
 	} else if function == "init_integer"{
 		return t.init_integer(stub,args)
+	}else if function == "transfer_money"{
+		return t.transfer_money(stub,args)
 	}
 	fmt.Println("invoke did not find func: " + function)
 
@@ -157,8 +160,46 @@ func (t *SimpleChaincode) read_list(stub *shim.ChaincodeStub, args []string) ([]
 
 	return finalList, nil
 }
-func (t *SimpleChaincode) change_user(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
-	return nil, nil;
+func (t *SimpleChaincode) transfer_money(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+	var number int64
+	var err error
+	number, err = strconv.ParseInt(args[2], 10, 64)
+
+
+	intAsBytes, err := stub.GetState(args[0])
+	if err != nil {
+		return nil, errors.New("Failed to get thing")
+	}
+	res := integerDefine{}
+	json.Unmarshal(intAsBytes, &res)										//un stringify it aka JSON.parse()
+	res.TheNumber = res.TheNumber -  number
+
+
+	jsonAsBytes, _ := json.Marshal(res)
+	err = stub.PutState(args[0], jsonAsBytes)								//rewrite the marble with id as key
+	if err != nil {
+		return nil, err
+	}
+
+	intAsBytes, err = stub.GetState(args[1])
+	if err != nil {
+		return nil, errors.New("Failed to get thing")
+	}
+	res = integerDefine{}
+	json.Unmarshal(intAsBytes, &res)										//un stringify it aka JSON.parse()
+	res.TheNumber = res.TheNumber +  number
+
+
+	jsonAsBytes, _ = json.Marshal(res)
+	err = stub.PutState(args[1], jsonAsBytes)								//rewrite the marble with id as key
+	if err != nil {
+		return nil, err
+	}
+
+
+
+
+	return nil, nil
 }
 
 func (t *SimpleChaincode) init_integer(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
@@ -182,11 +223,7 @@ func (t *SimpleChaincode) init_integer(stub *shim.ChaincodeStub, args []string) 
 
 	res := integerDefine{} 						// Get the above defined marble struct
 	json.Unmarshal(intAsBytes, &res)
-	if res.TheNumber == number {
-		fmt.Println("The number already exists: " + number)
-		fmt.Println(res)
-		return nil, errors.New("This number already exists")
-	}
+
 
 
 
@@ -216,3 +253,4 @@ func (t *SimpleChaincode) init_integer(stub *shim.ChaincodeStub, args []string) 
 
 	return nil, nil
 }
+
