@@ -167,7 +167,7 @@ func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args 
 
 
 
-	var res = integerDefine{}
+	res := integerDefine{}
 
 
 		intAsBytes,err := stub.GetState(args[0])
@@ -176,6 +176,7 @@ func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args 
 
 
 			res.TheNumber = (res.TheNumber - number)
+			res.Name = args[0]
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)								//rewrite the marble with id as key
 			if err != nil {
@@ -184,12 +185,15 @@ func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args 
 
 		intAsBytes,err = stub.GetState(args[1])
 
-			res.TheNumber = (res.TheNumber - number)
+			res.TheNumber = (res.TheNumber + number)
+			res.Name = args[1]
 			jsonAsBytes, _ = json.Marshal(res)
 			err = stub.PutState(args[1], jsonAsBytes)								//rewrite the marble with id as key
 			if err != nil {
 				return nil, err
 			}
+
+
 
 
 	return nil, nil
