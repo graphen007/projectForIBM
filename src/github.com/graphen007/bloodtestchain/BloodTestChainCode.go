@@ -182,12 +182,16 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 
 	bloodAsBytes, err := stub.GetState(bloodTestID)
 	if err != nil{
-		return nil, errors.New("Something went wrong")
-	}else if bloodAsBytes == nil{
-		return nil, errors.New("Bloodtest already exists")
+		return nil, errors.New("blood")
+	}
+	res := bloodTest{}
+	json.Unmarshal(bloodAsBytes, &res)
+	if res.BloodTestID == bloodTestID{
+
+		return nil, errors.New("This marble arleady exists")				//all stop a marble by this name exists
 	}
 
-	res := bloodTest{} 						// Get the above defined marble struct
+							// Get the above defined marble struct
 	json.Unmarshal(bloodAsBytes, &res)
 
 	str := `{"timeStamp": "` + timeStamp + `", "name": "` + name + `", "CPR": "` + CPR + `", "doctor": "` + doctor +`", "hospital": "` + hospital +`", "status": "` + status +`", "bloodTestID": "` + bloodTestID +`"}`  		//build the Json element
@@ -214,6 +218,6 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 
 	fmt.Println("Ended of creation")
 
-	return nil, errors.New("Created the bloodtest")
+	return nil, nil
 }
 
