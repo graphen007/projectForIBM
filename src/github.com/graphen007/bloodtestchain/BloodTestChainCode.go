@@ -201,7 +201,7 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 	}
 
 
-	//get the int index
+	//get the blood index
 	bloodAsBytes, err = stub.GetState(bloodTestIndex)
 	if err != nil{
 		return nil, errors.New("you fucked up")
