@@ -168,7 +168,7 @@ func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args 
 	if err != nil{
 
 	}
-	res := integerDefine{}
+
 
 	var intIndex []string
 	listAsBytes, err := stub.GetState(integerIndexname)
@@ -177,6 +177,7 @@ func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args 
 
 	for i := range intIndex{
 		intAsBytes,err := stub.GetState(intIndex[i])
+		res := integerDefine{}
 		json.Unmarshal(intAsBytes, &res)
 
 		//if res.Name == args[0]{
