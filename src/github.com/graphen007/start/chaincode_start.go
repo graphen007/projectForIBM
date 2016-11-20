@@ -25,6 +25,7 @@ import (
 
 	"strconv"
 
+
 )
 
 
@@ -40,7 +41,7 @@ type allIntegers struct {
 
 type integerDefine struct{
 	User string `json:"user"`
-	Number int64 `json:"number"`
+	Number string `json:"number"`
 	Name string `json:"name"`
 
 }
@@ -162,9 +163,9 @@ func (t *SimpleChaincode) read_list(stub shim.ChaincodeStubInterface, args []str
 	return finalList, nil
 }
 func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	var number int64
+	var number string
 	var err error
-	number, err = strconv.ParseInt(args[2], 10, 64)
+	number = args[2]
 	if err != nil{
 
 	}
@@ -177,22 +178,38 @@ func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args 
 
 	for i := range intIndex{
 		intAsBytes,err := stub.GetState(intIndex[i])
+		if err != nil{
+			
+		}
 		res := integerDefine{}
 		json.Unmarshal(intAsBytes, &res)
 		fmt.Println("looking at:" + res.Name )
 
-		//if res.Name == args[0]{
-			res.Number = (res.Number - number)
+		if res.Name == args[0]{
+
+			convertedNumber,err := strconv.Atoi(res.Number)
+			convertedNumberInput,err := strconv.Atoi(number)
+
+			convertedNumber = convertedNumber - convertedNumberInput
+
+
+			res.Number = strconv.Itoa(convertedNumber)
 
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)								//rewrite the marble with id as key
 			if err != nil {
 				return nil, err
 			}
-		//}
+		}
 
 		if res.Name == args[1]{
-			res.Number = (res.Number + number)
+			convertedNumber,err := strconv.Atoi(res.Number)
+			convertedNumberInput,err := strconv.Atoi(number)
+
+			convertedNumber = convertedNumber + convertedNumberInput
+
+
+			res.Number = strconv.Itoa(convertedNumber)
 
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[1], jsonAsBytes)								//rewrite the marble with id as key
