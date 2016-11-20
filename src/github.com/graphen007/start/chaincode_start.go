@@ -246,7 +246,7 @@ func (t *SimpleChaincode) init_integer(stub shim.ChaincodeStubInterface, args []
 
 
 
-	str := `{"user": "` + user + `", "number": "` + number + `"name": "` + name + `"}`  		//build the Json element
+	str := `{"user": "` + user + `", "number": "` + number + `", "name": "` + name + `"}`  		//build the Json element
 	err = stub.PutState(name, []byte(str))								// store int with key
 	if err != nil{
 		return nil, err
