@@ -179,7 +179,7 @@ func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args 
 		intAsBytes,err := stub.GetState(intIndex[i])
 		res := integerDefine{}
 		json.Unmarshal(intAsBytes, &res)
-		fmt.Println("looking at:" + res)
+		fmt.Println("looking at:" + res.Name )
 
 		//if res.Name == args[0]{
 			res.Number = (res.Number - number)
