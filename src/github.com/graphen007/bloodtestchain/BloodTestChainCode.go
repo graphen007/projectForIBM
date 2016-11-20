@@ -190,9 +190,6 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 	res := bloodTest{} 						// Get the above defined marble struct
 	json.Unmarshal(bloodAsBytes, &res)
 
-
-
-
 	str := `{"timeStamp": "` + timeStamp + `", "name": "` + name + `", "CPR": "` + CPR + `", "doctor": "` + doctor +`", "hospital": "` + hospital +`", "status": "` + status +`", "bloodTestID": "` + bloodTestID +`"}`  		//build the Json element
 	err = stub.PutState(bloodTestID, []byte(str))								// store int with key
 	if err != nil{
@@ -217,6 +214,6 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 
 	fmt.Println("Ended of creation")
 
-	return nil, nil
+	return nil, errors.New("Created the bloodtest")
 }
 
