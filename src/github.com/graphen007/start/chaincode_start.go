@@ -24,6 +24,7 @@ import (
 	"encoding/json"
 
 	"strconv"
+	"strings"
 )
 
 
@@ -166,35 +167,48 @@ func (t *SimpleChaincode) transfer_money(stub *shim.ChaincodeStub, args []string
 	number, err = strconv.ParseInt(args[2], 10, 64)
 
 
-	intAsBytes, err := stub.GetState(args[0])
+
+
+
+	intAsBytes, err := stub.GetState(integerIndexname)
 	if err != nil {
 		return nil, errors.New("Failed to get thing")
 	}
-	res := integerDefine{}
-	json.Unmarshal(intAsBytes, &res)										//un stringify it aka JSON.parse()
-	res.TheNumber = (res.TheNumber - number)
+
+	var integerIndex []string
+	json.Unmarshal(intAsBytes, &integerIndex)
+	var res = integerDefine{}
+	for i:= range integerIndex{
+
+		intAsBytes,err = stub.GetState(integerIndex[i])
+
+		json.Unmarshal(intAsBytes, &res)
+
+		if strings.ToLower(res.Name) == strings.ToLower(args[0]){
+			res.TheNumber = (res.TheNumber - number)
+			jsonAsBytes, _ := json.Marshal(res)
+			err = stub.PutState(args[0], jsonAsBytes)								//rewrite the marble with id as key
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if strings.ToLower(res.Name) == strings.ToLower(args[1]){
+			res.TheNumber = (res.TheNumber - number)
+			jsonAsBytes, _ := json.Marshal(res)
+			err = stub.PutState(args[1], jsonAsBytes)								//rewrite the marble with id as key
+			if err != nil {
+				return nil, err
+			}
+		}
 
 
-	jsonAsBytes, _ := json.Marshal(res)
-	err = stub.PutState(args[0], jsonAsBytes)								//rewrite the marble with id as key
-	if err != nil {
-		return nil, err
+
+
 	}
 
-	intAsBytes, err = stub.GetState(args[1])
-	if err != nil {
-		return nil, errors.New("Failed to get thing")
-	}
-	res = integerDefine{}
-	json.Unmarshal(intAsBytes, &res)										//un stringify it aka JSON.parse()
-	res.TheNumber = (res.TheNumber +  number)
 
 
-	jsonAsBytes, _ = json.Marshal(res)
-	err = stub.PutState(args[1], jsonAsBytes)								//rewrite the marble with id as key
-	if err != nil {
-		return nil, err
-	}
 
 
 
