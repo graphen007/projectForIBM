@@ -26,8 +26,8 @@
       <file leaf-file-name="chaincode_start.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1232">
-              <caret line="263" column="31" selection-start-line="263" selection-start-column="31" selection-end-line="263" selection-end-column="31" />
+            <state relative-caret-position="380">
+              <caret line="181" column="40" selection-start-line="181" selection-start-column="40" selection-end-line="181" selection-end-column="40" />
               <folding>
                 <element signature="e#612#723#0" expanded="true" />
               </folding>
@@ -41,18 +41,6 @@
             <state relative-caret-position="0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="chaincode_finished.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/finished/chaincode_finished.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2354">
-              <caret line="112" column="1" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
-              <folding>
-                <element signature="e#590#672#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -810,7 +798,14 @@
       <option name="project" value="LOCAL" />
       <updated>1479659534676</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="working commit ass this">
+      <created>1479661639348</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1479661639348</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -895,7 +890,7 @@
         <state relative-caret-position="2354">
           <caret line="112" column="1" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
           <folding>
-            <element signature="e#590#672#0" expanded="true" />
+            <element signature="e#590#672#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -923,7 +918,7 @@
         <state relative-caret-position="2354">
           <caret line="112" column="1" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
           <folding>
-            <element signature="e#590#672#0" expanded="true" />
+            <element signature="e#590#672#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -951,7 +946,7 @@
         <state relative-caret-position="2464">
           <caret line="112" column="1" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
           <folding>
-            <element signature="e#590#672#0" expanded="true" />
+            <element signature="e#590#672#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -979,7 +974,7 @@
         <state relative-caret-position="2464">
           <caret line="112" column="1" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
           <folding>
-            <element signature="e#590#672#0" expanded="true" />
+            <element signature="e#590#672#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1007,7 +1002,7 @@
         <state relative-caret-position="2354">
           <caret line="112" column="1" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
           <folding>
-            <element signature="e#590#672#0" expanded="true" />
+            <element signature="e#590#672#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1035,7 +1030,7 @@
         <state relative-caret-position="2354">
           <caret line="112" column="1" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
           <folding>
-            <element signature="e#590#672#0" expanded="true" />
+            <element signature="e#590#672#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1063,7 +1058,7 @@
         <state relative-caret-position="2354">
           <caret line="112" column="1" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
           <folding>
-            <element signature="e#590#672#0" expanded="true" />
+            <element signature="e#590#672#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1091,7 +1086,7 @@
         <state relative-caret-position="2354">
           <caret line="112" column="1" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
           <folding>
-            <element signature="e#590#672#0" expanded="true" />
+            <element signature="e#590#672#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1119,7 +1114,7 @@
         <state relative-caret-position="2464">
           <caret line="112" column="1" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
           <folding>
-            <element signature="e#590#672#0" expanded="true" />
+            <element signature="e#590#672#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1149,15 +1144,15 @@
         <state relative-caret-position="2354">
           <caret line="112" column="1" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
           <folding>
-            <element signature="e#590#672#0" expanded="true" />
+            <element signature="e#590#672#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1232">
-          <caret line="263" column="31" selection-start-line="263" selection-start-column="31" selection-end-line="263" selection-end-column="31" />
+        <state relative-caret-position="380">
+          <caret line="181" column="40" selection-start-line="181" selection-start-column="40" selection-end-line="181" selection-end-column="40" />
           <folding>
             <element signature="e#612#723#0" expanded="true" />
           </folding>

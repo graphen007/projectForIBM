@@ -40,7 +40,7 @@ type allIntegers struct {
 
 type integerDefine struct{
 	User string `json:"user"`
-	TheNumber int64 `json:"number"`
+	Number int64 `json:"number"`
 	Name string `json:"name"`
 
 }
@@ -170,7 +170,7 @@ func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args 
 	}
 
 
-	var intIndex []integerDefine
+	var intIndex []string
 	listAsBytes, err := stub.GetState(integerIndexname)
 
 	json.Unmarshal(listAsBytes, &intIndex)
@@ -179,9 +179,10 @@ func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args 
 		intAsBytes,err := stub.GetState(intIndex[i])
 		res := integerDefine{}
 		json.Unmarshal(intAsBytes, &res)
-		intIndex[i].
+		fmt.Println("looking at:" + res)
+
 		//if res.Name == args[0]{
-			res.TheNumber = (res.TheNumber - number)
+			res.Number = (res.Number - number)
 
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)								//rewrite the marble with id as key
@@ -191,7 +192,7 @@ func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args 
 		//}
 
 		if res.Name == args[1]{
-			res.TheNumber = (res.TheNumber + number)
+			res.Number = (res.Number + number)
 
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[1], jsonAsBytes)								//rewrite the marble with id as key
@@ -258,7 +259,7 @@ func (t *SimpleChaincode) init_integer(stub shim.ChaincodeStubInterface, args []
 		return nil, errors.New("you fucked up")
 	}
 
-	var integerIndex[]integerDefine
+	var integerIndex[]string
 	json.Unmarshal(intAsBytes, &integerIndex)
 
 	//append it to the list
