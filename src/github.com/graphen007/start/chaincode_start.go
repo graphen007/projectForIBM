@@ -24,7 +24,7 @@ import (
 	"encoding/json"
 
 	"strconv"
-	
+
 )
 
 
@@ -168,8 +168,6 @@ func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args 
 	if err != nil{
 
 	}
-
-
 	res := integerDefine{}
 
 	var intIndex []string
@@ -181,7 +179,7 @@ func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args 
 		intAsBytes,err := stub.GetState(intIndex[i])
 		json.Unmarshal(intAsBytes, &res)
 
-		if res.Name == args[0]{
+		//if res.Name == args[0]{
 			res.TheNumber = (res.TheNumber - number)
 
 			jsonAsBytes, _ := json.Marshal(res)
@@ -189,7 +187,7 @@ func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args 
 			if err != nil {
 				return nil, err
 			}
-		}
+		//}
 
 		if res.Name == args[1]{
 			res.TheNumber = (res.TheNumber + number)
