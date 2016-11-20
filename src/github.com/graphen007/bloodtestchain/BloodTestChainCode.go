@@ -23,7 +23,7 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
 
-	"strconv"
+
 
 
 )
@@ -33,16 +33,18 @@ import (
 type SimpleChaincode struct {
 }
 
-var integerIndexname = "_integerindex"
+var bloodTestIndex = "_bloodTestIndex"
 
-type allIntegers struct {
-	AllInts []integerDefine `json:"all_integers"`
-}
+type bloodTest struct{
 
-type integerDefine struct{
-	User string `json:"user"`
-	Number string `json:"number"`
+
+	TimeStamp string `json:"timestamp"`
 	Name string `json:"name"`
+	CPR string `json:"CPR"`
+	Doctor string `json:"doctor"`
+	Hospital string `json:"hospital"`
+	Status string `json:"status"`
+	BloodTestID string `json:"BloodTestID"`
 
 }
 
@@ -76,10 +78,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return t.Init(stub, "init", args)
 	} else if function == "write" {
 		return t.write(stub, args)
-	} else if function == "init_integer"{
-		return t.init_integer(stub,args)
-	}else if function == "transfer_money"{
-		return t.transfer_money(stub,args)
+	} else if function == "init_bloodtest"{
+		return t.init_bloodtest(stub,args)
 	}
 	fmt.Println("invoke did not find func: " + function)
 
@@ -140,149 +140,79 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 
 func (t *SimpleChaincode) read_list(stub shim.ChaincodeStubInterface, args []string) ([]byte, error){
 
-	intList, err := stub.GetState(args[0])
+	bloodTestList, err := stub.GetState(args[0])
 	if err != nil {
 		return nil, errors.New("Failed to get intList")
 	}
-	var integerIndex []string
+	var bloodTestIndex []string
 
-	err = json.Unmarshal(intList, &integerIndex)
+	err = json.Unmarshal(bloodTestList, &bloodTestIndex)
 	if err != nil{
 		fmt.Println("you dun goofed")
 	}
 	var finalList []byte
-	var intAsBytes []byte
-		for i:= range integerIndex {
+	var bloodAsBytes []byte
+	for i:= range bloodTestList {
 
-		intAsBytes, err = stub.GetState(integerIndex[i])
-		finalList = append(finalList, intAsBytes...)
+		bloodAsBytes, err = stub.GetState(bloodTestList[i])
+		finalList = append(finalList, bloodAsBytes...)
 
 	}
 
 
 	return finalList, nil
 }
-func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	var number string
-	var err error
-	number = args[2]
-	if err != nil{
 
-	}
+func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
-
-	var intIndex []string
-	listAsBytes, err := stub.GetState(integerIndexname)
-
-	json.Unmarshal(listAsBytes, &intIndex)
-
-	for i := range intIndex{
-		intAsBytes,err := stub.GetState(intIndex[i])
-		if err != nil{
-
-		}
-		res := integerDefine{}
-		json.Unmarshal(intAsBytes, &res)
-		fmt.Println("looking at:" + res.Name )
-
-		if res.Name == args[0]{
-
-			convertedNumber,err := strconv.Atoi(res.Number)
-			convertedNumberInput,err := strconv.Atoi(number)
-
-			convertedNumber = convertedNumber - convertedNumberInput
-
-
-			res.Number = strconv.Itoa(convertedNumber)
-
-			jsonAsBytes, _ := json.Marshal(res)
-			err = stub.PutState(args[0], jsonAsBytes)								//rewrite the marble with id as key
-			if err != nil {
-				return nil, err
-			}
-		}
-
-		if res.Name == args[1]{
-			convertedNumber,err := strconv.Atoi(res.Number)
-			convertedNumberInput,err := strconv.Atoi(number)
-
-			convertedNumber = convertedNumber + convertedNumberInput
-
-
-			res.Number = strconv.Itoa(convertedNumber)
-
-			jsonAsBytes, _ := json.Marshal(res)
-			err = stub.PutState(args[1], jsonAsBytes)								//rewrite the marble with id as key
-			if err != nil {
-				return nil, err
-			}
-		}
-
-
-
-
-
-
-
-
-
-	}
-
-
-
-
-
-
-
-
-	return nil, nil
-}
-
-func (t *SimpleChaincode) init_integer(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	var user string
-	var number string
-	var err error
 	//var err error
-	fmt.Println("Creating the Int")
-	if len(args) != 3 {
+	fmt.Println("Creating the bloodTest")
+	if len(args) != 7 {
 		return nil, errors.New("Gimme more arguments, 2 to be exact, User and number pliz")
 	}
 
-	user = args[0]
-	number = args[1]
-	name:= args[2]
+	timeStamp := args[0]
+	name := args[1]
+	CPR := args[2]
+	doctor := args[3]
+	hospital := args[4]
+	status := args[5]
+	bloodTestID := args[6]
 
-	intAsBytes, err := stub.GetState(number)
+
+	bloodAsBytes, err := stub.GetState(bloodTestID)
 	if err != nil{
-		return nil, errors.New("Failed to get integer")
+		return nil, errors.New("Something went wrong")
+	}else if bloodAsBytes == nil{
+		return nil, errors.New("Bloodtest already exists")
 	}
 
-	res := integerDefine{} 						// Get the above defined marble struct
-	json.Unmarshal(intAsBytes, &res)
+	res := bloodTest{} 						// Get the above defined marble struct
+	json.Unmarshal(bloodAsBytes, &res)
 
 
 
 
-	str := `{"user": "` + user + `", "number": "` + number + `", "name": "` + name + `"}`  		//build the Json element
-	err = stub.PutState(name, []byte(str))								// store int with key
+	str := `{"timeStamp": "` + timeStamp + `", "name": "` + name + `", "CPR": "` + CPR + `", "doctor": "` + doctor +`", "hospital": "` + hospital +`", "status": "` + status +`", "bloodTestID": "` + bloodTestID +`"}`  		//build the Json element
+	err = stub.PutState(bloodTestID, []byte(str))								// store int with key
 	if err != nil{
 		return nil, err
 	}
 
 
 	//get the int index
-	intAsBytes, err = stub.GetState(integerIndexname)
+	bloodAsBytes, err = stub.GetState(bloodTestIndex)
 	if err != nil{
 		return nil, errors.New("you fucked up")
 	}
 
-	var integerIndex[]string
-	json.Unmarshal(intAsBytes, &integerIndex)
+	var bloodInd[]string
+	json.Unmarshal(bloodAsBytes, &bloodInd)
 
 	//append it to the list
-	integerIndex = append(integerIndex, name)
-	jsonAsBytes, _ := json.Marshal(integerIndex)
-	err = stub.PutState(integerIndexname, jsonAsBytes)
+	bloodInd = append(bloodInd, bloodTestID)
+	jsonAsBytes, _ := json.Marshal(bloodInd)
+	err = stub.PutState(bloodTestIndex, jsonAsBytes)
 
 
 	fmt.Println("Ended of creation")
