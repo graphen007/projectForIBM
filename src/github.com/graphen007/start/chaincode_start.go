@@ -24,7 +24,6 @@ import (
 	"encoding/json"
 
 	"strconv"
-	"strings"
 )
 
 
@@ -168,49 +167,29 @@ func (t *SimpleChaincode) transfer_money(stub shim.ChaincodeStubInterface, args 
 
 
 
-
-
-	intAsBytes, err := stub.GetState(integerIndexname)
-	if err != nil {
-		return nil, errors.New("Failed to get thing")
-	}
-
-	var integerIndex []string
-	json.Unmarshal(intAsBytes, &integerIndex)
 	var res = integerDefine{}
-	for i:= range integerIndex{
 
-		intAsBytes,err = stub.GetState(integerIndex[i])
+
+		intAsBytes,err := stub.GetState(args[0])
 
 		json.Unmarshal(intAsBytes, &res)
 
-		if strings.ToLower(res.Name) == strings.ToLower(args[0]){
+
 			res.TheNumber = (res.TheNumber - number)
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)								//rewrite the marble with id as key
 			if err != nil {
 				return nil, err
 			}
-		}
 
-		if strings.ToLower(res.Name) == strings.ToLower(args[1]){
+		intAsBytes,err = stub.GetState(args[1])
+
 			res.TheNumber = (res.TheNumber - number)
-			jsonAsBytes, _ := json.Marshal(res)
+			jsonAsBytes, _ = json.Marshal(res)
 			err = stub.PutState(args[1], jsonAsBytes)								//rewrite the marble with id as key
 			if err != nil {
 				return nil, err
 			}
-		}
-
-
-
-
-	}
-
-
-
-
-
 
 
 	return nil, nil
