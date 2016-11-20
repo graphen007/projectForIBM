@@ -144,17 +144,17 @@ func (t *SimpleChaincode) read_list(stub shim.ChaincodeStubInterface, args []str
 	if err != nil {
 		return nil, errors.New("Failed to get intList")
 	}
-	var bloodTestIndex []string
+	var bloodInd []string
 
-	err = json.Unmarshal(bloodTestList, &bloodTestIndex)
+	err = json.Unmarshal(bloodTestList, &bloodInd)
 	if err != nil{
 		fmt.Println("you dun goofed")
 	}
 	var finalList []byte
 	var bloodAsBytes []byte
-	for i:= range bloodTestList {
+	for i:= range bloodInd {
 
-		bloodAsBytes, err = stub.GetState(bloodTestIndex[i])
+		bloodAsBytes, err = stub.GetState(bloodInd[i])
 		finalList = append(finalList, bloodAsBytes...)
 
 	}
