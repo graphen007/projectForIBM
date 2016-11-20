@@ -1,0 +1,161 @@
+# CA server parameters
+#
+server:
+
+        # limits the number of operating system threads used by the CA
+        # set to negative to use the system default setting
+        gomaxprocs: -1
+
+        # path to the OBC state directory and CA state subdirectory
+        rootpath: "/var/hyperledger/production"
+        cadir: ".membersrvc"
+
+        # port the CA services are listening on
+        port: ":7054"
+
+        # TLS certificate and key file paths
+        tls:
+            cert:
+                file:
+            key:
+                file:
+
+security:
+    # Either 256 or 384   (note: must be the exact same value as specified in the core.yaml file)
+    level: 256
+
+    # Either SHA2 or SHA3 (note: must be the exact same value as specified in the core.yaml file)
+    hashAlgorithm: SHA3
+    serverhostoverride:
+    tls_enabled: false
+
+    client:
+       cert:
+           file:
+
+
+    # The server host CN (Common Name) to be used (needs to match the TLS Server Certificate)
+    serverhostoverride:
+
+    # Boolean (true/false) value indicating whether TLS should be used between the client and
+    # the various CA services (ECA, TCA, TLSCA, ACA)
+    tls_enabled: false
+
+    # A PEM-encoded (X509 v3, Base64) certificate to use for establishing the TLS connection
+    # between the client and the ACA service
+    client:
+       cert:
+           file:
+
+
+# Enabling/disabling different logging levels of the CA.
+#
+logging:
+
+# Please see fabric/docs/Setup/logging-control.md for more
+# options.
+    server: warning
+    ca: warning
+    eca: warning
+    ecap: warning
+    ecaa: warning
+    aca: warning
+    acap: warning
+    tca: warning
+    tcap: warning
+    tcaa: warning
+    tlsca: warning
+
+# Default users to be registered with the CA on first launch.  The role is a binary OR
+# of the different roles a user can have:
+#
+# - simple client such as a wallet: CLIENT
+# - non-validating peer: PEER
+# - validating client: VALIDATOR
+# - auditing client: AUDITOR
+#
+eca:
+        # This hierarchy is used to create the Pre-key tree, affiliations is the top of this hierarchy, 'banks_and_institutions' is used to create the key associated to auditors of both banks and
+        # institutions, 'banks' is used to create a key associated to auditors of banks, 'bank_a' is used to create a key associated to auditors of bank_a, etc.
+        affiliations:
+
+
+            doctors:
+                  doctor_a
+                  doctor_b
+                  doctor_c
+            hospitals:
+                  hospital_a
+            patients:
+                  patient_a
+                  patient_b
+                  patient_c
+            bloodbanks:
+                  bloodbank_a
+
+        users:
+                #
+                # The fields of each user are as follows:
+                #    <EnrollmentID>: <system_role (1:client, 2: peer, 4: validator, 8: auditor)> <EnrollmentPWD> <Affiliation> <Affiliation_Role> <JSON_Metadata>
+                #
+                # The optional JSON_Metadata field is of the following format:
+                #   { "registrar": { "roles": <array-of-role-names>, "delegateRoles": <array-of-role-names> } }
+                # The 'registrar' section is used to control access to registration of new users directly via the ECAA.RegisterUser GRPC call.
+                # (See the 'fabric/membersrvc/protos/ca.proto' file for the definition of ECAA.RegisterUser.)
+                # Note that this also controls who can register users via the client SDK.
+                #
+                # Only users with a 'registrar' section may be a registrar to register other users.  In particular,
+                # 1) the "roles" field specifies which member roles may be registered by this user, and
+                # 2) the "delegateRoles" field specifies which member roles may become the "roles" field of registered users.
+                # The valid role names are "client", "peer", "validator", and "auditor".
+                #
+                # Example1:
+                #    The 'admin' user below can register clients, peers, validators, or auditors; furthermore, the 'admin' user can register other
+                #    users who can then register clients only.
+                #
+                # Example2:
+                #    The 'WebAppAdmin' user below can register clients only, but none of the users registered by this user can register other users.
+
+
+
+
+
+            admin: 1 b0db3487fb hospital_a '{"registrar":{"roles":["client","peer","validator","auditor"],"delegateRoles":["client"]}}'
+            user_type1_1: 1 47677b43b3
+
+           
+# Uncomment this section to activate devnet setup as specficied in
+# devnet-setup.md
+#
+#               vp0: 4 vp0_secret
+#               vp1: 4 vp1_secret
+
+
+
+tca:
+          # Enabling/disabling attributes encryption, currently false is unique possible value due attributes encryption is not yet implemented.
+          attribute-encryption:
+                 enabled: false
+aca:
+          # Attributes is a list of the valid attributes to each user, attribute certificate authority is emulated temporarily using this file entries.
+          # In the future an external attribute certificate authority will be invoked. The format to each entry is:
+          #
+          #     attribute-entry-#:{userid};{affiliation};{attributeName};{attributeValue};{valid from};{valid to}
+          #
+          # If valid to is empty the attribute never expire, if the valid from is empty the attribute is valid from the time zero.
+
+
+          attributes:
+            attribute-entry-0: admin;hospital_a;role;issuer;2015-01-01T00:00:00-03:00;;
+              attribute-entry-1: admin;hospital_a;role;issuer;2015-01-01T00:00:00-03:00;;
+
+
+          address: grpcs://56f0aae2371347f3a2597d9cc9b9d4ae-ca.us.blockchain.ibm.com:30001
+          server-name: 56f0aae2371347f3a2597d9cc9b9d4ae
+          # Enabling/disabling Attribute Certificate Authority, if ACA is enabled attributes will be added into the TCert.
+          enabled: true
+pki:
+          ca:
+                 subject:
+                         organization: Hyperledger
+                         country: US
