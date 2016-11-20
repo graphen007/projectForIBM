@@ -154,7 +154,7 @@ func (t *SimpleChaincode) read_list(stub shim.ChaincodeStubInterface, args []str
 	var bloodAsBytes []byte
 	for i:= range bloodTestList {
 
-		bloodAsBytes, err = stub.GetState(bloodTestList[i])
+		bloodAsBytes, err = stub.GetState(bloodTestIndex[i])
 		finalList = append(finalList, bloodAsBytes...)
 
 	}
