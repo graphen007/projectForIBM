@@ -167,9 +167,9 @@ func (t *SimpleChaincode) patient_read(stub shim.ChaincodeStubInterface, args []
 	res := bloodTest{}
 	for i:= range bloodInd {
 
-		json.Unmarshal(bloodAsBytes, &res)
-		bloodAsBytes, err = stub.GetState(bloodInd[i])
 
+		bloodAsBytes, err = stub.GetState(bloodInd[i])
+		json.Unmarshal(bloodAsBytes, &res)
 		if res.CPR == args[0]{
 			finalList = append(finalList, bloodAsBytes...)
 
@@ -201,9 +201,8 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 	res := bloodTest{}
 	for i:= range bloodInd {
 
-		json.Unmarshal(bloodAsBytes, &res)
 		bloodAsBytes, err = stub.GetState(bloodInd[i])
-
+		json.Unmarshal(bloodAsBytes, &res)
 		if res.Doctor == args[0]{
 			finalList = append(finalList, bloodAsBytes...)
 
@@ -234,9 +233,9 @@ func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args [
 	res := bloodTest{}
 	for i:= range bloodInd {
 
-		json.Unmarshal(bloodAsBytes, &res)
-		bloodAsBytes, err = stub.GetState(bloodInd[i])
 
+		bloodAsBytes, err = stub.GetState(bloodInd[i])
+		json.Unmarshal(bloodAsBytes, &res)
 		if res.Hospital == args[0]{
 			finalList = append(finalList, bloodAsBytes...)
 
