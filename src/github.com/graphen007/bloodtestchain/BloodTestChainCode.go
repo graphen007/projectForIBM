@@ -195,7 +195,15 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.BloodTestID == args[0]{
 			res.Status = args[1]
+			jsonAsBytes, _ := json.Marshal(res)
+			err = stub.PutState(args[0], jsonAsBytes)								//rewrite the marble with id as key
+			if err != nil {
+				return nil, err
+			}
+
 		}
+
+
 
 
 	}
