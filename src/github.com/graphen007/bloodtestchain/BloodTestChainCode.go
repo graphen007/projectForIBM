@@ -174,7 +174,7 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 	if err != nil{
 		return nil, errors.New("something didn't work")
 	}
-	if containsAttr {
+	if containsAttr == true {
 
 		if len(args) != 2 {
 			return nil, errors.New("Gimme more arguments, 2 to be exact, ID and status")
@@ -207,8 +207,6 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 			}
 
 		}
-	}else {
-		return nil, errors.New("it returned false")
 	}
 
 	return nil, nil
