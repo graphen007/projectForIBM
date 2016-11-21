@@ -60,7 +60,9 @@ func main() {
 	}
 }
 
-func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+	// *shim.ChaincodeStub 0.5
+	// shim.ChaincodeStubInterface 0.6
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}

@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d80bd710-649e-4d8c-b90a-bb8a52956ddc" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" afterPath="$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go" afterPath="$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go" />
     </list>
     <ignored path="goProjects.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -23,11 +23,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="chaincode_start.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="chaincode_start.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="58" column="36" selection-start-line="58" selection-start-column="36" selection-end-line="58" selection-end-column="36" />
+            <state relative-caret-position="1074">
+              <caret line="58" column="47" selection-start-line="58" selection-start-column="37" selection-end-line="58" selection-end-column="47" />
               <folding>
                 <element signature="e#612#724#0" expanded="true" />
               </folding>
@@ -35,11 +35,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BloodTestChainCode.go" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BloodTestChainCode.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7612">
-              <caret line="362" column="65" selection-start-line="362" selection-start-column="65" selection-end-line="362" selection-end-column="65" />
+            <state relative-caret-position="-4708">
+              <caret line="62" column="55" selection-start-line="62" selection-start-column="36" selection-end-line="62" selection-end-column="55" />
               <folding>
                 <element signature="e#612#714#0" expanded="true" />
               </folding>
@@ -101,8 +101,8 @@
         <option value="$PROJECT_DIR$/src/github.com/graphen007/.gitignore" />
         <option value="$PROJECT_DIR$/src/graphen007/start/chaincode_start.go" />
         <option value="$PROJECT_DIR$/src/github.com/graphen007/permissions/permissions.yaml" />
-        <option value="$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go" />
         <option value="$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" />
+        <option value="$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go" />
       </list>
     </option>
   </component>
@@ -579,13 +579,6 @@
       <option name="presentableId" value="Default" />
       <updated>1478785627633</updated>
     </task>
-    <task id="LOCAL-00020" summary="working commit ass this">
-      <created>1479122929725</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1479122929725</updated>
-    </task>
     <task id="LOCAL-00021" summary="working commit ass this">
       <created>1479123097882</created>
       <option name="number" value="00021" />
@@ -922,7 +915,14 @@
       <option name="project" value="LOCAL" />
       <updated>1479764895555</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="working commit ass this">
+      <created>1479764959125</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1479764959125</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1296,22 +1296,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
+    <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7612">
-          <caret line="362" column="65" selection-start-line="362" selection-start-column="65" selection-end-line="362" selection-end-column="65" />
+        <state relative-caret-position="1074">
+          <caret line="58" column="47" selection-start-line="58" selection-start-column="37" selection-end-line="58" selection-end-column="47" />
           <folding>
-            <element signature="e#612#714#0" expanded="true" />
+            <element signature="e#612#724#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go">
+    <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="58" column="36" selection-start-line="58" selection-start-column="36" selection-end-line="58" selection-end-column="36" />
+        <state relative-caret-position="-4708">
+          <caret line="62" column="55" selection-start-line="62" selection-start-column="36" selection-end-line="62" selection-end-column="55" />
           <folding>
-            <element signature="e#612#724#0" expanded="true" />
+            <element signature="e#612#714#0" expanded="true" />
           </folding>
         </state>
       </provider>
