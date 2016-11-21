@@ -170,44 +170,46 @@ func (t *SimpleChaincode) read_list(stub shim.ChaincodeStubInterface, args []str
 }
 
 func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args []string) ([]byte, error){
-
-
-	if len(args) != 2 {
-		return nil, errors.New("Gimme more arguments, 2 to be exact, ID and status")
-	}
-	bloodTestList, err := stub.GetState(bloodTestIndex)
-	if err != nil {
-		return nil, errors.New("Failed to get intList")
-	}
-	var bloodInd []string
-
-	err = json.Unmarshal(bloodTestList, &bloodInd)
+	containsAttr, err := stub.VerifyAttribute("affiliation", "group1")
 	if err != nil{
-		fmt.Println("you dun goofed")
+		return nil, errors.New("something didn't work")
 	}
+	if containsAttr {
 
-	res := bloodTest{}
-	var bloodAsBytes []byte
-	for i:= range bloodInd {
+		if len(args) != 2 {
+			return nil, errors.New("Gimme more arguments, 2 to be exact, ID and status")
+		}
+		bloodTestList, err := stub.GetState(bloodTestIndex)
+		if err != nil {
+			return nil, errors.New("Failed to get intList")
+		}
+		var bloodInd []string
 
+		err = json.Unmarshal(bloodTestList, &bloodInd)
+		if err != nil {
+			fmt.Println("you dun goofed")
+		}
 
-		bloodAsBytes, err = stub.GetState(bloodInd[i])
-		json.Unmarshal(bloodAsBytes, &res)
-		if res.BloodTestID == args[0]{
-			res.Status = args[1]
-			jsonAsBytes, _ := json.Marshal(res)
-			err = stub.PutState(args[0], jsonAsBytes)								//rewrite the marble with id as key
-			if err != nil {
-				return nil, err
+		res := bloodTest{}
+		var bloodAsBytes []byte
+		for i := range bloodInd {
+
+			bloodAsBytes, err = stub.GetState(bloodInd[i])
+			json.Unmarshal(bloodAsBytes, &res)
+			if res.BloodTestID == args[0] {
+				res.Status = args[1]
+				jsonAsBytes, _ := json.Marshal(res)
+				err = stub.PutState(args[0], jsonAsBytes)                                                                //rewrite the marble with id as key
+				if err != nil {
+					return nil, err
+				}
+
 			}
 
 		}
-
-
-
-
+	}else {
+		return nil, errors.New("it returned false")
 	}
-
 
 	return nil, nil
 }
