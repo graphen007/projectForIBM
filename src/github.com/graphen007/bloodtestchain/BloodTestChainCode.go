@@ -148,6 +148,15 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 	return valAsbytes, nil
 }
 func (t *SimpleChaincode) patient_read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	/*
+		    Our model looks like
+		    -------------------------------------------------------
+
+		    -------------------------------------------------------
+		       0
+		    "CPR"
+		    -------------------------------------------------------
+		    */
 	if len(args) != 1 {
 		return nil, errors.New("Gimme more arguments, 1 to be exact")
 	}
@@ -182,6 +191,15 @@ func (t *SimpleChaincode) patient_read(stub shim.ChaincodeStubInterface, args []
 
 
 func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	/*
+		    Our model looks like
+		    -------------------------------------------------------
+
+		    -------------------------------------------------------
+		       0
+		    "Doctor"
+		    -------------------------------------------------------
+		    */
 	if len(args) != 1 {
 		return nil, errors.New("Gimme more arguments, 1 to be exact")
 	}
@@ -214,6 +232,16 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 }
 
 func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	/*
+		    Our model looks like
+		    -------------------------------------------------------
+		     String
+		    -------------------------------------------------------
+		       0
+		    "hospital"
+		    -------------------------------------------------------
+		    */
+
 	if len(args) != 1 {
 		return nil, errors.New("Gimme more arguments, 1 to be exact")
 	}
@@ -279,6 +307,15 @@ func (t *SimpleChaincode) read_list(stub shim.ChaincodeStubInterface, args []str
 }
 
 func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args []string) ([]byte, error){
+	/*
+		    Our model looks like
+		    -------------------------------------------------------
+
+		    -------------------------------------------------------
+		       0              1
+		    "bloodTestID", "Status"
+		    -------------------------------------------------------
+		    */
 
 
 	if len(args) != 2 {
@@ -322,8 +359,15 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 }
 
 func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	/*
+	    Our model looks like
+	    -------------------------------------------------------
+	    -------------------------------------------------------
+	       0           1        2       3          4	5	  6	  7
+	    "timestamp", "name", "CPR", "doctor", "hospital" "status" "result" "bloodTestID
+	    -------------------------------------------------------
+	    */
 
-	//var err error
 	fmt.Println("Creating the bloodTest")
 	if len(args) != 8 {
 		return nil, errors.New("Gimme more arguments, 8 to be exact, User and number pliz")
