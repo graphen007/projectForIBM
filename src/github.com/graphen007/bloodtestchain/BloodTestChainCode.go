@@ -209,11 +209,7 @@ func (t *SimpleChaincode) read_list(stub shim.ChaincodeStubInterface, args []str
 }
 
 func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args []string) ([]byte, error){
-	containsAttr, err := stub.VerifyAttribute("affiliation", "group1")
-
-	if containsAttr {
-
-	}
+	
 
 	if len(args) != 2 {
 		return nil, errors.New("Gimme more arguments, 2 to be exact, ID and status")
