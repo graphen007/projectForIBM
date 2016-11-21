@@ -187,10 +187,12 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 	}
 
 	res := bloodTest{}
+	var bloodAsBytes []byte
 	for i:= range bloodInd {
 
 
-		res, err = stub.GetState(bloodInd[i])
+		bloodAsBytes, err = stub.GetState(bloodInd[i])
+		json.Unmarshal(bloodAsBytes, &res)
 		if res.BloodTestID == args[0]{
 			res.Status = args[1]
 		}
