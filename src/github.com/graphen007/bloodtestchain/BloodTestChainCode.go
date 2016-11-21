@@ -80,6 +80,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return t.write(stub, args)
 	} else if function == "init_bloodtest"{
 		return t.init_bloodtest(stub,args)
+	} else if function == "change_status"{
+		return t.change_status(stub, args)
 	}
 	fmt.Println("invoke did not find func: " + function)
 
@@ -140,6 +142,10 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 
 func (t *SimpleChaincode) read_list(stub shim.ChaincodeStubInterface, args []string) ([]byte, error){
 
+
+	if len(args) != 1 {
+		return nil, errors.New("Gimme more arguments, 1 to be exact")
+	}
 	bloodTestList, err := stub.GetState(args[0])
 	if err != nil {
 		return nil, errors.New("Failed to get intList")
@@ -161,6 +167,39 @@ func (t *SimpleChaincode) read_list(stub shim.ChaincodeStubInterface, args []str
 
 
 	return finalList, nil
+}
+
+func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args []string) ([]byte, error){
+
+
+	if len(args) != 2 {
+		return nil, errors.New("Gimme more arguments, 2 to be exact, ID and status")
+	}
+	bloodTestList, err := stub.GetState(bloodTestIndex)
+	if err != nil {
+		return nil, errors.New("Failed to get intList")
+	}
+	var bloodInd []string
+
+	err = json.Unmarshal(bloodTestList, &bloodInd)
+	if err != nil{
+		fmt.Println("you dun goofed")
+	}
+
+	res := bloodTest{}
+	for i:= range bloodInd {
+
+
+		res, err = stub.GetState(bloodInd[i])
+		if res.BloodTestID == args[0]{
+			res.Status = args[1]
+		}
+
+
+	}
+
+
+	return nil, nil
 }
 
 func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {

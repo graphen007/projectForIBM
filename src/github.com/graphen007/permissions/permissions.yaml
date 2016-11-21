@@ -123,7 +123,7 @@ eca:
             admin: 1 b0db3487fb hospital_a '{"registrar":{"roles":["client","peer","validator","auditor"],"delegateRoles":["client"]}}'
             user_type1_1: 1 47677b43b3
 
-           
+
 # Uncomment this section to activate devnet setup as specficied in
 # devnet-setup.md
 #
