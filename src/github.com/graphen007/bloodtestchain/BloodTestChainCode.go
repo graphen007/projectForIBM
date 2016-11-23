@@ -29,6 +29,7 @@ type SimpleChaincode struct {
 }
 
 var bloodTestIndex = "_bloodTestIndex"
+var accountIndex = "_accountIndex"
 
 type bloodTest struct {
 	TimeStamp   string `json:"timestamp"`
@@ -41,6 +42,11 @@ type bloodTest struct {
 	BloodTestID string `json:"BloodTestID"`
 }
 
+type account struct{
+	typeOfUser 	 string `json:"typeOfUser"`
+	username        string `json:"username"`
+	password         string `json:"password"`
+}
 // ============================================================================================================================
 // Main
 // ============================================================================================================================
@@ -516,3 +522,86 @@ func (t *SimpleChaincode) init_bloodtest(stub *shim.ChaincodeStub, args []string
 
 	return nil, nil
 }
+
+
+// user account stuff, login, create user, etc.
+func (t *SimpleChaincode) create_user(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+	/*
+	   Our model looks like
+	   -------------------------------------------------------
+
+	   -------------------------------------------------------
+	      0		1	    2
+	   "Type"   "username"  "password"
+	   -------------------------------------------------------
+	*/
+
+	typeOfUser := args[0]
+	username := args[1]
+	password := args[2]
+
+	userAsBytes, err := stub.GetState(username)
+	if err != nil {
+		return nil, errors.New("No user by that name")
+	}
+	res := account{}
+	json.Unmarshal(userAsBytes, &res)
+	if res.username == username {
+
+		return nil, errors.New("This user arleady exists")
+	}
+
+	json.Unmarshal(userAsBytes, &res)
+
+	str := `{"typeOfUser": "` + typeOfUser + `", "username": "` + username + `", "password": "` + password + `"}` //build the Json element
+	err = stub.PutState(username, []byte(str))
+	if err != nil {
+		return nil, err
+	}
+
+	//get the blood index
+	userAsBytes, err = stub.GetState(accountIndex)
+	if err != nil {
+		return nil, errors.New("you fucked up")
+	}
+
+	var userInd []string
+	json.Unmarshal(userAsBytes, &userInd)
+
+	//append it to the list
+	userInd = append(userInd, username)
+	jsonAsBytes, _ := json.Marshal(userInd)
+	err = stub.PutState(bloodTestIndex, jsonAsBytes)
+
+
+	return nil, nil
+}
+func (t *SimpleChaincode) get_user(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+	if len(args) != 2 {
+		return nil, errors.New("Gimme more arguments, 2 to be exact")
+	}
+	userList, err := stub.GetState(accountIndex)
+	if err != nil {
+		return nil, errors.New("Failed to get intList")
+	}
+	var userInd []string
+
+	err = json.Unmarshal(userList, &userInd)
+	if err != nil {
+		fmt.Println("you dun goofed")
+	}
+	var acountAsBytes []byte
+	res := account{}
+	for i := range userInd {
+		acountAsBytes, err = stub.GetState(userInd[i])
+		json.Unmarshal(acountAsBytes, &res)
+		if res.username == args[0]{
+			return acountAsBytes, nil
+
+		}
+	}
+	return nil, nil
+}
+
+
+
