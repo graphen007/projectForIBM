@@ -45,7 +45,7 @@ type bloodTest struct {
 
 type account struct{
 	typeOfUser 	 string `json:"typeOfUser"`
-	username        string `json:"username"`
+	username         string `json:"username"`
 	password         string `json:"password"`
 }
 // ============================================================================================================================
@@ -600,13 +600,10 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 		res := account{}
 		acountAsBytes, err = stub.GetState(userInd[i])
 		json.Unmarshal(acountAsBytes, &res)
-		if strings.ToLower(res.username) == strings.ToLower(args[0]) && strings.ToLower(res.password) == strings.ToLower(args[1]){
+		if strings.ToLower(res.username) == strings.ToLower(args[0]){
 			return acountAsBytes, nil
 
 		}
 	}
 	return nil, nil
 }
-
-
-
