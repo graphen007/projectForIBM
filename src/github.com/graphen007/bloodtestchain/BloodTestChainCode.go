@@ -604,7 +604,7 @@ func (t *SimpleChaincode) get_user(stub *shim.ChaincodeStub, args []string) ([]b
 
 		}
 	}
-	return nil, nil
+	return acountAsBytes, nil
 }
 
 
