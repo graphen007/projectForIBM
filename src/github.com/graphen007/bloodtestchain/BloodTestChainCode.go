@@ -89,6 +89,8 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
 		return t.change_hospital(stub, args)
 	} else if function == "change_result" {
 		return t.change_result(stub, args)
+	}else if function == "create_user" {
+		return t.create_user(stub, args)
 	}
 	fmt.Println("invoke did not find func: " + function)
 
@@ -112,6 +114,8 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 		return t.doctor_read(stub, args)
 	} else if function == "hospital_read" {
 		return t.hospital_read(stub, args)
+	} else if function == "get_user" {
+		return t.get_user(stub, args)
 	}
 
 	fmt.Println("query did not find func: " + function)
@@ -595,7 +599,7 @@ func (t *SimpleChaincode) get_user(stub *shim.ChaincodeStub, args []string) ([]b
 	for i := range userInd {
 		acountAsBytes, err = stub.GetState(userInd[i])
 		json.Unmarshal(acountAsBytes, &res)
-		if res.username == args[0]{
+		if res.username == args[0] && res.password == args[1]{
 			return acountAsBytes, nil
 
 		}
