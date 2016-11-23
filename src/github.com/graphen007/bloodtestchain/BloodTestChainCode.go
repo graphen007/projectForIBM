@@ -575,7 +575,7 @@ func (t *SimpleChaincode) create_user(stub *shim.ChaincodeStub, args []string) (
 	//append it to the list
 	userInd = append(userInd, username)
 	jsonAsBytes, _ := json.Marshal(userInd)
-	err = stub.PutState(bloodTestIndex, jsonAsBytes)
+	err = stub.PutState(accountIndex, jsonAsBytes)
 
 
 	return nil, nil
@@ -604,7 +604,7 @@ func (t *SimpleChaincode) get_user(stub *shim.ChaincodeStub, args []string) ([]b
 
 		}
 	}
-	return acountAsBytes, nil
+	return nil, nil
 }
 
 
