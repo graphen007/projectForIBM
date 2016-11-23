@@ -556,8 +556,6 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("This user arleady exists")
 	}
 
-	json.Unmarshal(userAsBytes, &res)
-
 	str := `{"typeOfUser": "` + typeOfUser + `", "username": "` + username + `", "password": "` + password + `"}` //build the Json element
 	err = stub.PutState(username, []byte(str))
 	if err != nil {
@@ -589,21 +587,7 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 	if err != nil {
 		return nil, errors.New("Failed to get intList")
 	}
-	var userInd []string
 
-	err = json.Unmarshal(userList, &userInd)
-	if err != nil {
-		fmt.Println("you dun goofed")
-	}
-	var acountAsBytes []byte
-	for i := range userInd {
-		res := account{}
-		acountAsBytes, err = stub.GetState(userInd[i])
-		json.Unmarshal(acountAsBytes, &res)
-		if strings.ToLower(res.username) == strings.ToLower(args[0]){
-			return acountAsBytes, nil
 
-		}
-	}
-	return nil, nil
+	return userList, nil
 }
