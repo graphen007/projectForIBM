@@ -57,7 +57,7 @@ func main() {
 	}
 }
 
-func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	// *shim.ChaincodeStub 0.5
 	// shim.ChaincodeStubInterface 0.6
 	if len(args) != 1 {
@@ -71,7 +71,7 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
 
 	return nil, nil
 }
-func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("invoke is running " + function)
 
 	// Handle different functions
@@ -98,7 +98,7 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
 }
 
 // Query is our entry point for queries
-func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	//for 0.6 stub shim.ChaincodeStubInterface
 
 	fmt.Println("query is running " + function)
@@ -122,7 +122,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 	return nil, errors.New("Received unknown function query")
 }
 
-func (t *SimpleChaincode) write(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var name, value string
 	var err error
 	fmt.Println("running write()")
@@ -139,7 +139,7 @@ func (t *SimpleChaincode) write(stub *shim.ChaincodeStub, args []string) ([]byte
 	}
 	return nil, nil
 }
-func (t *SimpleChaincode) read(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var name, jsonResp string
 	var err error
 
@@ -156,7 +156,7 @@ func (t *SimpleChaincode) read(stub *shim.ChaincodeStub, args []string) ([]byte,
 
 	return valAsbytes, nil
 }
-func (t *SimpleChaincode) patient_read(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) patient_read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	/*
 	   Our model looks like
 	   -------------------------------------------------------
@@ -196,7 +196,7 @@ func (t *SimpleChaincode) patient_read(stub *shim.ChaincodeStub, args []string) 
 	return finalList, nil
 }
 
-func (t *SimpleChaincode) doctor_read(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	/*
 	   Our model looks like
 	   -------------------------------------------------------
@@ -236,7 +236,7 @@ func (t *SimpleChaincode) doctor_read(stub *shim.ChaincodeStub, args []string) (
 	return finalList, nil
 }
 
-func (t *SimpleChaincode) hospital_read(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	/*
 	   Our model looks like
 	   -------------------------------------------------------
@@ -278,7 +278,7 @@ func (t *SimpleChaincode) hospital_read(stub *shim.ChaincodeStub, args []string)
 	return finalList, nil
 }
 
-func (t *SimpleChaincode) read_list(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) read_list(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	if len(args) != 1 {
 		return nil, errors.New("Gimme more arguments, 1 to be exact")
 	}
@@ -304,7 +304,7 @@ func (t *SimpleChaincode) read_list(stub *shim.ChaincodeStub, args []string) ([]
 	return finalList, nil
 }
 
-func (t *SimpleChaincode) change_status(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	/*
 	   Our model looks like
 	   -------------------------------------------------------
@@ -345,7 +345,7 @@ func (t *SimpleChaincode) change_status(stub *shim.ChaincodeStub, args []string)
 	return nil, nil
 }
 
-func (t *SimpleChaincode) change_doctor(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) change_doctor(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	/*
 	   Our model looks like
 	   -------------------------------------------------------
@@ -385,7 +385,7 @@ func (t *SimpleChaincode) change_doctor(stub *shim.ChaincodeStub, args []string)
 	return nil, nil
 }
 
-func (t *SimpleChaincode) change_hospital(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) change_hospital(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	/*
 	   Our model looks like
 	   -------------------------------------------------------
@@ -425,7 +425,7 @@ func (t *SimpleChaincode) change_hospital(stub *shim.ChaincodeStub, args []strin
 	return nil, nil
 }
 
-func (t *SimpleChaincode) change_result(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) change_result(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	/*
 	   Our model looks like
 	   -------------------------------------------------------
@@ -465,7 +465,7 @@ func (t *SimpleChaincode) change_result(stub *shim.ChaincodeStub, args []string)
 	return nil, nil
 }
 
-func (t *SimpleChaincode) init_bloodtest(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	/*
 	   Our model looks like
 	   -------------------------------------------------------
@@ -529,7 +529,7 @@ func (t *SimpleChaincode) init_bloodtest(stub *shim.ChaincodeStub, args []string
 
 
 // user account stuff, login, create user, etc.
-func (t *SimpleChaincode) create_user(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	/*
 	   Our model looks like
 	   -------------------------------------------------------
@@ -580,7 +580,7 @@ func (t *SimpleChaincode) create_user(stub *shim.ChaincodeStub, args []string) (
 
 	return nil, nil
 }
-func (t *SimpleChaincode) get_user(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	if len(args) != 2 {
 		return nil, errors.New("Gimme more arguments, 2 to be exact")
 	}
@@ -604,7 +604,7 @@ func (t *SimpleChaincode) get_user(stub *shim.ChaincodeStub, args []string) ([]b
 
 		}
 	}
-	return nil, nil
+	return acountAsBytes, nil
 }
 
 
