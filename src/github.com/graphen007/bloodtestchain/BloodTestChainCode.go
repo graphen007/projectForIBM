@@ -22,6 +22,7 @@ import (
 
 	"encoding/json"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"strings"
 )
 
 // SimpleChaincode example simple Chaincode implementation
@@ -550,7 +551,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	}
 	res := account{}
 	json.Unmarshal(userAsBytes, &res)
-	if res.username == username {
+	if strings.ToLower(res.username) == strings.ToLower(username) {
 
 		return nil, errors.New("This user arleady exists")
 	}
@@ -599,7 +600,7 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 	for i := range userInd {
 		acountAsBytes, err = stub.GetState(userInd[i])
 		json.Unmarshal(acountAsBytes, &res)
-		if res.username == args[0] && res.password == args[1]{
+		if strings.ToLower(res.username) == strings.ToLower(args[0]) && strings.ToLower(res.password) == strings.ToLower(args[1]){
 			return acountAsBytes, nil
 
 		}
