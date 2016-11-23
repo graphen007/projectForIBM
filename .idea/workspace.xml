@@ -26,8 +26,8 @@
       <file leaf-file-name="BloodTestChainCode.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="172">
-              <caret line="59" column="10" selection-start-line="59" selection-start-column="8" selection-end-line="59" selection-end-column="10" />
+            <state relative-caret-position="258">
+              <caret line="606" column="18" selection-start-line="606" selection-start-column="18" selection-end-line="606" selection-end-column="18" />
               <folding>
                 <element signature="e#612#710#0" expanded="true" />
               </folding>
@@ -582,13 +582,6 @@
       <option name="presentableId" value="Default" />
       <updated>1478785627633</updated>
     </task>
-    <task id="LOCAL-00028" summary="working commit ass this">
-      <created>1479126765148</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1479126765148</updated>
-    </task>
     <task id="LOCAL-00029" summary="working commit ass this">
       <created>1479387471279</created>
       <option name="number" value="00029" />
@@ -925,7 +918,14 @@
       <option name="project" value="LOCAL" />
       <updated>1479935878804</updated>
     </task>
-    <option name="localTasksCounter" value="77" />
+    <task id="LOCAL-00077" summary="Implemented rest of methods">
+      <created>1479938965440</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1479938965440</updated>
+    </task>
+    <option name="localTasksCounter" value="78" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1330,8 +1330,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="59" column="10" selection-start-line="59" selection-start-column="8" selection-end-line="59" selection-end-column="10" />
+        <state relative-caret-position="258">
+          <caret line="606" column="18" selection-start-line="606" selection-start-column="18" selection-end-line="606" selection-end-column="18" />
           <folding>
             <element signature="e#612#710#0" expanded="true" />
           </folding>
