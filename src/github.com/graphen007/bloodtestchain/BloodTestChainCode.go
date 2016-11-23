@@ -596,8 +596,8 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 		fmt.Println("you dun goofed")
 	}
 	var acountAsBytes []byte
-	res := account{}
 	for i := range userInd {
+		res := account{}
 		acountAsBytes, err = stub.GetState(userInd[i])
 		json.Unmarshal(acountAsBytes, &res)
 		if strings.ToLower(res.username) == strings.ToLower(args[0]) && strings.ToLower(res.password) == strings.ToLower(args[1]){
