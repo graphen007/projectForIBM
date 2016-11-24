@@ -591,7 +591,7 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 	if len(args) != 2 {
 		return nil, errors.New("Gimme more arguments, 2 to be exact")
 	}
-	userList, err := stub.GetState(args[0])
+	userList, err := stub.GetState(accountIndex)
 	if err != nil {
 		return nil, errors.New("Failed to get accountList")
 	}
@@ -603,9 +603,9 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 	}
 
 	var accountAsBytes []byte
-	res := account{}
-	for i := range userIndex {
 
+	for i := range userIndex {
+		res := account{}
 		accountAsBytes, err = stub.GetState(userIndex[i])
 		json.Unmarshal(accountAsBytes, &res)
 		if res.Username == args[0] && res.Password == args[1] {
