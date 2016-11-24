@@ -22,7 +22,7 @@ import (
 
 	"encoding/json"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
-	
+
 )
 
 // SimpleChaincode example simple Chaincode implementation
@@ -541,8 +541,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	   -------------------------------------------------------
 	*/
 	fmt.Println("Creating the bloodTest")
-	if len(args) != 8 {
-		return nil, errors.New("Gimme more arguments, 8 to be exact, User and number pliz")
+	if len(args) != 3 {
+		return nil, errors.New("Gimme more arguments, 3 to be exact, User and number pliz")
 	}
 
 	typeOfUser := args[0]
@@ -575,12 +575,12 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("you fucked up")
 	}
 
-	var bloodInd []string
-	json.Unmarshal(accountAsBytes, &bloodInd)
+	var accInd []string
+	json.Unmarshal(accountAsBytes, &accInd)
 
 	//append it to the list
-	bloodInd = append(bloodInd, username)
-	jsonAsBytes, _ := json.Marshal(bloodInd)
+	accInd = append(accInd, username)
+	jsonAsBytes, _ := json.Marshal(accInd)
 	err = stub.PutState(accountIndex, jsonAsBytes)
 
 	fmt.Println("Ended of creation")
