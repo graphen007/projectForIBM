@@ -540,7 +540,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	   "Type"   "username"  "password"
 	   -------------------------------------------------------
 	*/
-	fmt.Println("Creating the bloodTest")
+	fmt.Println("Creating the account")
 	if len(args) != 3 {
 		return nil, errors.New("Gimme more arguments, 3 to be exact, User and number pliz")
 	}
@@ -552,13 +552,13 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 
 	accountAsBytes, err := stub.GetState(username)
 	if err != nil {
-		return nil, errors.New("blood")
+		return nil, errors.New("")
 	}
 	res := account{}
 	json.Unmarshal(accountAsBytes, &res)
 	if res.Username == username {
 
-		return nil, errors.New("This blood test arleady exists")
+		return nil, errors.New("This account arleady exists")
 	}
 
 	json.Unmarshal(accountAsBytes, &res)
@@ -593,9 +593,28 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 	}
 	userList, err := stub.GetState(args[0])
 	if err != nil {
-		return nil, errors.New("Failed to get intList")
+		return nil, errors.New("Failed to get accountList")
+	}
+	var userIndex []string
+
+	err = json.Unmarshal(userList, &userIndex)
+	if err != nil {
+		fmt.Println("you dun goofed")
+	}
+
+	var accountAsBytes []byte
+	res := account{}
+	for i := range userIndex {
+
+		accountAsBytes, err = stub.GetState(userIndex[i])
+		json.Unmarshal(accountAsBytes, &res)
+		if res.Username == args[0] && res.Password == args[1] {
+
+			return accountAsBytes, nil
+
+		}
 	}
 
 
-	return userList, nil
+	return nil, nil
 }
