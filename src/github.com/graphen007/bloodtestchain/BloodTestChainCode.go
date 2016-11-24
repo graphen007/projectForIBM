@@ -22,7 +22,7 @@ import (
 
 	"encoding/json"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
-	"strings"
+	
 )
 
 // SimpleChaincode example simple Chaincode implementation
@@ -44,9 +44,9 @@ type bloodTest struct {
 }
 
 type account struct{
-	typeOfUser 	 string `json:"typeOfUser"`
-	username         string `json:"username"`
-	password         string `json:"password"`
+	TypeOfUser 	 string `json:"typeOfUser"`
+	Username         string `json:"username"`
+	Password         string `json:"password"`
 }
 // ============================================================================================================================
 // Main
@@ -540,42 +540,50 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	   "Type"   "username"  "password"
 	   -------------------------------------------------------
 	*/
+	fmt.Println("Creating the bloodTest")
+	if len(args) != 8 {
+		return nil, errors.New("Gimme more arguments, 8 to be exact, User and number pliz")
+	}
 
 	typeOfUser := args[0]
 	username := args[1]
 	password := args[2]
 
-	userAsBytes, err := stub.GetState(username)
+
+	accountAsBytes, err := stub.GetState(username)
 	if err != nil {
-		return nil, errors.New("No user by that name")
+		return nil, errors.New("blood")
 	}
 	res := account{}
-	json.Unmarshal(userAsBytes, &res)
-	if strings.ToLower(res.username) == strings.ToLower(username) {
+	json.Unmarshal(accountAsBytes, &res)
+	if res.Username == username {
 
-		return nil, errors.New("This user arleady exists")
+		return nil, errors.New("This blood test arleady exists")
 	}
 
-	str := `{"typeOfUser": "` + typeOfUser + `", "username": "` + username + `", "password": "` + password + `"}` //build the Json element
+	json.Unmarshal(accountAsBytes, &res)
+
+	str := `{"typeOfUser": "` + typeOfUser + `", "username": "` + username + `", "password": "` + password  + `"}` //build the Json element
 	err = stub.PutState(username, []byte(str))
 	if err != nil {
 		return nil, err
 	}
 
 	//get the blood index
-	userAsBytes, err = stub.GetState(accountIndex)
+	accountAsBytes, err = stub.GetState(accountIndex)
 	if err != nil {
 		return nil, errors.New("you fucked up")
 	}
 
-	var userInd []string
-	json.Unmarshal(userAsBytes, &userInd)
+	var bloodInd []string
+	json.Unmarshal(accountAsBytes, &bloodInd)
 
 	//append it to the list
-	userInd = append(userInd, username)
-	jsonAsBytes, _ := json.Marshal(userInd)
+	bloodInd = append(bloodInd, username)
+	jsonAsBytes, _ := json.Marshal(bloodInd)
 	err = stub.PutState(accountIndex, jsonAsBytes)
 
+	fmt.Println("Ended of creation")
 
 	return nil, nil
 }
