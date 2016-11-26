@@ -274,25 +274,25 @@ func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args [
 		fmt.Println("you dun goofed")
 	}
 
-	var bloodAsBytes []byte
-	var finalList []byte
-	res := bloodTest{}
-	for i := range bloodInd {
+	// var bloodAsBytes []byte
+	// var finalList []byte
+	// res := bloodTest{}
+	// for i := range bloodInd {
 
-		bloodAsBytes, err := stub.GetState(bloodInd[i])
-		if err != nil {
-			return nil, errors.New("Failed to get bloodAsBytes")
-		}
+	// 	bloodAsBytes, err := stub.GetState(bloodInd[i])
+	// 	if err != nil {
+	// 		return nil, errors.New("Failed to get bloodAsBytes")
+	// 	}
 
-		json.Unmarshal(bloodAsBytes, &res)
-		if res.Hospital == args[0] {
+	// 	json.Unmarshal(bloodAsBytes, &res)
+	// 	if res.Hospital == args[0] {
 
-			finalList =  append(finalList, bloodAsBytes...)
+	// 		finalList =  append(finalList, bloodAsBytes...)
 
-		}
-	}
+	// 	}
+	// }
 
-	return bloodAsBytes, nil
+	return nil, errors.New("This account already exists")
 }
 
 // ============================================================================================================================
@@ -530,7 +530,7 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 	json.Unmarshal(bloodAsBytes, &res)
 	if res.BloodTestID == bloodTestID {
 
-		return nil, errors.New("This blood test arleady exists")
+		return nil, errors.New("This blood test already exists")
 	}
 
 	json.Unmarshal(bloodAsBytes, &res)
@@ -589,7 +589,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	json.Unmarshal(accountAsBytes, &res)
 	if res.Username == username {
 
-		return nil, errors.New("This account arleady exists")
+		return nil, errors.New("This account already exists")
 	}
 
 	json.Unmarshal(accountAsBytes, &res)
