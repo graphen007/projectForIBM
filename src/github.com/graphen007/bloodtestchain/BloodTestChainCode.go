@@ -134,7 +134,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	} else if function == "doctor_read" {
 		return t.doctor_read(stub, args)
 	} else if function == "hospital_read" {
-		return t.hospital_read(stub, args)
+		return  nil, errors.New("yo!") //t.hospital_read(stub, args)
 	} else if function == "get_user" {
 		return t.get_user(stub, args)
 	}
@@ -260,39 +260,35 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 // ============================================================================================================================
 func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
-	// if len(args) != 1 {
-	// 	return nil, errors.New("Gimme more arguments, 1 to be exact")
-	// }
-	// bloodTestList, err := stub.GetState(bloodTestIndex)
-	// if err != nil {
-	// 	return nil, errors.New("Failed to get bloodList")
-	// }
-	// var bloodInd []string
+	if len(args) != 1 {
+		return nil, errors.New("Gimme more arguments, 1 to be exact")
+	}
+	bloodTestList, err := stub.GetState(bloodTestIndex)
+	if err != nil {
+		return nil, errors.New("Failed to get bloodList")
+	}
+	var bloodInd []string
 
-	// err = json.Unmarshal(bloodTestList, &bloodInd)
-	// if err != nil {
-	// 	fmt.Println("you dun goofed")
-	// }
+	err = json.Unmarshal(bloodTestList, &bloodInd)
+	if err != nil {
+		fmt.Println("you dun goofed")
+	}
 
-	// var bloodAsBytes []byte
-	// var finalList []byte
-	// res := bloodTest{}
-	// for i := range bloodInd {
+	var bloodAsBytes []byte
+	var finalList []byte
+	res := bloodTest{}
+	for i := range bloodInd {
 
-	// 	bloodAsBytes, err := stub.GetState(bloodInd[i])
-	// 	if err != nil {
-	// 		return nil, errors.New("Failed to get bloodAsBytes")
-	// 	}
+		bloodAsBytes, err = stub.GetState(bloodInd[i])
+		json.Unmarshal(bloodAsBytes, &res)
+		if res.Hospital == args[0] {
 
-	// 	json.Unmarshal(bloodAsBytes, &res)
-	// 	if res.Hospital == args[0] {
+			finalList = append(finalList, bloodAsBytes...)
 
-	// 		finalList =  append(finalList, bloodAsBytes...)
+		}
+	}
 
-	// 	}
-	// }
-
-	return nil, errors.New("Nothing happens!")
+	return finalList, nil
 }
 
 // ============================================================================================================================
@@ -530,7 +526,7 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 	json.Unmarshal(bloodAsBytes, &res)
 	if res.BloodTestID == bloodTestID {
 
-		return nil, errors.New("This blood test already exists")
+		return nil, errors.New("This blood test arleady exists")
 	}
 
 	json.Unmarshal(bloodAsBytes, &res)
@@ -589,7 +585,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	json.Unmarshal(accountAsBytes, &res)
 	if res.Username == username {
 
-		return nil, errors.New("This account already exists")
+		return nil, errors.New("This account arleady exists")
 	}
 
 	json.Unmarshal(accountAsBytes, &res)
