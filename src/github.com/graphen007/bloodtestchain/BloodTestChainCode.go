@@ -260,19 +260,19 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 // ============================================================================================================================
 func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
-	if len(args) != 1 {
-		return nil, errors.New("Gimme more arguments, 1 to be exact")
-	}
-	bloodTestList, err := stub.GetState(bloodTestIndex)
-	if err != nil {
-		return nil, errors.New("Failed to get bloodList")
-	}
-	var bloodInd []string
+	// if len(args) != 1 {
+	// 	return nil, errors.New("Gimme more arguments, 1 to be exact")
+	// }
+	// bloodTestList, err := stub.GetState(bloodTestIndex)
+	// if err != nil {
+	// 	return nil, errors.New("Failed to get bloodList")
+	// }
+	// var bloodInd []string
 
-	err = json.Unmarshal(bloodTestList, &bloodInd)
-	if err != nil {
-		fmt.Println("you dun goofed")
-	}
+	// err = json.Unmarshal(bloodTestList, &bloodInd)
+	// if err != nil {
+	// 	fmt.Println("you dun goofed")
+	// }
 
 	// var bloodAsBytes []byte
 	// var finalList []byte
@@ -292,7 +292,7 @@ func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args [
 	// 	}
 	// }
 
-	return nil, errors.New("This account already exists")
+	return nil, errors.New("Nothing happens!")
 }
 
 // ============================================================================================================================
