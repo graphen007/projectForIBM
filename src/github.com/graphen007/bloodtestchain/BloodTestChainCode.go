@@ -279,7 +279,11 @@ func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args [
 	res := bloodTest{}
 	for i := range bloodInd {
 
-		bloodAsBytes, err = stub.GetState(bloodInd[i])
+		bloodAsBytes, err := stub.GetState(bloodInd[i])
+		if err != nil {
+			return nil, errors.New("Failed to get bloodAsBytes")
+		}
+
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.Hospital == args[0] {
 
