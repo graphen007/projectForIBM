@@ -533,7 +533,7 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 
 // "STILL TESTING! timeStamp": " + timeStamp + ", "name": " + name + ", "CPR": " + CPR + ", "doctor": " + doctor + ", "hospital": " + hospital + ", "status": " + status + ", "result": " + result + ", "bloodTestID": " + bloodTestID + "
 
-	str := []byte(`{"timeStamp": ` + timeStamp + `,
+	str := []byte(`{"timeStamp": "` + timeStamp + `",
 			"name": "` + name + `",
 			"CPR": "` + CPR + `",
 			"doctor": "` + doctor + `",
