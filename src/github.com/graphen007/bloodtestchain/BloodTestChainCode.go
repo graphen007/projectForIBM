@@ -283,12 +283,12 @@ func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args [
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.Hospital == args[0] {
 
-			finalList = append(finalList, bloodAsBytes...)
+			// finalList = append(finalList, bloodAsBytes...)
 
 		}
 	}
 
-	return bloodAsBytes, nil
+	return finalList, nil
 }
 
 // ============================================================================================================================
