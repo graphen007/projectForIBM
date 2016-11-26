@@ -540,7 +540,7 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 			"hospital": "` + hospital + `",
 			"status": "` + status + `",
 			"result": "` + result + `",
-			"bloodTestID": "` + bloodTestID + `"}`) //build the Json element
+			"bloodTestID": "` + bloodTestID + `"},`) //build the Json element
 
 	err = stub.PutState(bloodTestID, str)
 	if err != nil {
@@ -600,8 +600,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 
 	json.Unmarshal(accountAsBytes, &res)
 
-	stringss := `{"typeOfUser": "` + typeOfUser + `", "username": "` + username + `", "password": "` + password + `"}` //build the Json element
-	err = stub.PutState(username, []byte(stringss))
+	stringss := []byte(`{"typeOfUser": "` + typeOfUser + `", "username": "` + username + `", "password": "` + password + `"},`) //build the Json element
+	err = stub.PutState(username, stringss)
 	if err != nil {
 		return nil, err
 	}
