@@ -288,7 +288,7 @@ func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args [
 		}
 	}
 
-	return bloodAsBytes, nil
+	return finalList, nil
 }
 
 // ============================================================================================================================
