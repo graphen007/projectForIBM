@@ -7,7 +7,6 @@ You may obtain a copy of the License at
 
 		 http://www.apache.org/licenses/LICENSE-2.0
 
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -135,7 +134,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	} else if function == "doctor_read" {
 		return t.doctor_read(stub, args)
 	} else if function == "hospital_read" {
-		return  nil, errors.New("yo!") //t.hospital_read(stub, args)
+		return t.hospital_read(stub, args)
 	} else if function == "get_user" {
 		return t.get_user(stub, args)
 	}
@@ -532,7 +531,7 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 
 	json.Unmarshal(bloodAsBytes, &res)
 
-	str := `{ ` + `"timeStamp": "` + timeStamp + `", "name": "` + name + `", "CPR": "` + CPR + `", "doctor": "` + doctor + `", "hospital": "` + hospital + `", "status": "` + status + `", "result": "` + result + `", "bloodTestID": "` + bloodTestID + ` }` //build the Json element
+	str := `{"TESTING!!!!!!!!! timeStamp": "` + timeStamp + `", "name": "` + name + `", "CPR": "` + CPR + `", "doctor": "` + doctor + `", "hospital": "` + hospital + `", "status": "` + status + `", "result": "` + result + `", "bloodTestID": "` + bloodTestID + `"}` //build the Json element
 	err = stub.PutState(bloodTestID, []byte(str))
 	if err != nil {
 		return nil, err
