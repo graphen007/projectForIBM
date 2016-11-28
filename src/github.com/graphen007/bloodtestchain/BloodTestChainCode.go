@@ -43,7 +43,6 @@ const CLIENT_TOKEN = "ERE4zwMnao"
 const HOSPITAL_TOKEN = "XpK9cGH22x"
 const BLOODBANK_TOKEN = "TdFeAzGlrI"
 
-
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
 }
@@ -62,6 +61,7 @@ type bloodTest struct {
 	Result      string `json:"result"`
 	BloodTestID string `json:"BloodTestID"`
 }
+
 //==============================================================================================================================
 //	account - Struct for storing the JSON of a account
 //==============================================================================================================================
@@ -172,7 +172,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		return t.get_admin_certs(stub, args)
 	}
 
-fmt.Println("query did not find func: " + function)
+	fmt.Println("query did not find func: " + function)
 	return nil, errors.New("Received unknown function query")
 }
 
@@ -854,7 +854,6 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 		json.Unmarshal(accountAsBytes, &res)
 		if res.Username == args[0] && res.Password == args[1] {
 
-
 			finalListForUser = append(finalListForUser, accountAsBytes...)
 			if i < (len(userIndex) - 1) {
 				finalListForUser = append(finalListForUser, []byte(`,`)...)
@@ -877,7 +876,7 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 		return nil, errors.New("Failed to get adminEcertList")
 	}
 
-	var finalList []byte = []byte(`"returnedObjects":[`)
+	var finalList []byte = []byte(`"admin_ecerts":[`)
 
 	finalList = append(finalList, adminCerts...)
 
