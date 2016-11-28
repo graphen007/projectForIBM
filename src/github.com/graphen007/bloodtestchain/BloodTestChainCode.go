@@ -240,7 +240,7 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 	}
 
 	var bloodAsBytes []byte
-	var finalList []byte = []byte (`[`)
+	var finalList []byte = []byte (`"returnedObjects":[`)
 	res := bloodTest{}
 	for i := range bloodInd {
 
