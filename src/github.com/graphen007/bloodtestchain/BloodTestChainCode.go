@@ -846,7 +846,7 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 	}
 
 	var accountAsBytes []byte
-	var finalListForUser []byte = []byte (`"returnedObjects":[`)
+	var finalListForUser []byte = []byte(`"returnedObjects":[`)
 	res := account{}
 	for i := range userIndex {
 

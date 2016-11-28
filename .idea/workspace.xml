@@ -26,10 +26,10 @@
       <file leaf-file-name="BloodTestChainCode.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="474">
-              <caret line="711" column="31" selection-start-line="711" selection-start-column="31" selection-end-line="711" selection-end-column="31" />
+            <state relative-caret-position="-996">
+              <caret line="801" column="0" selection-start-line="801" selection-start-column="0" selection-end-line="801" selection-end-column="0" />
               <folding>
-                <element signature="e#612#789#0" expanded="true" />
+                <element signature="e#612#720#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -706,20 +706,6 @@
       <option name="presentableId" value="Default" />
       <updated>1478785627633</updated>
     </task>
-    <task id="LOCAL-00052" summary="working commit ass this">
-      <created>1479673625901</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1479673625901</updated>
-    </task>
-    <task id="LOCAL-00053" summary="working commit ass this">
-      <created>1479678759921</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1479678759921</updated>
-    </task>
     <task id="LOCAL-00054" summary="working commit ass this">
       <created>1479751732586</created>
       <option name="number" value="00054" />
@@ -1049,7 +1035,21 @@
       <option name="project" value="LOCAL" />
       <updated>1480357426566</updated>
     </task>
-    <option name="localTasksCounter" value="101" />
+    <task id="LOCAL-00101" summary="Removed \n \t \t \t">
+      <created>1480358155495</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1480358155495</updated>
+    </task>
+    <task id="LOCAL-00102" summary="Merged it all">
+      <created>1480358683447</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1480358683447</updated>
+    </task>
+    <option name="localTasksCounter" value="103" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1100,7 +1100,8 @@
     <MESSAGE value="working commit ass this" />
     <MESSAGE value="Implemented rest of methods" />
     <MESSAGE value="Removed \n \t \t \t" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed \n \t \t \t" />
+    <MESSAGE value="Merged it all" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merged it all" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1126,7 +1127,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#612#789#0" expanded="true" />
+            <element signature="e#612#720#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1161,7 +1162,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#612#789#0" expanded="true" />
+            <element signature="e#612#720#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1196,7 +1197,7 @@
         <state relative-caret-position="4642">
           <caret line="221" column="1" selection-start-line="221" selection-start-column="1" selection-end-line="221" selection-end-column="1" />
           <folding>
-            <element signature="e#612#789#0" expanded="true" />
+            <element signature="e#612#720#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1406,10 +1407,10 @@
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" />
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="474">
-          <caret line="711" column="31" selection-start-line="711" selection-start-column="31" selection-end-line="711" selection-end-column="31" />
+        <state relative-caret-position="-996">
+          <caret line="801" column="0" selection-start-line="801" selection-start-column="0" selection-end-line="801" selection-end-column="0" />
           <folding>
-            <element signature="e#612#789#0" expanded="true" />
+            <element signature="e#612#720#0" expanded="true" />
           </folding>
         </state>
       </provider>
