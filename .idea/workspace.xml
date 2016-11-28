@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d80bd710-649e-4d8c-b90a-bb8a52956ddc" name="Default" comment="Implemented rest of methods">
+    <list default="true" id="d80bd710-649e-4d8c-b90a-bb8a52956ddc" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go" afterPath="$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go" />
     </list>
@@ -26,8 +26,8 @@
       <file leaf-file-name="BloodTestChainCode.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="602" column="121" selection-start-line="602" selection-start-column="121" selection-end-line="602" selection-end-column="121" />
+            <state relative-caret-position="392">
+              <caret line="542" column="61" selection-start-line="542" selection-start-column="61" selection-end-line="542" selection-end-column="61" />
               <folding>
                 <element signature="e#612#789#0" expanded="true" />
               </folding>
@@ -705,13 +705,6 @@
       <option name="presentableId" value="Default" />
       <updated>1478785627633</updated>
     </task>
-    <task id="LOCAL-00041" summary="working commit ass this">
-      <created>1479659534676</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1479659534676</updated>
-    </task>
     <task id="LOCAL-00042" summary="working commit ass this">
       <created>1479661639348</created>
       <option name="number" value="00042" />
@@ -1048,7 +1041,14 @@
       <option name="project" value="LOCAL" />
       <updated>1480342180359</updated>
     </task>
-    <option name="localTasksCounter" value="90" />
+    <task id="LOCAL-00090" summary="Implemented rest of methods">
+      <created>1480342813116</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1480342813116</updated>
+    </task>
+    <option name="localTasksCounter" value="91" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1404,8 +1404,8 @@
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" />
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="602" column="121" selection-start-line="602" selection-start-column="121" selection-end-line="602" selection-end-column="121" />
+        <state relative-caret-position="392">
+          <caret line="542" column="61" selection-start-line="542" selection-start-column="61" selection-end-line="542" selection-end-column="61" />
           <folding>
             <element signature="e#612#789#0" expanded="true" />
           </folding>
