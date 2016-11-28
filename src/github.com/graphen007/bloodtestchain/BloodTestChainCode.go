@@ -236,17 +236,22 @@ func (t *SimpleChaincode) patient_read(stub shim.ChaincodeStubInterface, args []
 	}
 
 	var bloodAsBytes []byte
-	var finalList []byte
+	var finalList []byte = []byte (`"returnedObjects":[`)
 	res := bloodTest{}
 	for i := range bloodInd {
 
 		bloodAsBytes, err = stub.GetState(bloodInd[i])
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.CPR == args[0] {
-			finalList = append(finalList, bloodAsBytes...)
 
+
+			finalList = append(finalList, bloodAsBytes...)
+			if i < (len(bloodInd) - 1) {
+				finalList = append(finalList, []byte(`,`)...)
+			}
 		}
 	}
+	finalList = append(finalList, []byte(`]`)...)
 
 	return finalList, nil
 }
@@ -271,17 +276,22 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 	}
 
 	var bloodAsBytes []byte
-	var finalList []byte
+	var finalList []byte = []byte (`"returnedObjects":[`)
 	res := bloodTest{}
 	for i := range bloodInd {
 
 		bloodAsBytes, err = stub.GetState(bloodInd[i])
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.Doctor == args[0] {
-			finalList = append(finalList, bloodAsBytes...)
 
+
+			finalList = append(finalList, bloodAsBytes...)
+			if i < (len(bloodInd) - 1) {
+				finalList = append(finalList, []byte(`,`)...)
+			}
 		}
 	}
+	finalList = append(finalList, []byte(`]`)...)
 
 	return finalList, nil
 }
@@ -306,7 +316,7 @@ func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args [
 	}
 
 	var bloodAsBytes []byte
-	var finalList []byte
+	var finalList []byte = []byte (`"returnedObjects":[`)
 	res := bloodTest{}
 	for i := range bloodInd {
 
@@ -314,10 +324,55 @@ func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args [
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.Hospital == args[0] {
 
-			finalList = append(finalList, bloodAsBytes...)
 
+			finalList = append(finalList, bloodAsBytes...)
+			if i < (len(bloodInd) - 1) {
+				finalList = append(finalList, []byte(`,`)...)
+			}
 		}
 	}
+	finalList = append(finalList, []byte(`]`)...)
+
+	return finalList, nil
+}
+
+
+// ============================================================================================================================
+// bloodbank Read !! HAS NOT BEEN ADDED YET AND IS NOT FULLY FUNCTIONAL!!!
+// ============================================================================================================================
+func (t *SimpleChaincode) bloodbank_read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	if len(args) != 1 {
+		return nil, errors.New("Gimme more arguments, 1 to be exact")
+	}
+	bloodTestList, err := stub.GetState(bloodTestIndex)
+	if err != nil {
+		return nil, errors.New("Failed to get bloodList")
+	}
+	var bloodInd []string
+
+	err = json.Unmarshal(bloodTestList, &bloodInd)
+	if err != nil {
+		fmt.Println("you dun goofed")
+	}
+
+	var bloodAsBytes []byte
+	var finalList []byte = []byte (`"returnedObjects":[`)
+	res := bloodTest{}
+	for i := range bloodInd {
+
+		bloodAsBytes, err = stub.GetState(bloodInd[i])
+		json.Unmarshal(bloodAsBytes, &res)
+		if res.Result == args[0] {
+
+
+			finalList = append(finalList, bloodAsBytes...)
+			if i < (len(bloodInd) - 1) {
+				finalList = append(finalList, []byte(`,`)...)
+			}
+		}
+	}
+	finalList = append(finalList, []byte(`]`)...)
 
 	return finalList, nil
 }
@@ -564,14 +619,7 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 
 	// "STILL TESTING! timeStamp": " + timeStamp + ", "name": " + name + ", "CPR": " + CPR + ", "doctor": " + doctor + ", "hospital": " + hospital + ", "status": " + status + ", "result": " + result + ", "bloodTestID": " + bloodTestID + "
 
-	str := []byte(`{"timeStamp": "` + timeStamp + `",
-			"name": "` + name + `",
-			"CPR": "` + CPR + `",
-			"doctor": "` + doctor + `",
-			"hospital": "` + hospital + `",
-			"status": "` + status + `",
-			"result": "` + result + `",
-			"bloodTestID": "` + bloodTestID + `"},`) //build the Json element
+	str := []byte(`{"timeStamp": "` + timeStamp + `","name": "` + name + `","CPR": "` + CPR + `","doctor": "` + doctor + `","hospital": "` + hospital + `","status": "` + status + `","result": "` + result + `","bloodTestID": "` + bloodTestID + `"}`) //build the Json element
 
 	err = stub.PutState(bloodTestID, str)
 	if err != nil {
@@ -757,13 +805,13 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 
 	json.Unmarshal(accountAsBytes, &res)
 
-	stringss := []byte(`{"typeOfUser": "` + typeOfUser + `", "username": "` + username + `", "password": "` + password + `"},`) //build the Json element
-	err = stub.PutState(username, stringss)
+	stringss := `{"typeOfUser": "` + typeOfUser + `", "username": "` + username + `", "password": "` + password + `"}` //build the Json element
+	err = stub.PutState(username, []byte(stringss))
 	if err != nil {
 		return nil, err
 	}
 
-	//get the blood index
+	//get the account index
 	accountAsBytes, err = stub.GetState(accountIndex)
 	if err != nil {
 		return nil, errors.New("you fucked up")
@@ -801,19 +849,25 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 	}
 
 	var accountAsBytes []byte
-
+	var finalList []byte = []byte (`"returnedObjects":[`)
+	res := account{}
 	for i := range userIndex {
-		res := account{}
+
 		accountAsBytes, err = stub.GetState(userIndex[i])
 		json.Unmarshal(accountAsBytes, &res)
 		if res.Username == args[0] && res.Password == args[1] {
 
-			return accountAsBytes, nil
 
+			finalList = append(finalList, accountAsBytes...)
+			if i < (len(userIndex) - 1) {
+				finalList = append(finalList, []byte(`,`)...)
+			}
 		}
 	}
+	finalList = append(finalList, []byte(`]`)...)
 
-	return nil, nil
+	return finalList, nil
+
 }
 
 // ============================================================================================================================
