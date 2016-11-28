@@ -168,6 +168,8 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		return t.hospital_read(stub, args)
 	} else if function == "get_user" {
 		return t.get_user(stub, args)
+	} else if function == "get_admin_certs" {
+		return t.get_admin_certs(stub, args)
 	}
 
 	fmt.Println("query did not find func: " + function)
