@@ -882,7 +882,7 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 
 	finalList = append(finalList, []byte(`]`)...)
 
-	return finalListForUser, nil
+	return finalList, nil
 
 }
 
