@@ -600,8 +600,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 
 	json.Unmarshal(accountAsBytes, &res)
 
-	stringss := []byte(`{"typeOfUser": "` + typeOfUser + `", "username": "` + username + `", "password": "` + password + `"},`) //build the Json element
-	err = stub.PutState(username, stringss)
+	stringss := `{"typeOfUser": "` + typeOfUser + `", "username": "` + username + `", "password": "` + password + `"},` //build the Json element
+	err = stub.PutState(username, []byte(stringss))
 	if err != nil {
 		return nil, err
 	}
