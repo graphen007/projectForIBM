@@ -876,7 +876,14 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 		return nil, errors.New("Failed to get adminEcertList")
 	}
 
-	var finalList []byte = []byte(`"admin_ecerts":[]`)
+	var adminIndexStr []string
+
+	err = json.Unmarshal(adminIndexStr, &adminCerts)
+	if err != nil {
+		fmt.Println("Failed unmarshal of adminIndex")
+	}
+
+	var finalList []byte = []byte(`"adminEcerts":[]`)
 
 	//finalList = append(finalList, adminCerts...)
 
