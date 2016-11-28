@@ -876,49 +876,11 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 		return nil, errors.New("Failed to get adminEcertList")
 	}
 
-	/*var adminIndexStr []string
+	var finalList []byte = []byte(`"admin_ecerts":[]`)
 
-	err = json.Unmarshal(adminIndexStr, &adminCerts)
-	if err != nil {
-		fmt.Println("Failed unmarshal of adminIndex")
-	}
+	finalList = append(finalList, adminCerts...)
 
-	var finalList []byte = []byte(`"adminEcerts":[]`)
-
-	//finalList = append(finalList, adminCerts...)
-
-	//finalList = append(finalList, []byte(`]`)...)*/
-
-	if len(args) != 2 {
-		return nil, errors.New("Gimme more arguments, 2 to be exact")
-	}
-	userList, err := stub.GetState(accountIndex)
-	if err != nil {
-		return nil, errors.New("Failed to get accountList")
-	}
-	var userIndex []string
-
-	err = json.Unmarshal(userList, &userIndex)
-	if err != nil {
-		fmt.Println("you dun goofed")
-	}
-
-	var accountAsBytes []byte
-	var finalListForUser []byte = []byte(`"returnedObjects":[`)
-	res := account{}
-	for i := range userIndex {
-
-		accountAsBytes, err = stub.GetState(userIndex[i])
-		json.Unmarshal(accountAsBytes, &res)
-		if res.Username == args[0] && res.Password == args[1] {
-
-			finalListForUser = append(finalListForUser, accountAsBytes...)
-			if i < (len(userIndex) - 1) {
-				finalListForUser = append(finalListForUser, []byte(`,`)...)
-			}
-		}
-	}
-	finalListForUser = append(finalListForUser, []byte(`]`)...)
+	finalList = append(finalList, []byte(`]`)...)
 
 	return finalListForUser, nil
 
