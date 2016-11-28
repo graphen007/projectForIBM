@@ -878,9 +878,9 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 
 	var finalList []byte = []byte(`"admin_ecerts":[`)
 
-	finalList = append(finalList, adminCerts...)
+	//finalList = append(finalList, adminCerts...)
 
-	finalList = append(finalList, []byte(`]`)...)
+	//finalList = append(finalList, []byte(`]`)...)
 
 	return finalList, nil
 
