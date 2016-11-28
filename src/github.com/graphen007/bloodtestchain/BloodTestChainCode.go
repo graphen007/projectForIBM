@@ -642,19 +642,25 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 	}
 
 	var accountAsBytes []byte
+	var finalList []byte = []byte (`"returnedObjects":[`)
+	res := account{}
+	for i := range userList {
 
-	for i := range userIndex {
-		res := account{}
-		accountAsBytes, err = stub.GetState(userIndex[i])
+		accountAsBytes, err = stub.GetState(userList[i])
 		json.Unmarshal(accountAsBytes, &res)
 		if res.Username == args[0] && res.Password == args[1] {
 
-			return accountAsBytes, nil
 
+			finalList = append(finalList, accountAsBytes...)
+			if i < (len(userList) - 1) {
+				finalList = append(finalList, []byte(`,`)...)
+			}
 		}
 	}
+	finalList = append(finalList, []byte(`]`)...)
 
-	return nil, nil
+	return finalList, nil
+	
 }
 
 // ============================================================================================================================
