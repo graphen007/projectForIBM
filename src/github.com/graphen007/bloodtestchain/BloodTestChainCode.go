@@ -692,7 +692,7 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 	}
 
 	var accountAsBytes []byte
-	var finalList []byte = []byte (`"returnedObjects":[`)
+	var finalListForUser []byte = []byte (`"returnedObjects":[`)
 	res := account{}
 	for i := range userIndex {
 
@@ -701,15 +701,15 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 		if res.Username == args[0] && res.Password == args[1] {
 
 
-			finalList = append(finalList, accountAsBytes...)
+			finalListForUser = append(finalListForUser, accountAsBytes...)
 			if i < (len(userIndex) - 1) {
-				finalList = append(finalList, []byte(`,`)...)
+				finalListForUser = append(finalListForUser, []byte(`,`)...)
 			}
 		}
 	}
-	finalList = append(finalList, []byte(`]`)...)
+	finalListForUser = append(finalListForUser, []byte(`]`)...)
 
-	return finalList, nil
+	return finalListForUser, nil
 
 }
 
