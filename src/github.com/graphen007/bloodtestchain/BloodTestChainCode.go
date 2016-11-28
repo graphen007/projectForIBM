@@ -240,17 +240,22 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 	}
 
 	var bloodAsBytes []byte
-	var finalList []byte
+	var finalList []byte = []byte (`[`)
 	res := bloodTest{}
 	for i := range bloodInd {
 
 		bloodAsBytes, err = stub.GetState(bloodInd[i])
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.Doctor == args[0] {
-			finalList = append(finalList, bloodAsBytes...)
 
+
+			finalList = append(finalList, bloodAsBytes...)
+			if i < len(bloodInd) {
+				finalList = append(finalList, []byte(`,`)...)
+			}
 		}
 	}
+	finalList = append(finalList, []byte(`]`)...)
 
 	return finalList, nil
 }
