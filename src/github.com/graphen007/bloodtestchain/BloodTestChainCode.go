@@ -22,7 +22,8 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"runtime"
-}
+)
+
 //==============================================================================================================================
 //	 Participant types - Each participant type is mapped to an integer which we will use to compare to the value stored in a
 //						 user's eCert
