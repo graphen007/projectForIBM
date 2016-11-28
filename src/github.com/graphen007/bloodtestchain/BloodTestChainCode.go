@@ -250,7 +250,7 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 
 
 			finalList = append(finalList, bloodAsBytes...)
-			if i < len(bloodInd - 1) {
+			if i < (len(bloodInd) - 1) {
 				finalList = append(finalList, []byte(`,`)...)
 			}
 		}
