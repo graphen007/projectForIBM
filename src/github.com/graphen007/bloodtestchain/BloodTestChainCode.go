@@ -22,13 +22,26 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"runtime"
+}
+//==============================================================================================================================
+//	 Participant types - Each participant type is mapped to an integer which we will use to compare to the value stored in a
+//						 user's eCert
+//==============================================================================================================================
+const ADMIN = "admin"         // 0
+const DOCTOR = "doctor"       // 1
+const CLIENT = "client"       // 2
+const HOSPITAL = "hospital"   // 3
+const BLOODBANK = "bloodbank" // 4
 
-	"crypto/aes"
-	"crypto/cipher"
-	"crypto/rand"
-	"encoding/hex"
-	"io"
-)
+//==============================================================================================================================
+//	 Hardcoded access tokens
+//==============================================================================================================================
+const ADMIN_TOKEN = "pNAQvsgTSz"
+const DOCTOR_TOKEN = "9Hk5e3rdR9"
+const CLIENT_TOKEN = "ERE4zwMnao"
+const HOSPITAL_TOKEN = "XpK9cGH22x"
+const BLOODBANK_TOKEN = "TdFeAzGlrI"
+
 
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
@@ -48,12 +61,29 @@ type bloodTest struct {
 	Result      string `json:"result"`
 	BloodTestID string `json:"BloodTestID"`
 }
-
+//==============================================================================================================================
+//	account - Struct for storing the JSON of a account
+//==============================================================================================================================
 type account struct {
 	TypeOfUser string `json:"typeOfUser"`
 	Username   string `json:"username"`
 	Password   string `json:"password"`
 }
+
+//==============================================================================================================================
+//	User_and_eCert - Struct for storing the JSON of a user and their ecert
+//==============================================================================================================================
+type User_and_eCert struct {
+	Identity string `json:"identity"`
+	eCert    string `json:"ecert"`
+}
+
+//name for the key/value that will store a list of all known permissionholders
+var adminIndex = "_adminIndex"
+var doctorIndex = "_doctorIndex"
+var clientIndex = "_clientIndex"
+var hospitalIndex = "_hospitalIndex"
+var bloodbankIndex = "_bloodbankIndex"
 
 // ============================================================================================================================
 // Main
@@ -137,9 +167,11 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		return t.hospital_read(stub, args)
 	} else if function == "get_user" {
 		return t.get_user(stub, args)
+	} else if function == "get_admin_certs" {
+		return t.get_admin_certs(stub, args)
 	}
 
-	fmt.Println("query did not find func: " + function)
+fmt.Println("query did not find func: " + function)
 	return nil, errors.New("Received unknown function query")
 }
 
@@ -205,14 +237,13 @@ func (t *SimpleChaincode) patient_read(stub shim.ChaincodeStubInterface, args []
 	}
 
 	var bloodAsBytes []byte
-	var finalList []byte = []byte (`"returnedObjects":[`)
+	var finalList []byte = []byte(`"returnedObjects":[`)
 	res := bloodTest{}
 	for i := range bloodInd {
 
 		bloodAsBytes, err = stub.GetState(bloodInd[i])
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.CPR == args[0] {
-
 
 			finalList = append(finalList, bloodAsBytes...)
 			if i < (len(bloodInd) - 1) {
@@ -245,14 +276,13 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 	}
 
 	var bloodAsBytes []byte
-	var finalList []byte = []byte (`"returnedObjects":[`)
+	var finalList []byte = []byte(`"returnedObjects":[`)
 	res := bloodTest{}
 	for i := range bloodInd {
 
 		bloodAsBytes, err = stub.GetState(bloodInd[i])
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.Doctor == args[0] {
-
 
 			finalList = append(finalList, bloodAsBytes...)
 			if i < (len(bloodInd) - 1) {
@@ -285,14 +315,13 @@ func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args [
 	}
 
 	var bloodAsBytes []byte
-	var finalList []byte = []byte (`"returnedObjects":[`)
+	var finalList []byte = []byte(`"returnedObjects":[`)
 	res := bloodTest{}
 	for i := range bloodInd {
 
 		bloodAsBytes, err = stub.GetState(bloodInd[i])
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.Hospital == args[0] {
-
 
 			finalList = append(finalList, bloodAsBytes...)
 			if i < (len(bloodInd) - 1) {
@@ -304,7 +333,6 @@ func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args [
 
 	return finalList, nil
 }
-
 
 // ============================================================================================================================
 // bloodbank Read !! HAS NOT BEEN ADDED YET AND IS NOT FULLY FUNCTIONAL!!!
@@ -326,14 +354,13 @@ func (t *SimpleChaincode) bloodbank_read(stub shim.ChaincodeStubInterface, args 
 	}
 
 	var bloodAsBytes []byte
-	var finalList []byte = []byte (`"returnedObjects":[`)
+	var finalList []byte = []byte(`"returnedObjects":[`)
 	res := bloodTest{}
 	for i := range bloodInd {
 
 		bloodAsBytes, err = stub.GetState(bloodInd[i])
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.Result == args[0] {
-
 
 			finalList = append(finalList, bloodAsBytes...)
 			if i < (len(bloodInd) - 1) {
@@ -586,7 +613,7 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 
 	json.Unmarshal(bloodAsBytes, &res)
 
-// "STILL TESTING! timeStamp": " + timeStamp + ", "name": " + name + ", "CPR": " + CPR + ", "doctor": " + doctor + ", "hospital": " + hospital + ", "status": " + status + ", "result": " + result + ", "bloodTestID": " + bloodTestID + "
+	// "STILL TESTING! timeStamp": " + timeStamp + ", "name": " + name + ", "CPR": " + CPR + ", "doctor": " + doctor + ", "hospital": " + hospital + ", "status": " + status + ", "result": " + result + ", "bloodTestID": " + bloodTestID + "
 
 	str := []byte(`{"timeStamp": "` + timeStamp + `","name": "` + name + `","CPR": "` + CPR + `","doctor": "` + doctor + `","hospital": "` + hospital + `","status": "` + status + `","result": "` + result + `","bloodTestID": "` + bloodTestID + `"}`) //build the Json element
 
@@ -621,8 +648,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	/*
 	   Our model looks like
 	   -------------------------------------------------------
-	      0		1	    2
-	   "Type"   "username"  "password"
+	        0		       1	       2
+	   "typeOfUser"   "username"  "password"
 	   -------------------------------------------------------
 	*/
 
@@ -642,8 +669,134 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	res := account{}
 	json.Unmarshal(accountAsBytes, &res)
 	if res.Username == username {
-
 		return nil, errors.New("This account arleady exists")
+	}
+
+	// Check access token
+	accessCode, err := CheckToken(stub)
+	if err != nil {
+		return nil, errors.New("Failed during token approval")
+	}
+
+	ecert, err := stub.GetCallerCertificate()
+	if err != nil {
+		return nil, errors.New("Failed during ecert retrival")
+	}
+
+	// Convert byte[] to str
+	ecertStr := string(ecert[:])
+
+	// Set account permissons
+	// ADMIN | DOCTOR | CLIENT | HOSPITAL | BLOODBANK
+	switch typeOfUser {
+	case ADMIN:
+
+		// Check access code
+		if accessCode != 0 {
+			return nil, errors.New("Token does not give admin rights!")
+		}
+
+		// Get holder
+		adminAsBytes, err := stub.GetState(adminIndex)
+		if err != nil {
+			return nil, errors.New("Failed getting adminIndex")
+		}
+
+		// Create tmp
+		var tmpHolder []string
+		json.Unmarshal(adminAsBytes, &tmpHolder)
+
+		// Append this users eCert to the list
+		tmpHolder = append(tmpHolder, ecertStr)
+		jsonAsBytes, _ := json.Marshal(tmpHolder)
+		err = stub.PutState(adminIndex, jsonAsBytes)
+	case DOCTOR:
+
+		// Check access code
+		if accessCode != 1 {
+			return nil, errors.New("Token does not give doctor rights!")
+		}
+
+		// Get holder
+		doctorAsBytes, err := stub.GetState(doctorIndex)
+		if err != nil {
+			return nil, errors.New("Failed getting doctorIndex")
+		}
+
+		// Create tmp
+		var tmpHolder []string
+		json.Unmarshal(doctorAsBytes, &tmpHolder)
+
+		// Append this users eCert to the list
+		tmpHolder = append(tmpHolder, ecertStr)
+		jsonAsBytes, _ := json.Marshal(tmpHolder)
+		err = stub.PutState(doctorIndex, jsonAsBytes)
+	case CLIENT:
+
+		// Check access code
+		if accessCode != 2 {
+			return nil, errors.New("Token does not give client rights!")
+		}
+
+		// Get holder
+		clientAsBytes, err := stub.GetState(clientIndex)
+		if err != nil {
+			return nil, errors.New("Failed getting doctorIndex")
+		}
+
+		// Create tmp
+		var tmpHolder []string
+		json.Unmarshal(clientAsBytes, &tmpHolder)
+
+		// Append this users eCert to the list
+		tmpHolder = append(tmpHolder, ecertStr)
+		jsonAsBytes, _ := json.Marshal(tmpHolder)
+		err = stub.PutState(clientIndex, jsonAsBytes)
+	case HOSPITAL:
+
+		// Check access code
+		if accessCode != 3 {
+			return nil, errors.New("Token does not give hospital rights!")
+		}
+
+		// Get holder
+		hospitalAsBytes, err := stub.GetState(hospitalIndex)
+		if err != nil {
+			return nil, errors.New("Failed getting hospitalIndex")
+		}
+
+		// Create tmp
+		var tmpHolder []string
+		json.Unmarshal(hospitalAsBytes, &tmpHolder)
+
+		// Append this users eCert to the list
+		tmpHolder = append(tmpHolder, ecertStr)
+		jsonAsBytes, _ := json.Marshal(tmpHolder)
+		err = stub.PutState(hospitalIndex, jsonAsBytes)
+	case BLOODBANK:
+
+		// Check access code
+		if accessCode != 4 {
+			return nil, errors.New("Token does not give blood bank rights!")
+		}
+
+		// Get holder
+		bloodBankAsBytes, err := stub.GetState(bloodbankIndex)
+		if err != nil {
+			return nil, errors.New("Failed getting doctorIndex")
+		}
+
+		// Create tmp
+		var tmpHolder []string
+		json.Unmarshal(bloodBankAsBytes, &tmpHolder)
+
+		// Append this users eCert to the list
+		tmpHolder = append(tmpHolder, ecertStr)
+		jsonAsBytes, _ := json.Marshal(tmpHolder)
+		err = stub.PutState(bloodbankIndex, jsonAsBytes)
+
+	default:
+		return nil, errors.New("User not supported. User has not been created!")
 	}
 
 	json.Unmarshal(accountAsBytes, &res)
@@ -714,61 +867,47 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 }
 
 // ============================================================================================================================
-// GCM Encrypter
+// Get ADMIN CERT HOLDER
 // ============================================================================================================================
-func GCMEncrypter() {
+func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
-	// The key argument should be the AES key, either 16 or 32 bytes
-	// to select 16 = AES-128 or 32 = AES-256.
-	key := []byte("AES256Key-32Characters1234567890")
-	plaintext := []byte("example")
-
-	block, err := aes.NewCipher(key)
+	adminCerts, err := stub.GetState(adminIndex)
 	if err != nil {
-		panic(err.Error())
+		return nil, errors.New("Failed to get adminEcertList")
 	}
 
-	// Never use more than 2^32 random nonces with a given key because of the risk of a repeat.
-	nonce := make([]byte, 12)
-	if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
-		panic(err.Error())
-	}
-	fmt.Printf("Nonce is: %x\n", nonce)
+	return adminCerts, nil
 
-	aesgcm, err := cipher.NewGCM(block)
-	if err != nil {
-		panic(err.Error())
-	}
-
-	ciphertext := aesgcm.Seal(nil, nonce, plaintext, nil)
-	fmt.Printf("Ciphertext is: %x\n", ciphertext)
 }
 
 // ============================================================================================================================
-// GCMD Decrypter
+// CheckToken - The metadata should contain the token of user type
 // ============================================================================================================================
-func GCMDecrypter() {
-	// The key argument should be the AES key, either 16 or 32 bytes
-	// to select AES-128 or AES-256.
-	key := []byte("AES256Key-32Characters1234567890")
-	ciphertext, _ := hex.DecodeString("6e8a5cb0e489ab2aa71567e574347db63e675d8c0275532bdb3203a1d4ae5c1c")
+func CheckToken(stub shim.ChaincodeStubInterface) (int, error) {
 
-	nonce, _ := hex.DecodeString("f58996f832a43cbf4135e7f5")
-
-	block, err := aes.NewCipher(key)
+	token, err := stub.GetCallerMetadata()
 	if err != nil {
-		panic(err.Error())
+		return -1, errors.New("Failed getting metadata.")
+	}
+	if len(token) == 0 {
+		return -1, errors.New("Invalid token. Empty.")
 	}
 
-	aesgcm, err := cipher.NewGCM(block)
-	if err != nil {
-		panic(err.Error())
-	}
+	tokenStr := string(token[:])
 
-	plaintext, err := aesgcm.Open(nil, nonce, ciphertext, nil)
-	if err != nil {
-		panic(err.Error())
-	}
+	switch tokenStr {
+	case ADMIN_TOKEN:
+		return 0, nil
+	case DOCTOR_TOKEN:
+		return 1, nil
+	case CLIENT_TOKEN:
+		return 2, nil
+	case HOSPITAL_TOKEN:
+		return 3, nil
+	case BLOODBANK:
+		return 4, nil
+	default:
+		return -1, errors.New("Invalid token. Not Correct.")
 
-	fmt.Printf("Decoded string is: %s\n", plaintext)
+	}
 }
