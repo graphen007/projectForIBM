@@ -22,7 +22,7 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"runtime"
-	
+
 )
 
 //==============================================================================================================================
@@ -677,7 +677,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 
 	// Check access token
 	fmt.Println("getting AccesToken")
-	accessCode, err := CheckToken(stub)
+	accessCode, err := t.CheckToken(stub)
 	if err != nil {
 		return nil, errors.New("Failed during token approval")
 	}
@@ -897,7 +897,7 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 // ============================================================================================================================
 // CheckToken - The metadata should contain the token of user type
 // ============================================================================================================================
-func CheckToken(stub shim.ChaincodeStubInterface) (int, error) {
+func (t *SimpleChaincode)CheckToken(stub shim.ChaincodeStubInterface) (int, error) {
 
 	token, err := stub.GetCallerMetadata()
 	fmt.Println("Getting metaData")
