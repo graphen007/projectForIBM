@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"runtime"
+	"strings"
 )
 
 var logger = shim.NewLogger("BTChaincode")
@@ -686,9 +687,9 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 
 	// Check access token
 	fmt.Println("getting AccesToken")
-	accessCode, err := t.CheckToken(stub)
+	accessCode, err := t.CheckToken(args[3])
 	if err != nil {
-		return nil, errors.New("Failed during token approval")
+		return nil, errors.New("Failed: during token approval")
 	}
 	fmt.Println("getting callerCertificate")
 	ecert, err := stub.GetCallerCertificate()
@@ -696,10 +697,9 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("Failed during ecert retrival")
 	}
 
-	// Convert byte[] to str
-	// ecertStr := string(ecert[:])
-	// fmt.Println("ecert")
-	// ecertStr := string(ecert[:])
+	if len(ecert) == 0 {
+		return nil, errors.New("Caller has no eCert!")
+	}
 
 	// Set account permissons
 	// ADMIN | DOCTOR | CLIENT | HOSPITAL | BLOODBANK
@@ -712,6 +712,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 			return nil, errors.New("Token does not give admin rights!")
 		}
 
+		// *Debugging*
 		logger.Debug("admin ecert: ", ecert)
 
 		//  getting the rows for admin
@@ -919,11 +920,6 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 // ============================================================================================================================
 func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
-	// adminCerts, err := stub.GetState(adminIndex)
-	// if err != nil {
-	// 	return nil, errors.New("Failed to get adminEcertList")
-	// }
-
 	// Initial repsonse
 	var finalList []byte = []byte(`"admin_ecerts":[`)
 
@@ -961,10 +957,7 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 // ============================================================================================================================
 // CheckToken - The metadata should contain the token of user type
 // ============================================================================================================================
-func (t *SimpleChaincode) CheckToken(stub shim.ChaincodeStubInterface) (int, error) {
-
-	token := stub.GetStringArgs()[3]
-	fmt.Println("Getting metaData")
+func (t *SimpleChaincode) CheckToken(token string) (int, error) {
 
 	fmt.Println("checking token")
 	if len(token) == 0 {
