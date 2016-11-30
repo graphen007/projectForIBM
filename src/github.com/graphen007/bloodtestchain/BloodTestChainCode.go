@@ -701,7 +701,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	}
 
 	// *Debugging*
-	logger.Infof("admin ecert: %s", string(ecert))
+	logger.Errorf("admin ecert: %s", string(ecert))
 
 	// Set account permissons
 	// ADMIN | DOCTOR | CLIENT | HOSPITAL | BLOODBANK
