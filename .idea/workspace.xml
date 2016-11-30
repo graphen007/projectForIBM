@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d80bd710-649e-4d8c-b90a-bb8a52956ddc" name="Default" comment="">
+    <list default="true" id="d80bd710-649e-4d8c-b90a-bb8a52956ddc" name="Default" comment="Merged it all">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go" afterPath="$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go" />
     </list>
@@ -26,8 +26,8 @@
       <file leaf-file-name="BloodTestChainCode.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-996">
-              <caret line="801" column="0" selection-start-line="801" selection-start-column="0" selection-end-line="801" selection-end-column="0" />
+            <state relative-caret-position="220">
+              <caret line="821" column="38" selection-start-line="821" selection-start-column="38" selection-end-line="821" selection-end-column="38" />
               <folding>
                 <element signature="e#612#720#0" expanded="true" />
               </folding>
@@ -119,7 +119,7 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
-    <option name="STATE" value="1" />
+    <option name="STATE" value="2" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -136,8 +136,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -258,7 +256,9 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -295,11 +295,6 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="CREATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/.DS_Store</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/.DS_Store</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/github.com/.DS_Store</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/.DS_Store</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/github.com/hyperledger/.DS_Store</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Deleted" />
@@ -706,13 +701,6 @@
       <option name="presentableId" value="Default" />
       <updated>1478785627633</updated>
     </task>
-    <task id="LOCAL-00054" summary="working commit ass this">
-      <created>1479751732586</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1479751732586</updated>
-    </task>
     <task id="LOCAL-00055" summary="working commit ass this">
       <created>1479751996162</created>
       <option name="number" value="00055" />
@@ -1049,7 +1037,14 @@
       <option name="project" value="LOCAL" />
       <updated>1480358683447</updated>
     </task>
-    <option name="localTasksCounter" value="103" />
+    <task id="LOCAL-00103" summary="Merged it all">
+      <created>1480360304207</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1480360304207</updated>
+    </task>
+    <option name="localTasksCounter" value="104" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1062,8 +1057,8 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36598492" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32938644" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36598492" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32938644" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1407,8 +1402,8 @@
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" />
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-996">
-          <caret line="801" column="0" selection-start-line="801" selection-start-column="0" selection-end-line="801" selection-end-column="0" />
+        <state relative-caret-position="220">
+          <caret line="821" column="38" selection-start-line="821" selection-start-column="38" selection-end-line="821" selection-end-column="38" />
           <folding>
             <element signature="e#612#720#0" expanded="true" />
           </folding>

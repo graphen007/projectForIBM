@@ -689,9 +689,10 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 
 	// Set account permissons
 	// ADMIN | DOCTOR | CLIENT | HOSPITAL | BLOODBANK
+	fmt.Println("starting the permission")
 	switch typeOfUser {
 	case ADMIN:
-
+		fmt.Println("It's an Admin ACC")
 		// Check access code
 		if accessCode != 0 {
 			return nil, errors.New("Token does not give admin rights!")
@@ -712,7 +713,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		jsonAsBytes, _ := json.Marshal(tmpHolder)
 		err = stub.PutState(adminIndex, jsonAsBytes)
 	case DOCTOR:
-
+		fmt.Println("It's an doctor ACC")
 		// Check access code
 		if accessCode != 1 {
 			return nil, errors.New("Token does not give doctor rights!")
@@ -733,7 +734,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		jsonAsBytes, _ := json.Marshal(tmpHolder)
 		err = stub.PutState(doctorIndex, jsonAsBytes)
 	case CLIENT:
-
+		fmt.Println("It's an CLIENT ACC")
 		// Check access code
 		if accessCode != 2 {
 			return nil, errors.New("Token does not give client rights!")
@@ -754,7 +755,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		jsonAsBytes, _ := json.Marshal(tmpHolder)
 		err = stub.PutState(clientIndex, jsonAsBytes)
 	case HOSPITAL:
-
+		fmt.Println("It's an Hospital ACC")
 		// Check access code
 		if accessCode != 3 {
 			return nil, errors.New("Token does not give hospital rights!")
@@ -775,7 +776,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		jsonAsBytes, _ := json.Marshal(tmpHolder)
 		err = stub.PutState(hospitalIndex, jsonAsBytes)
 	case BLOODBANK:
-
+		fmt.Println("It's an bloodbank ACC")
 		// Check access code
 		if accessCode != 4 {
 			return nil, errors.New("Token does not give blood bank rights!")
@@ -797,6 +798,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		err = stub.PutState(bloodbankIndex, jsonAsBytes)
 
 	default:
+		fmt.Println("It's a no go acc")
 		return nil, errors.New("User not supported. User has not been created!")
 	}
 
@@ -805,18 +807,20 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	stringss := `{"typeOfUser": "` + typeOfUser + `", "username": "` + username + `", "password": "` + password + `"}` //build the Json element
 	err = stub.PutState(username, []byte(stringss))
 	if err != nil {
+		fmt.Println("Could not add account to list")
 		return nil, err
 	}
 
 	//get the account index
 	accountAsBytes, err = stub.GetState(accountIndex)
 	if err != nil {
+		fmt.Println("Could not get acc index")
 		return nil, errors.New("you fucked up")
 	}
 
 	var accInd []string
 	json.Unmarshal(accountAsBytes, &accInd)
-
+	fmt.Println("Appending to List")
 	//append it to the list
 	accInd = append(accInd, username)
 	jsonAsBytes, _ := json.Marshal(accInd)
