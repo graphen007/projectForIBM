@@ -899,9 +899,12 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 func CheckToken(stub shim.ChaincodeStubInterface) (int, error) {
 
 	token, err := stub.GetCallerMetadata()
+	fmt.Println("Getting metaData")
 	if err != nil {
 		return -1, errors.New("Failed getting metadata.")
 	}
+
+	fmt.Println("checking token")
 	if len(token) == 0 {
 		return -1, errors.New("Invalid token. Empty.")
 	}
