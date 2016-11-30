@@ -25,6 +25,8 @@ import (
 	"runtime"
 )
 
+var logger = shim.NewLogger("BTChaincode")
+
 //==============================================================================================================================
 //	 Participant types - Each participant type is mapped to an integer which we will use to compare to the value stored in a
 //						 user's eCert
@@ -709,6 +711,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		if accessCode != 0 {
 			return nil, errors.New("Token does not give admin rights!")
 		}
+
+		logger.Debug("admin ecert: ", ecert)
 
 		//  getting the rows for admin
 		var columns []shim.Column
