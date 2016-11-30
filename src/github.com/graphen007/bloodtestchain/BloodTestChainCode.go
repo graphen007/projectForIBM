@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"runtime"
+	"bytes"
 )
 
 //==============================================================================================================================
@@ -80,11 +81,12 @@ type User_and_eCert struct {
 }
 
 //name for the key/value that will store a list of all known permissionholders
-var adminIndex = "_adminIndex"
-var doctorIndex = "_doctorIndex"
-var clientIndex = "_clientIndex"
-var hospitalIndex = "_hospitalIndex"
-var bloodbankIndex = "_bloodbankIndex"
+const ADMIN_INDEX = "adminIndex"
+const DOCTOR_INDEX = "doctorIndex"
+const CLIENT_INDEX = "clientIndex"
+const HOSPITAL_INDEX = "hospitalIndex"
+const BLOODBANK_INDEX = "bloodbankIndex"
+const COLUMN_KEY = "eCerts"
 
 // ============================================================================================================================
 // Main
@@ -110,9 +112,15 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
 
-	err := stub.PutState("hello_world", []byte(args[0]))
+	var columnResTbl []*shim.ColumnDefinition
+	columnNewTbl := shim.ColumnDefinition{Name: "eCerts", Type: shim.ColumnDefinition_BYTES, Key: false}
+	columnResTbl = append(columnResTbl, &columnNewTbl)
+
+	// ADMIN_INDEX is name of the table
+	err := stub.CreateTable(ADMIN_INDEX, columnResTbl)
+
 	if err != nil {
-		return nil, err
+		fmt.Print("Table is already created!")
 	}
 
 	return nil, nil
@@ -609,7 +617,7 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 	json.Unmarshal(bloodAsBytes, &res)
 	if res.BloodTestID == bloodTestID {
 
-		return nil, errors.New("This blood test arleady exists")
+		return nil, errors.New("This blood test already exists")
 	}
 
 	json.Unmarshal(bloodAsBytes, &res)
@@ -670,7 +678,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	res := account{}
 	json.Unmarshal(accountAsBytes, &res)
 	if res.Username == username {
-		return nil, errors.New("This account arleady exists")
+		return nil, errors.New("This account already exists")
 	}
 
 	// Check access token
@@ -685,7 +693,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	}
 
 	// Convert byte[] to str
-	ecertStr := string(ecert[:])
+	// ecertStr := string(ecert[:])
 
 	// Set account permissons
 	// ADMIN | DOCTOR | CLIENT | HOSPITAL | BLOODBANK
@@ -698,20 +706,68 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 			return nil, errors.New("Token does not give admin rights!")
 		}
 
-		// Get holder
-		adminAsBytes, err := stub.GetState(adminIndex)
-		if err != nil {
-			return nil, errors.New("Failed getting adminIndex")
+		// // Get holder
+		// adminAsBytes, err := stub.GetState(adminIndex)
+		// if err != nil {
+		// 	return nil, errors.New("Failed getting adminIndex")
+		// }
+
+		// // Create tmp
+		// var tmpHolder []string
+		// json.Unmarshal(adminAsBytes, &tmpHolder)
+
+		// // Append this users eCert to the list
+		// tmpHolder = append(tmpHolder, ecertStr)
+		// jsonAsBytes, _ := json.Marshal(tmpHolder)
+		// err = stub.PutState(adminIndex, jsonAsBytes)
+
+		// adminTable, err := stub.GetTable(ADMIN_INDEX)
+		// if err != nil {
+		// 	return nil, errors.New("Cannot get table: adminTable")
+		// }
+
+		var columns []shim.Column
+		col1 := shim.Column{Value: &shim.Column_Bytes{Bytes: []byte(COLUMN_KEY)}}
+		columns = append(columns, col1)
+
+		adminRows, errs := stub.GetRows(ADMIN_INDEX, columns)
+		if errs != nil {
+			return nil, errors.New("Failed getting rows for admin")
 		}
 
-		// Create tmp
-		var tmpHolder []string
-		json.Unmarshal(adminAsBytes, &tmpHolder)
+		var found = 0
 
-		// Append this users eCert to the list
-		tmpHolder = append(tmpHolder, ecertStr)
-		jsonAsBytes, _ := json.Marshal(tmpHolder)
-		err = stub.PutState(adminIndex, jsonAsBytes)
+		for {
+			select {
+			case row, ok := <-adminRows:
+				if !ok {
+					adminRows = nil
+				} else {
+					if !(bytes.Equal(row.Columns[1].GetBytes(), ecert)) {
+						continue
+						} else {
+							found = 1
+						}
+				}
+			}
+		}
+
+		// INSERT
+
+		if found==0{
+			ok, err := stub.InsertRow(ADMIN_INDEX, shim.Row{
+				Columns: []*shim.Column{
+					&shim.Column{Value: &shim.Column_Bytes{Bytes: ecert}}},
+				})
+
+			if err != nil {
+				return nil, errors.New("Error: can't insert row!")
+			} else if !ok {
+				return nil, errors.New("Failed inserting row!")
+			}
+		}
+
+
 	case DOCTOR:
 		fmt.Println("It's an doctor ACC")
 		// Check access code
@@ -719,20 +775,20 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 			return nil, errors.New("Token does not give doctor rights!")
 		}
 
-		// Get holder
-		doctorAsBytes, err := stub.GetState(doctorIndex)
-		if err != nil {
-			return nil, errors.New("Failed getting doctorIndex")
-		}
+		// // Get holder
+		// doctorAsBytes, err := stub.GetState(doctorIndex)
+		// if err != nil {
+		// 	return nil, errors.New("Failed getting doctorIndex")
+		// }
 
-		// Create tmp
-		var tmpHolder []string
-		json.Unmarshal(doctorAsBytes, &tmpHolder)
+		// // Create tmp
+		// var tmpHolder []string
+		// json.Unmarshal(doctorAsBytes, &tmpHolder)
 
-		// Append this users eCert to the list
-		tmpHolder = append(tmpHolder, ecertStr)
-		jsonAsBytes, _ := json.Marshal(tmpHolder)
-		err = stub.PutState(doctorIndex, jsonAsBytes)
+		// // Append this users eCert to the list
+		// tmpHolder = append(tmpHolder, ecertStr)
+		// jsonAsBytes, _ := json.Marshal(tmpHolder)
+		// err = stub.PutState(doctorIndex, jsonAsBytes)
 	case CLIENT:
 		fmt.Println("It's an CLIENT ACC")
 		// Check access code
@@ -741,19 +797,19 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		}
 
 		// Get holder
-		clientAsBytes, err := stub.GetState(clientIndex)
-		if err != nil {
-			return nil, errors.New("Failed getting doctorIndex")
-		}
+		// clientAsBytes, err := stub.GetState(clientIndex)
+		// if err != nil {
+		// 	return nil, errors.New("Failed getting doctorIndex")
+		// }
 
-		// Create tmp
-		var tmpHolder []string
-		json.Unmarshal(clientAsBytes, &tmpHolder)
+		// // Create tmp
+		// var tmpHolder []string
+		// json.Unmarshal(clientAsBytes, &tmpHolder)
 
-		// Append this users eCert to the list
-		tmpHolder = append(tmpHolder, ecertStr)
-		jsonAsBytes, _ := json.Marshal(tmpHolder)
-		err = stub.PutState(clientIndex, jsonAsBytes)
+		// // Append this users eCert to the list
+		// tmpHolder = append(tmpHolder, ecertStr)
+		// jsonAsBytes, _ := json.Marshal(tmpHolder)
+		// err = stub.PutState(clientIndex, jsonAsBytes)
 	case HOSPITAL:
 		fmt.Println("It's an Hospital ACC")
 		// Check access code
@@ -762,19 +818,19 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		}
 
 		// Get holder
-		hospitalAsBytes, err := stub.GetState(hospitalIndex)
-		if err != nil {
-			return nil, errors.New("Failed getting hospitalIndex")
-		}
+		// hospitalAsBytes, err := stub.GetState(hospitalIndex)
+		// if err != nil {
+		// 	return nil, errors.New("Failed getting hospitalIndex")
+		// }
 
-		// Create tmp
-		var tmpHolder []string
-		json.Unmarshal(hospitalAsBytes, &tmpHolder)
+		// // Create tmp
+		// var tmpHolder []string
+		// json.Unmarshal(hospitalAsBytes, &tmpHolder)
 
-		// Append this users eCert to the list
-		tmpHolder = append(tmpHolder, ecertStr)
-		jsonAsBytes, _ := json.Marshal(tmpHolder)
-		err = stub.PutState(hospitalIndex, jsonAsBytes)
+		// // Append this users eCert to the list
+		// tmpHolder = append(tmpHolder, ecertStr)
+		// jsonAsBytes, _ := json.Marshal(tmpHolder)
+		// err = stub.PutState(hospitalIndex, jsonAsBytes)
 	case BLOODBANK:
 		fmt.Println("It's an bloodbank ACC")
 		// Check access code
@@ -783,19 +839,19 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		}
 
 		// Get holder
-		bloodBankAsBytes, err := stub.GetState(bloodbankIndex)
-		if err != nil {
-			return nil, errors.New("Failed getting doctorIndex")
-		}
+		// bloodBankAsBytes, err := stub.GetState(bloodbankIndex)
+		// if err != nil {
+		// 	return nil, errors.New("Failed getting doctorIndex")
+		// }
 
-		// Create tmp
-		var tmpHolder []string
-		json.Unmarshal(bloodBankAsBytes, &tmpHolder)
+		// // Create tmp
+		// var tmpHolder []string
+		// json.Unmarshal(bloodBankAsBytes, &tmpHolder)
 
-		// Append this users eCert to the list
-		tmpHolder = append(tmpHolder, ecertStr)
-		jsonAsBytes, _ := json.Marshal(tmpHolder)
-		err = stub.PutState(bloodbankIndex, jsonAsBytes)
+		// // Append this users eCert to the list
+		// tmpHolder = append(tmpHolder, ecertStr)
+		// jsonAsBytes, _ := json.Marshal(tmpHolder)
+		// err = stub.PutState(bloodbankIndex, jsonAsBytes)
 
 	default:
 		fmt.Println("It's a no go acc")
@@ -875,16 +931,12 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 // ============================================================================================================================
 func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
-	adminCerts, err := stub.GetState(adminIndex)
-	if err != nil {
-		return nil, errors.New("Failed to get adminEcertList")
-	}
+	// adminCerts, err := stub.GetState(adminIndex)
+	// if err != nil {
+	// 	return nil, errors.New("Failed to get adminEcertList")
+	// }
 
-	var finalList []byte = []byte(`"admin_ecerts":[`)
-
-	finalList = append(finalList, adminCerts...)
-
-	finalList = append(finalList, []byte(`]`)...)
+	var finalList []byte = []byte(`"admin_ecerts":[]`)
 
 	return finalList, nil
 
