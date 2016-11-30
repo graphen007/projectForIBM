@@ -700,6 +700,9 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("Caller has no eCert!")
 	}
 
+	// *Debugging*
+	logger.Infof("admin ecert: %s", string(ecert))
+
 	// Set account permissons
 	// ADMIN | DOCTOR | CLIENT | HOSPITAL | BLOODBANK
 	fmt.Println("starting the permission")
@@ -712,7 +715,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		}
 
 		// *Debugging*
-		logger.Debug("admin ecert: ", ecert)
+		logger.Info("admin ecert: ", ecert)
 
 		//  getting the rows for admin
 		var columns []shim.Column
