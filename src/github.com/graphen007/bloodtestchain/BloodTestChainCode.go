@@ -676,23 +676,27 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("")
 	}
 	res := account{}
+	fmt.Println("checking if account exists")
 	json.Unmarshal(accountAsBytes, &res)
 	if res.Username == username {
 		return nil, errors.New("This account already exists")
 	}
 
 	// Check access token
-	accessCode, err := CheckToken(stub)
+	fmt.Println("getting AccesToken")
+	accessCode, err := t.CheckToken(stub)
 	if err != nil {
 		return nil, errors.New("Failed during token approval")
 	}
-
+	fmt.Println("getting callerCertificate")
 	ecert, err := stub.GetCallerCertificate()
 	if err != nil {
 		return nil, errors.New("Failed during ecert retrival")
 	}
 
 	// Convert byte[] to str
+	// ecertStr := string(ecert[:])
+	// fmt.Println("ecert")
 	// ecertStr := string(ecert[:])
 
 	// Set account permissons
@@ -945,20 +949,30 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 // ============================================================================================================================
 // CheckToken - The metadata should contain the token of user type
 // ============================================================================================================================
-func CheckToken(stub shim.ChaincodeStubInterface) (int, error) {
+func (t *SimpleChaincode)CheckToken(stub shim.ChaincodeStubInterface) (int, error) {
 
 	token, err := stub.GetCallerMetadata()
+	fmt.Println("Getting metaData")
 	if err != nil {
 		return -1, errors.New("Failed getting metadata.")
 	}
+
+	var res string
+	json.Unmarshal(token, &res)
+	fmt.Println(res)
+
+	fmt.Println("checking token")
 	if len(token) == 0 {
+		fmt.Println("invalid token, empty")
 		return -1, errors.New("Invalid token. Empty.")
 	}
 
+	fmt.Println("Stringify")
 	tokenStr := string(token[:])
 
 	switch tokenStr {
 	case ADMIN_TOKEN:
+		fmt.Println("return 0")
 		return 0, nil
 	case DOCTOR_TOKEN:
 		return 1, nil
