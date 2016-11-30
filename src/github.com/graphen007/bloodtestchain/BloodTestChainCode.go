@@ -909,10 +909,12 @@ func CheckToken(stub shim.ChaincodeStubInterface) (int, error) {
 		return -1, errors.New("Invalid token. Empty.")
 	}
 
+	fmt.Println("Stringify")
 	tokenStr := string(token[:])
 
 	switch tokenStr {
 	case ADMIN_TOKEN:
+		fmt.Println("return 0")
 		return 0, nil
 	case DOCTOR_TOKEN:
 		return 1, nil
