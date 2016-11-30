@@ -663,8 +663,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	*/
 
 	fmt.Println("Creating the account")
-	if len(args) != 3 {
-		return nil, errors.New("Gimme more arguments, 3 to be exact, User and number pliz")
+	if len(args) != 4 {
+		return nil, errors.New("Gimme more arguments, 4 to be exact, User and number pliz")
 	}
 
 	typeOfUser := args[0]
@@ -959,15 +959,8 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 // ============================================================================================================================
 func (t *SimpleChaincode) CheckToken(stub shim.ChaincodeStubInterface) (int, error) {
 
-	token, err := stub.GetCallerMetadata()
+	token := stub.GetStringArgs()[3]
 	fmt.Println("Getting metaData")
-	if err != nil {
-		return -1, errors.New("Failed getting metadata.")
-	}
-
-	var res string
-	json.Unmarshal(token, &res)
-	fmt.Println(res)
 
 	fmt.Println("checking token")
 	if len(token) == 0 {
@@ -975,10 +968,7 @@ func (t *SimpleChaincode) CheckToken(stub shim.ChaincodeStubInterface) (int, err
 		return -1, errors.New("Invalid token. Empty.")
 	}
 
-	fmt.Println("Stringify")
-	tokenStr := string(token[:])
-
-	switch tokenStr {
+	switch token {
 	case ADMIN_TOKEN:
 		fmt.Println("return 0")
 		return 0, nil
