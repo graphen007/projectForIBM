@@ -668,23 +668,26 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("")
 	}
 	res := account{}
+	fmt.Println("checking if account exists")
 	json.Unmarshal(accountAsBytes, &res)
 	if res.Username == username {
 		return nil, errors.New("This account arleady exists")
 	}
 
 	// Check access token
+	fmt.Println("getting AccesToken")
 	accessCode, err := CheckToken(stub)
 	if err != nil {
 		return nil, errors.New("Failed during token approval")
 	}
-
+	fmt.Println("getting callerCertificate")
 	ecert, err := stub.GetCallerCertificate()
 	if err != nil {
 		return nil, errors.New("Failed during ecert retrival")
 	}
 
 	// Convert byte[] to str
+	fmt.Println("ecert")
 	ecertStr := string(ecert[:])
 
 	// Set account permissons
