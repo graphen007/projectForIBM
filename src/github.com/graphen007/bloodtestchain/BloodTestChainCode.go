@@ -710,26 +710,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 			return nil, errors.New("Token does not give admin rights!")
 		}
 
-		// // Get holder
-		// adminAsBytes, err := stub.GetState(adminIndex)
-		// if err != nil {
-		// 	return nil, errors.New("Failed getting adminIndex")
-		// }
-
-		// // Create tmp
-		// var tmpHolder []string
-		// json.Unmarshal(adminAsBytes, &tmpHolder)
-
-		// // Append this users eCert to the list
-		// tmpHolder = append(tmpHolder, ecertStr)
-		// jsonAsBytes, _ := json.Marshal(tmpHolder)
-		// err = stub.PutState(adminIndex, jsonAsBytes)
-
-		// adminTable, err := stub.GetTable(ADMIN_INDEX)
-		// if err != nil {
-		// 	return nil, errors.New("Cannot get table: adminTable")
-		// }
-
+		//  getting the rows for admin
 		var columns []shim.Column
 		col1 := shim.Column{Value: &shim.Column_Bytes{Bytes: []byte(COLUMN_KEY)}}
 		columns = append(columns, col1)
@@ -751,13 +732,13 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 						continue
 						} else {
 							found = 1
+							break
 						}
 				}
 			}
 		}
 
-		// INSERT
-
+		// Inserting rows
 		if found==0{
 			ok, err := stub.InsertRow(ADMIN_INDEX, shim.Row{
 				Columns: []*shim.Column{
