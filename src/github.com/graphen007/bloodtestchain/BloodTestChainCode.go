@@ -906,6 +906,7 @@ func CheckToken(stub shim.ChaincodeStubInterface) (int, error) {
 
 	fmt.Println("checking token")
 	if len(token) == 0 {
+		fmt.Println("invalid token, empty")
 		return -1, errors.New("Invalid token. Empty.")
 	}
 
