@@ -17,12 +17,12 @@ limitations under the License.
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"runtime"
-	"bytes"
 )
 
 //==============================================================================================================================
@@ -730,20 +730,20 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 				} else {
 					if !(bytes.Equal(row.Columns[1].GetBytes(), ecert)) {
 						continue
-						} else {
-							found = 1
-							break
-						}
+					} else {
+						found = 1
+						break
+					}
 				}
 			}
 		}
 
 		// Inserting rows
-		if found==0{
+		if found == 0 {
 			ok, err := stub.InsertRow(ADMIN_INDEX, shim.Row{
 				Columns: []*shim.Column{
 					&shim.Column{Value: &shim.Column_Bytes{Bytes: ecert}}},
-				})
+			})
 
 			if err != nil {
 				return nil, errors.New("Error: can't insert row!")
@@ -751,7 +751,6 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 				return nil, errors.New("Failed inserting row!")
 			}
 		}
-
 
 	case DOCTOR:
 		fmt.Println("It's an doctor ACC")
@@ -921,7 +920,35 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 	// 	return nil, errors.New("Failed to get adminEcertList")
 	// }
 
-	var finalList []byte = []byte(`"admin_ecerts":[]`)
+	// Initial repsonse
+	var finalList []byte = []byte(`"admin_ecerts":[`)
+
+	// Getting the rows for admin
+	var columns []shim.Column
+	col1 := shim.Column{Value: &shim.Column_Bytes{Bytes: []byte(COLUMN_KEY)}}
+	columns = append(columns, col1)
+
+	adminRows, errs := stub.GetRows(ADMIN_INDEX, columns)
+	if errs != nil {
+		return nil, errors.New("Failed getting rows for admin")
+	}
+
+	var tmpHolder []byte
+	for {
+		select {
+		case row, ok := <-adminRows:
+			if !ok {
+				adminRows = nil
+			} else {
+
+				tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
+				tmpHolder = append(tmpHolder, []byte(`,`)...)
+			}
+		}
+	}
+	finalList = append(finalList, tmpHolder...)
+
+	finalList = append(finalList, []byte(`]`)...)
 
 	return finalList, nil
 
@@ -930,7 +957,7 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 // ============================================================================================================================
 // CheckToken - The metadata should contain the token of user type
 // ============================================================================================================================
-func (t *SimpleChaincode)CheckToken(stub shim.ChaincodeStubInterface) (int, error) {
+func (t *SimpleChaincode) CheckToken(stub shim.ChaincodeStubInterface) (int, error) {
 
 	token, err := stub.GetCallerMetadata()
 	fmt.Println("Getting metaData")
