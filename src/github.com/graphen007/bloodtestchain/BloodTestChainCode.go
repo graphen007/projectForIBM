@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"runtime"
+	
 )
 
 //==============================================================================================================================
@@ -903,6 +904,10 @@ func CheckToken(stub shim.ChaincodeStubInterface) (int, error) {
 	if err != nil {
 		return -1, errors.New("Failed getting metadata.")
 	}
+
+	var res string
+	json.Unmarshal(token, &res)
+	fmt.Println(res)
 
 	fmt.Println("checking token")
 	if len(token) == 0 {
