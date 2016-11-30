@@ -23,7 +23,6 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"runtime"
-	"strings"
 )
 
 var logger = shim.NewLogger("BTChaincode")
