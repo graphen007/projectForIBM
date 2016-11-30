@@ -927,8 +927,8 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 	col1 := shim.Column{Value: &shim.Column_Bytes{Bytes: []byte(COLUMN_KEY)}}
 	columns = append(columns, col1)
 
-	adminRows, errs := stub.GetRows(ADMIN_INDEX, columns)
-	if errs != nil {
+	adminRows, err := stub.GetRows(ADMIN_INDEX, columns)
+	if err != nil {
 		return nil, errors.New("Failed getting rows for admin")
 	}
 
