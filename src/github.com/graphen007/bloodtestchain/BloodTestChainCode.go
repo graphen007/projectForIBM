@@ -984,3 +984,27 @@ func (t *SimpleChaincode) CheckToken(token string) (int, error) {
 
 	}
 }
+
+/**----------- JUST FOR TESTING ----------- **/
+
+// ============================================================================================================================
+// Get Metadata
+// ============================================================================================================================
+func (t *SimpleChaincode) get_ecert_test(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	fmt.Println("getting callerCertificate")
+	ecert, err := stub.GetCallerCertificate()
+	if err != nil {
+		return nil, errors.New("Failed during ecert retrival")
+	}
+
+	// Initial repsonse
+	var finalList []byte = []byte(`"your_ecert_is":[`)
+
+	finalList = append(finalList, ecert...)
+
+	finalList = append(finalList, []byte(`]`)...)
+
+	return finalList, nil
+
+}
