@@ -180,6 +180,8 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		return t.get_user(stub, args)
 	} else if function == "get_admin_certs" {
 		return t.get_admin_certs(stub, args)
+	} else if function == "get_ecert_test" {
+		return t.get_ecert_test(stub, args)
 	}
 
 	fmt.Println("query did not find func: " + function)
