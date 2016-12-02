@@ -702,9 +702,6 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("Caller has no eCert!")
 	}
 
-	// *Debugging*
-	logger.Errorf("admin ecert: %s", string(ecert))
-
 	// Set account permissons
 	// ADMIN | DOCTOR | CLIENT | HOSPITAL | BLOODBANK
 	fmt.Println("starting the permission")
@@ -731,6 +728,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 
 		var found = 0
 
+		fmt.Println("Start for loop")
 		for {
 			select {
 			case row, ok := <-adminRows:
@@ -738,8 +736,10 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 					adminRows = nil
 				} else {
 					if !(bytes.Equal(row.Columns[1].GetBytes(), ecert)) {
+						fmt.Println("Not found!")
 						continue
 					} else {
+						fmt.Println("Found!")
 						found = 1
 						break
 					}
@@ -748,6 +748,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		}
 
 		// Inserting rows
+		fmt.Println("Inserting")
 		if found == 0 {
 			ok, err := stub.InsertRow(ADMIN_INDEX, shim.Row{
 				Columns: []*shim.Column{
@@ -760,6 +761,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 				return nil, errors.New("Failed inserting row!")
 			}
 		}
+
+		fmt.Println("After Insert")
 
 	case DOCTOR:
 		fmt.Println("It's an doctor ACC")
