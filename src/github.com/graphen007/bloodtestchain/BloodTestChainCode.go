@@ -723,6 +723,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 
 		adminRows, errs := stub.GetRows(ADMIN_INDEX, columns)
 		if errs != nil {
+			fmt.Println("Failed getting rows for admin")
 			return nil, errors.New("Failed getting rows for admin")
 		}
 
