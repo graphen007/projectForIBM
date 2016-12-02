@@ -122,7 +122,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 	err := stub.CreateTable(ADMIN_INDEX, columnResTbl)
 
 	if err != nil {
-		fmt.Print("Table is already created!")
+		fmt.Print("Table is already created! %s", err)
 	}
 
 	return nil, nil
