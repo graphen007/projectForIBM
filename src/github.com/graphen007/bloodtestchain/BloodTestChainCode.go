@@ -115,7 +115,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 	}
 
 	var columnResTbl []*shim.ColumnDefinition
-	columnNewTbl := shim.ColumnDefinition{Name: "eCerts", Type: shim.ColumnDefinition_BYTES, Key: false}
+	columnNewTbl := shim.ColumnDefinition{Name: COLUMN_KEY, Type: shim.ColumnDefinition_BYTES, Key: false}
 	columnResTbl = append(columnResTbl, &columnNewTbl)
 
 	// ADMIN_INDEX is name of the table
@@ -723,7 +723,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 
 		adminRows, errs := stub.GetRows(ADMIN_INDEX, columns)
 		if errs != nil {
-			fmt.Println("Failed getting rows for admin")
+			fmt.Println("Failed getting rows for admin %s", errs)
 			return nil, errors.New("Failed getting rows for admin")
 		}
 
