@@ -115,14 +115,14 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 	}
 
 	var columnResTbl []*shim.ColumnDefinition
-	columnNewTbl := shim.ColumnDefinition{Name: COLUMN_KEY, Type: shim.ColumnDefinition_BYTES, Key: false}
+	columnNewTbl := shim.ColumnDefinition{Name: COLUMN_KEY, Type: shim.ColumnDefinition_BYTES, Key: true}
 	columnResTbl = append(columnResTbl, &columnNewTbl)
 
 	// ADMIN_INDEX is name of the table
 	err := stub.CreateTable(ADMIN_INDEX, columnResTbl)
 
 	if err != nil {
-		fmt.Print("Table is already created! %s", err)
+		fmt.Println("Table is already created! %s", err)
 	}
 
 	return nil, nil
@@ -851,7 +851,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		// err = stub.PutState(bloodbankIndex, jsonAsBytes)
 
 	default:
-		fmt.Println("It's a no go acc")
+		fmt.Println("User not supported. User has not been created!")
 		return nil, errors.New("User not supported. User has not been created!")
 	}
 
@@ -938,6 +938,7 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 
 	adminRows, err := stub.GetRows(ADMIN_INDEX, columns)
 	if err != nil {
+		fmt.Println("Failed getting rows for admin")
 		return nil, errors.New("Failed getting rows for admin")
 	}
 
@@ -969,7 +970,7 @@ func (t *SimpleChaincode) CheckToken(token string) (int, error) {
 
 	fmt.Println("checking token")
 	if len(token) == 0 {
-		fmt.Println("invalid token, empty")
+		fmt.Println("Invalid token. Empty.")
 		return -1, errors.New("Invalid token. Empty.")
 	}
 
@@ -978,14 +979,19 @@ func (t *SimpleChaincode) CheckToken(token string) (int, error) {
 		fmt.Println("return 0")
 		return 0, nil
 	case DOCTOR_TOKEN:
+		fmt.Println("return 1")
 		return 1, nil
 	case CLIENT_TOKEN:
+		fmt.Println("return 2")
 		return 2, nil
 	case HOSPITAL_TOKEN:
+		fmt.Println("return 3")
 		return 3, nil
 	case BLOODBANK:
+		fmt.Println("return 4")
 		return 4, nil
 	default:
+		fmt.Println("Invalid token. Not Correct.")
 		return -1, errors.New("Invalid token. Not Correct.")
 
 	}
@@ -1001,6 +1007,7 @@ func (t *SimpleChaincode) get_ecert_test(stub shim.ChaincodeStubInterface, args 
 	fmt.Println("getting callerCertificate")
 	ecert, err := stub.GetCallerCertificate()
 	if err != nil {
+		fmt.Println("Failed during ecert retrival")
 		return nil, errors.New("Failed during ecert retrival")
 	}
 
