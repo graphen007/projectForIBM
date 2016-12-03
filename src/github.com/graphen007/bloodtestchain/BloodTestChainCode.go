@@ -471,11 +471,7 @@ func (t *SimpleChaincode) change_doctor(stub shim.ChaincodeStubInterface, args [
 	   "bloodTestID", "Status"
 	   -------------------------------------------------------
 	*/
-
-	if len(args) != 2 {
-		fmt.Println("args are not two!")
-		return nil, errors.New("Gimme more arguments, 2 to be exact, ID and status")
-	}
+	
 	fmt.Println("changing doctor")
 	bloodTestList, err := stub.GetState(bloodTestIndex)
 	if err != nil {
