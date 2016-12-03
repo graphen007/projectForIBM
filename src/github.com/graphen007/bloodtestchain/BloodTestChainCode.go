@@ -475,18 +475,22 @@ func (t *SimpleChaincode) change_doctor(stub shim.ChaincodeStubInterface, args [
 	if len(args) != 2 {
 		return nil, errors.New("Gimme more arguments, 2 to be exact, ID and status")
 	}
+	fmt.Println("changing doctor")
 	bloodTestList, err := stub.GetState(bloodTestIndex)
 	if err != nil {
 		return nil, errors.New("Failed to get intList")
 	}
+	fmt.Println("creating list")
 	var bloodInd []string
 
+	fmt.Println("Unmarshaling doctor")
 	err = json.Unmarshal(bloodTestList, &bloodInd)
 	if err != nil {
 		fmt.Println("you dun goofed")
 	}
 	res := bloodTest{}
 	var bloodAsBytes []byte
+	fmt.Println("running through list")
 	for i := range bloodInd {
 		bloodAsBytes, err = stub.GetState(bloodInd[i])
 		json.Unmarshal(bloodAsBytes, &res)
