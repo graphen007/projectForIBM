@@ -17,7 +17,7 @@ limitations under the License.
 package main
 
 import (
-	"bytes"
+	//"bytes"
 	"crypto/x509"
 	"encoding/json"
 	"errors"
