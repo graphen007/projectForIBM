@@ -717,7 +717,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		}
 
 		// *Debugging*
-		logger.Debug("Peer CommonName ecert: [% x]", x509Cert.Subject.CommonName)
+		logger.Debug("Peer CommonName ecert: [% x]", x509Cert.Signature)
 
 		logger.Debug("Peer saved as ecert: [% x]", x509Cert)
 
