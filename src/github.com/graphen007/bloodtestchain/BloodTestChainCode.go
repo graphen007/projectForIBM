@@ -968,11 +968,11 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 			return nil, errors.New("Failed getting rows for admin")
 		}
 
-		if len(row.GetColumns()) != 0 {
-			fmt.Println("Appending eCert")
-			tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
-			tmpHolder = append(tmpHolder, []byte(`,`)...)
-		}
+		//if len(row.GetColumns()) != 0 {
+		fmt.Println("Appending eCert")
+		tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
+		tmpHolder = append(tmpHolder, []byte(`,`)...)
+		//}
 	}
 
 	finalList = append(finalList, tmpHolder...)
