@@ -22,6 +22,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"net/url"
 	"runtime"
 )
 
@@ -949,7 +950,7 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 	}
 
 	// Initial repsonse
-	var finalList []byte = []byte(`"admin_ecerts":[`)
+	var finalList []byte = []byte(`"ecert":[`)
 
 	// Getting the rows for admin
 	var columns []shim.Column
@@ -968,18 +969,18 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 			return nil, errors.New("Failed getting rows for admin")
 		}
 
-		//if len(row.GetColumns()) != 0 {
-		fmt.Println("Appending eCert")
-		tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
-		tmpHolder = append(tmpHolder, []byte(`,`)...)
-		//}
+		if len(row.GetColumns()) != 0 {
+			fmt.Println("Appending eCert")
+			tmpHolder = append(tmpHolder, []byte(row.Columns[1].GetString_())...)
+			tmpHolder = append(tmpHolder, []byte(`,,,`)...)
+		}
 	}
 
 	finalList = append(finalList, tmpHolder...)
 	finalList = append(finalList, []byte(`]`)...)
 
 	fmt.Println("Number of Keys retrieved: ", len(args))
-	fmt.Println("Number of rows retrieved: ", len(tmpHolder))
+	fmt.Println("Number of rows retrieved: ", nCol)
 
 	fmt.Println("End of admin ecerts!")
 
