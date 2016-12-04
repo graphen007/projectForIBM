@@ -1033,9 +1033,9 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 
 	if errors != nil {
 		fmt.Print("error getting metadata: ", errors)
+	} else {
+		fmt.Print("Caller MetaData is: ", value)
 	}
-
-	fmt.Print("Caller MetaData is: ", value)
 }
 
 // ============================================================================================================================
