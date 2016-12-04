@@ -716,29 +716,29 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		col1 := shim.Column{Value: &shim.Column_String_{String_: username}}
 		columns = append(columns, col1)
 
-		adminRow, errs := stub.GetRow(ADMIN_INDEX, columns)
-		fmt.Println("Row: ", adminRow)
-		if errs != nil {
-			fmt.Println("Row for username not found [%s]", errs)
+		//adminRow, errs := stub.GetRow(ADMIN_INDEX, columns)
+		//fmt.Println("Row: ", adminRow)
+		//if errs != nil {
+		//fmt.Println("Row for username not found [%s]", errs)
 
-			// Inserting rows
-			fmt.Println("Inserting user: ", username)
-			ok, err := stub.InsertRow(ADMIN_INDEX, shim.Row{
-				Columns: []*shim.Column{
-					&shim.Column{Value: &shim.Column_String_{String_: username}},
-					&shim.Column{Value: &shim.Column_Bytes{Bytes: ecert}}},
-			})
+		// Inserting rows
+		fmt.Println("Inserting user: ", username)
+		ok, err := stub.InsertRow(ADMIN_INDEX, shim.Row{
+			Columns: []*shim.Column{
+				&shim.Column{Value: &shim.Column_String_{String_: username}},
+				&shim.Column{Value: &shim.Column_Bytes{Bytes: ecert}}},
+		})
 
-			if err != nil {
-				fmt.Println("Error: can't insert row! ", err)
-				return nil, errors.New("Error: can't insert row!")
-			} else if !ok {
-				fmt.Println("Failed inserting row!")
-				return nil, errors.New("Failed inserting row!")
-			}
-
-			fmt.Println("Insert successful!")
+		if err != nil {
+			fmt.Println("Error: can't insert row! ", err)
+			return nil, errors.New("Error: can't insert row!")
+		} else if !ok {
+			fmt.Println("Failed inserting row!")
+			return nil, errors.New("Failed inserting row!")
 		}
+
+		fmt.Println("Insert successful!")
+		//}
 
 		//if !(bytes.Equal(adminRow.Columns[1].GetBytes(), ecert)) {
 
@@ -939,7 +939,7 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 	var columns []shim.Column
 
 	for i := 0; i < nCol; i++ {
-		fmt.Println("Finding key/value pair key: [%d]", i)
+		fmt.Println("Finding key/value pair key: ", i)
 		colNext := shim.Column{Value: &shim.Column_String_{String_: args[i]}}
 		columns = append(columns, colNext)
 	}
