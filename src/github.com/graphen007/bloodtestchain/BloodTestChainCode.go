@@ -953,66 +953,29 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 
 	// Getting the rows for admin
 	var columns []shim.Column
+	var tmpHolder []byte
 
 	for i := 0; i < nCol; i++ {
+
 		fmt.Println("Finding key/value pair key: ", i)
 		colNext := shim.Column{Value: &shim.Column_String_{String_: args[i]}}
 		columns = append(columns, colNext)
-	}
 
-	adminRows, err := stub.GetRows(ADMIN_INDEX, columns)
-	if err != nil {
-		fmt.Println("Failed getting rows for admin")
-		return nil, errors.New("Failed getting rows for admin")
-	}
+		row, err := stub.GetRow(ADMIN_INDEX, columns)
 
-	/*
-		fmt.Println("Checking for inserted data!")
-			var columns []shim.Column
-			colNext := shim.Column{Value: &shim.Column_String_{String_: username}}
-			columns = append(columns, colNext)
-
-			adminRow, err := stub.GetRow(ADMIN_INDEX, columns)
-			if err != nil {
-				fmt.Println("Failed inserted row for admin")
-				return nil, errors.New("Failed getting rows for admin")
-			}
-
-			if len(adminRow.GetColumns()) != 0 {
-				logger.Debug("Retrived ecert from table: [% x]", adminRow.Columns[1].GetBytes())
-			}
-	*/
-
-	var tmpHolder []byte
-	for {
-		select {
-		case row, _ := <-adminRows:
-			/*if !ok {
-				fmt.Println("adminRows is nil")
-				adminRows = nil
-			} else {
-				fmt.Println("Appending eCert")
-				tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
-				tmpHolder = append(tmpHolder, []byte(`,`)...)
-			}*/
-
-			if len(row.GetColumns()) != 0 {
-				fmt.Println("Appending eCert")
-				tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
-				tmpHolder = append(tmpHolder, []byte(`,`)...)
-			} else {
-				break
-			}
+		if err != nil {
+			fmt.Println("Failed inserted row for admin")
+			return nil, errors.New("Failed getting rows for admin")
 		}
 
-		// Break out of infinte loop
-		if adminRows == nil {
-			fmt.Println("adminRows is nil breaking out")
-			break
+		if len(row.GetColumns()) != 0 {
+			fmt.Println("Appending eCert")
+			tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
+			tmpHolder = append(tmpHolder, []byte(`,`)...)
 		}
 	}
+
 	finalList = append(finalList, tmpHolder...)
-
 	finalList = append(finalList, []byte(`]`)...)
 
 	fmt.Println("Number of Keys retrieved: ", len(args))
