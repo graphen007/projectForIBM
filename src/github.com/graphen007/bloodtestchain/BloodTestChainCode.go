@@ -180,8 +180,6 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		return t.get_user(stub, args)
 	} else if function == "get_admin_certs" {
 		return t.get_admin_certs(stub, args)
-	} else if function == "get_ecert_test" {
-		return t.get_ecert_test(stub, args)
 	}
 
 	fmt.Println("query did not find func: " + function)
@@ -716,40 +714,13 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 			return nil, errors.New("Token does not give admin rights!")
 		}
 
-		// *Debugging*
-		logger.Debug("Peer ecert: [% x]", x509Cert.Signature)
-
-		// Inserting rows
-		fmt.Println("Inserting user: ", username)
-		ok, err := stub.InsertRow(ADMIN_INDEX, shim.Row{
-			Columns: []*shim.Column{
-				&shim.Column{Value: &shim.Column_String_{String_: username}},
-				&shim.Column{Value: &shim.Column_Bytes{Bytes: x509Cert.Signature}}},
-		})
+		ok, err := t.SaveECertificate(stub, []string{ADMIN_INDEX, username}, x509Cert.Signature)
 
 		if err != nil {
-			fmt.Println("Error: can't insert row! ", err)
-			return nil, errors.New("Error: can't insert row!")
-		} else if !ok {
-			fmt.Println("Failed inserting row!")
-			return nil, errors.New("Failed inserting row!")
+			return nil, errors.New("SaveECertificate Failed:")
 		}
-
-		fmt.Println("Insert successful!")
-
-		fmt.Println("Checking for inserted data!")
-		var columns []shim.Column
-		colNext := shim.Column{Value: &shim.Column_String_{String_: username}}
-		columns = append(columns, colNext)
-
-		adminRow, err := stub.GetRow(ADMIN_INDEX, columns)
-		if err != nil {
-			fmt.Println("Failed inserted row for admin")
-			return nil, errors.New("Failed getting rows for admin")
-		}
-
-		if len(adminRow.GetColumns()) != 0 {
-			logger.Debug("Retrived ecert from table: [%x]", adminRow.Columns[1].GetBytes())
+		if ok != 1 {
+			return nil, errors.New("SaveECertificate Failed")
 		}
 
 	case DOCTOR:
@@ -962,7 +933,7 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 }
 
 // ============================================================================================================================
-// CheckToken - The metadata should contain the token of user type
+// CheckToken - The args[3] should contain the token of user type
 // ============================================================================================================================
 func (t *SimpleChaincode) CheckToken(token string) (int, error) {
 
@@ -995,27 +966,60 @@ func (t *SimpleChaincode) CheckToken(token string) (int, error) {
 	}
 }
 
-/**----------- JUST FOR TESTING ----------- **/
-
 // ============================================================================================================================
-// Get Metadata
+// SaveECertificate - Save Callers Enrollment Certificate
 // ============================================================================================================================
-func (t *SimpleChaincode) get_ecert_test(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *SimpleChaincode) SaveECertificate(stub shim.ChaincodeStubInterface, args []string, ecert []byte) (int, error) {
 
-	fmt.Println("getting callerCertificate")
-	ecert, err := stub.GetCallerCertificate()
-	if err != nil {
-		fmt.Println("Failed during ecert retrival")
-		return nil, errors.New("Failed during ecert retrival")
+	// args: 0 = tablename, 1 = username
+	// ecert = x509Cert.Signature
+
+	fmt.Println("SaveECertificate")
+
+	if len(args) != 2 {
+		fmt.Println("Invaild number of arguments - 0 = tablename, 1 = username")
+		return -1, errors.New("Invaild number of arguments ")
 	}
 
-	// Initial repsonse
-	var finalList []byte = []byte(`"your_ecert_is":[`)
+	// Saving Ecert
+	logger.Debug("Saving to table: ", args[0])
 
-	finalList = append(finalList, ecert...)
+	// *Debugging*
+	logger.Debug("Peer ecert: [% x]", ecert)
 
-	finalList = append(finalList, []byte(`]`)...)
+	// Inserting rows
+	fmt.Println("Inserting user: ", args[1])
+	ok, err := stub.InsertRow(args[0], shim.Row{
+		Columns: []*shim.Column{
+			&shim.Column{Value: &shim.Column_String_{String_: args[1]}},
+			&shim.Column{Value: &shim.Column_Bytes{Bytes: ecert}}},
+	})
 
-	return finalList, nil
+	if err != nil {
+		fmt.Println("Error: can't insert row! ", err)
+		return -1, errors.New("Error: can't insert row!")
+	} else if !ok {
+		fmt.Println("Failed inserting row!")
+		return -1, nil
+	}
 
+	fmt.Println("Insert successful!")
+
+	fmt.Println("Checking for inserted data!")
+	var columns []shim.Column
+	colNext := shim.Column{Value: &shim.Column_String_{String_: args[1]}}
+	columns = append(columns, colNext)
+
+	row, err := stub.GetRow(args[0], columns)
+	if err != nil {
+		fmt.Println("Failed inserted row for ", args[0])
+		return -1, errors.New("Failed getting rows")
+	}
+
+	if len(row.GetColumns()) != 0 {
+		logger.Debug("Retrived ecert from table: [%x]", row.Columns[1].GetBytes())
+	}
+
+	// Ran successfully!
+	return 1, nil
 }
