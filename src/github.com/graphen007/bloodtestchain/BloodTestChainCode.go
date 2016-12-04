@@ -709,12 +709,12 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		}
 
 		// *Debugging*
-		logger.Info("admin ecert: ", ecert)
+		logger.Debug("Peer ecert: [% x]", ecert)
 
 		//  getting the row for username
-		var columns []shim.Column
-		col1 := shim.Column{Value: &shim.Column_String_{String_: username}}
-		columns = append(columns, col1)
+		//var columns []shim.Column
+		//col1 := shim.Column{Value: &shim.Column_String_{String_: username}}
+		//columns = append(columns, col1)
 
 		//adminRow, errs := stub.GetRow(ADMIN_INDEX, columns)
 		//fmt.Println("Row: ", adminRow)
@@ -738,6 +738,22 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		}
 
 		fmt.Println("Insert successful!")
+
+		fmt.Println("Checking for inserted data!")
+		var columns []shim.Column
+		colNext := shim.Column{Value: &shim.Column_String_{String_: username}}
+		columns = append(columns, colNext)
+
+		adminRow, err := stub.GetRow(ADMIN_INDEX, columns)
+		if err != nil {
+			fmt.Println("Failed inserted row for admin")
+			return nil, errors.New("Failed getting rows for admin")
+		}
+
+		if len(adminRow.GetColumns()) != 0 {
+			logger.Debug("Retrived ecert from table: [% x]", adminRow.Columns[1].GetBytes())
+		}
+
 		//}
 
 		//if !(bytes.Equal(adminRow.Columns[1].GetBytes(), ecert)) {
