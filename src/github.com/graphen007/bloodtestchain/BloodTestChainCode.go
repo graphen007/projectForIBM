@@ -717,6 +717,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		columns = append(columns, col1)
 
 		adminRow, errs := stub.GetRow(ADMIN_INDEX, columns)
+		fmt.Println("Row: ", adminRow)
 		if errs != nil {
 			fmt.Println("Row for username not found [%s]", errs)
 
