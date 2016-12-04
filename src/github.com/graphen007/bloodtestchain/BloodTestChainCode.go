@@ -961,6 +961,11 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 				tmpHolder = append(tmpHolder, []byte(`,`)...)
 			}
 		}
+
+		// Break out of infinte loop
+		if adminRows == nil {
+			break
+		}
 	}
 	finalList = append(finalList, tmpHolder...)
 
