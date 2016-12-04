@@ -939,6 +939,7 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 	var columns []shim.Column
 
 	for i := 0; i < nCol; i++ {
+		fmt.Println("Finding key/value pair key: [%d]", i)
 		colNext := shim.Column{Value: &shim.Column_String_{String_: args[i]}}
 		columns = append(columns, colNext)
 	}
@@ -954,22 +955,26 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 		select {
 		case row, ok := <-adminRows:
 			if !ok {
+				fmt.Println("adminRows is nil")
 				adminRows = nil
 			} else {
-
-				tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
+				fmt.Println("Appending eCert")
+				tmpHolder = append(tmpHolder, row.Columns[2].GetBytes()...)
 				tmpHolder = append(tmpHolder, []byte(`,`)...)
 			}
 		}
 
 		// Break out of infinte loop
 		if adminRows == nil {
+			fmt.Println("adminRows is nil breaking out")
 			break
 		}
 	}
 	finalList = append(finalList, tmpHolder...)
 
 	finalList = append(finalList, []byte(`]`)...)
+
+	fmt.Println("End of admin ecerts!")
 
 	return finalList, nil
 
