@@ -962,18 +962,41 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 
 	adminRows, err := stub.GetRows(ADMIN_INDEX, columns)
 	if err != nil {
-		fmt.Println("Failed getting rows for admin\n")
+		fmt.Println("Failed getting rows for admin")
 		return nil, errors.New("Failed getting rows for admin")
 	}
+
+	/*
+		fmt.Println("Checking for inserted data!")
+			var columns []shim.Column
+			colNext := shim.Column{Value: &shim.Column_String_{String_: username}}
+			columns = append(columns, colNext)
+
+			adminRow, err := stub.GetRow(ADMIN_INDEX, columns)
+			if err != nil {
+				fmt.Println("Failed inserted row for admin")
+				return nil, errors.New("Failed getting rows for admin")
+			}
+
+			if len(adminRow.GetColumns()) != 0 {
+				logger.Debug("Retrived ecert from table: [% x]", adminRow.Columns[1].GetBytes())
+			}
+	*/
 
 	var tmpHolder []byte
 	for {
 		select {
-		case row, ok := <-adminRows:
-			if !ok {
+		case row, _ := <-adminRows:
+			/*if !ok {
 				fmt.Println("adminRows is nil")
 				adminRows = nil
 			} else {
+				fmt.Println("Appending eCert")
+				tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
+				tmpHolder = append(tmpHolder, []byte(`,`)...)
+			}*/
+
+			if len(row.GetColumns()) != 0 {
 				fmt.Println("Appending eCert")
 				tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
 				tmpHolder = append(tmpHolder, []byte(`,`)...)
