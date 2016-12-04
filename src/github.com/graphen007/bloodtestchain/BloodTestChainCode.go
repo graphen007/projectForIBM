@@ -17,7 +17,7 @@ limitations under the License.
 package main
 
 import (
-	//"bytes"
+	"bytes"
 	"crypto/x509"
 	"encoding/json"
 	"errors"
@@ -112,18 +112,9 @@ func main() {
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	// *shim.ChaincodeStub 0.5
 	// shim.ChaincodeStubInterface 0.6
-	if len(args) != 1 {
-		return nil, errors.New("Incorrect number of arguments. Expecting 1")
-	}
 
-	err := stub.CreateTable(ADMIN_INDEX, []*shim.ColumnDefinition{
-		&shim.ColumnDefinition{Name: COLUMN_CERTS, Type: shim.ColumnDefinition_STRING, Key: true},
-		&shim.ColumnDefinition{Name: COLUMN_VALUE, Type: shim.ColumnDefinition_BYTES, Key: false},
-	})
-
-	if err != nil {
-		fmt.Println("Table is already created! Error: [%s]", err)
-	}
+	// Create tables
+	t.CreateTables(stub)
 
 	return nil, nil
 }
@@ -676,6 +667,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	fmt.Println("checking if account exists")
 	json.Unmarshal(accountAsBytes, &res)
 	if res.Username == username {
+		fmt.Println("This account already exists")
 		return nil, errors.New("This account already exists")
 	}
 
@@ -683,15 +675,18 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	fmt.Println("getting AccesToken")
 	accessCode, err := t.CheckToken(args[3])
 	if err != nil {
+		fmt.Println("Failed: during token approval")
 		return nil, errors.New("Failed: during token approval")
 	}
 	fmt.Println("getting callerCertificate")
 	ecert, err := stub.GetCallerCertificate()
 	if err != nil {
+		fmt.Println("Failed during ecert retrival")
 		return nil, errors.New("Failed during ecert retrival")
 	}
 
 	if len(ecert) == 0 {
+		fmt.Println("Caller has no eCert!")
 		return nil, errors.New("Caller has no eCert!")
 	}
 
@@ -842,6 +837,10 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 		fmt.Println("you dun goofed")
 	}
 
+	if t.CheckRole(stub, args[0], ADMIN_INDEX) != true {
+		return nil, errors.New("Access Denied!")
+	}
+
 	var accountAsBytes []byte
 	var finalListForUser []byte = []byte(`"returnedObjects":[`)
 	res := account{}
@@ -887,7 +886,7 @@ func (t *SimpleChaincode) get_enrollment_cert(stub shim.ChaincodeStubInterface, 
 	row, err := stub.GetRow(args[1], columns)
 
 	if err != nil {
-		fmt.Println("Failed inserted row for ", args[1])
+		fmt.Println("Failed getting row for ", args[1])
 		return nil, errors.New("Failed getting row")
 	}
 
@@ -995,4 +994,91 @@ func (t *SimpleChaincode) SaveECertificate(stub shim.ChaincodeStubInterface, arg
 
 	// Ran successfully!
 	return 1, nil
+}
+
+// ============================================================================================================================
+// CreateTables - Called from init
+// ============================================================================================================================
+func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
+
+	var tableName string
+	for i := 0; i < 5; i++ {
+
+		switch i {
+		case 1:
+			tableName = DOCTOR_INDEX
+		case 2:
+			tableName = HOSPITAL_INDEX
+		case 3:
+			tableName = CLIENT_INDEX
+		case 4:
+			tableName = BLOODBANK_INDEX
+		default:
+			tableName = ADMIN_INDEX
+		}
+
+		fmt.Println("Creating table: ", tableName)
+
+		err := stub.CreateTable(tableName, []*shim.ColumnDefinition{
+			&shim.ColumnDefinition{Name: COLUMN_CERTS, Type: shim.ColumnDefinition_STRING, Key: true},
+			&shim.ColumnDefinition{Name: COLUMN_VALUE, Type: shim.ColumnDefinition_BYTES, Key: false},
+		})
+
+		if err != nil {
+			fmt.Println("Table is already created! Error: [%s]", err)
+		}
+	}
+}
+
+// ============================================================================================================================
+// CheckRole - Called from all invoke/query func's.
+// Access Control happens here
+// Params: username, role
+// Username should be pass from json input
+// Roles: ADMIN_INDEX, DOCTOR_INDEX, CLIENT_INDEX, HOSPITAL_INDEX, BLOODBANK_INDEX
+// ============================================================================================================================
+func (t *SimpleChaincode) CheckRole(stub shim.ChaincodeStubInterface, username string, role string) bool {
+
+	fmt.Println("Checking Role")
+	fmt.Println("Finding pair in table ", role)
+	fmt.Println("Finding key/value pair for key: ", username)
+
+	// Get the row for username
+	var columns []shim.Column
+	colNext := shim.Column{Value: &shim.Column_String_{String_: username}}
+	columns = append(columns, colNext)
+
+	row, err := stub.GetRow(role, columns)
+
+	if err != nil {
+		fmt.Println("Access denied! User not permitted to do this: ", role)
+		return false
+	}
+
+	if len(row.GetColumns()) != 0 {
+
+		fmt.Println("Getting callerCertificate")
+		ecert, err := stub.GetCallerCertificate()
+		if err != nil || len(ecert) == 0 {
+			fmt.Println("Failed during ecert retrival")
+			return false
+		}
+
+		// Extract Certificate from result of GetCallerCertificate
+		x509Cert, err := x509.ParseCertificate(ecert)
+
+		if err != nil {
+			fmt.Println("Couldn't parse certificate")
+			return false
+		}
+
+		// Compare callers ecert & that which is stored
+		fmt.Println("Checking signature")
+		if bytes.Compare(row.Columns[1].GetBytes(), x509Cert.Signature) == 0 {
+			return true
+		}
+	}
+
+	fmt.Println("Empty eCert...Access denied!")
+	return false
 }
