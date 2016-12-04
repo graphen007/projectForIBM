@@ -1000,8 +1000,7 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 				fmt.Println("Appending eCert")
 				tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
 				tmpHolder = append(tmpHolder, []byte(`,`)...)
-			}
-			else{
+			} else {
 				break
 			}
 		}
