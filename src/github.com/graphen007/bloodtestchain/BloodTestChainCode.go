@@ -710,7 +710,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		}
 
 		// Store eCerrt in table
-		ok, err := t.SaveECertificate(stub, []string{ADMIN_INDEX, username}, x509Cert.Signature)
+		ok, err := t.SaveECertificate(stub, []string{ADMIN_INDEX, username}, ecert)
 
 		if err != nil {
 			return nil, errors.New("SaveECertificate Failed:")
@@ -1072,17 +1072,29 @@ func (t *SimpleChaincode) CheckRole(stub shim.ChaincodeStubInterface, username s
 			return false
 		}
 
+		x509CertSaved, err := x509.ParseCertificate(row.Columns[1].GetBytes())
+
+		if err != nil {
+			fmt.Println("Couldn't parse certificate")
+			return false
+		}
+
 		// Compare callers ecert & that which is stored
 		fmt.Println("Checking signature")
 
-		fmt.Print("\nIn table: ", row.Columns[1].GetBytes())
+		fmt.Print("\nIn table: ", x509CertSaved.Signature)
 		fmt.Print("\nIn Signature: ", x509Cert.Signature)
 
-		if bytes.Compare(row.Columns[1].GetBytes(), x509Cert.Signature) == 0 {
+		/*if bytes.Compare(row.Columns[1].GetBytes(), x509Cert.Signature) == 0 {
+			return true
+		}*/
+
+		if x509Cert.Equal(x509CertSaved) {
+			fmt.Println("x509Cert signature matches!")
 			return true
 		}
 	}
 
-	fmt.Println("Empty eCert...Access denied!")
+	fmt.Println("Maybe Empty eCert...Access denied!")
 	return false
 }
