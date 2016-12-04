@@ -18,6 +18,7 @@ package main
 
 import (
 	//"bytes"
+	"crypto/x509"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -696,6 +697,13 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("Caller has no eCert!")
 	}
 
+	// Extract Certificate from result of GetCallerCertificate
+	x509Cert, err := x509.ParseCertificate(ecert)
+
+	if err != nil {
+		return nil, errors.New("Couldn't parse certificate")
+	}
+
 	// Set account permissons
 	// ADMIN | DOCTOR | CLIENT | HOSPITAL | BLOODBANK
 	fmt.Println("Checking the permission")
@@ -709,7 +717,9 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		}
 
 		// *Debugging*
-		logger.Debug("Peer ecert: [% x]", ecert)
+		logger.Debug("Peer CommonName ecert: [% x]", x509Cert.Subject.CommonName)
+
+		logger.Debug("Peer saved as ecert: [% x]", x509Cert)
 
 		//  getting the row for username
 		//var columns []shim.Column
@@ -970,6 +980,7 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 
 		if len(row.GetColumns()) != 0 {
 			fmt.Println("Appending eCert")
+
 			tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
 			tmpHolder = append(tmpHolder, []byte(`,,,`)...)
 		}
