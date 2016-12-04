@@ -178,8 +178,8 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		return t.hospital_read(stub, args)
 	} else if function == "get_user" {
 		return t.get_user(stub, args)
-	} else if function == "get_admin_certs" {
-		return t.get_admin_certs(stub, args)
+	} else if function == "get_enrollment_cert" {
+		return t.get_enrollment_cert(stub, args)
 	}
 
 	fmt.Println("query did not find func: " + function)
@@ -714,6 +714,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 			return nil, errors.New("Token does not give admin rights!")
 		}
 
+		// Store eCerrt in table
 		ok, err := t.SaveECertificate(stub, []string{ADMIN_INDEX, username}, x509Cert.Signature)
 
 		if err != nil {
@@ -730,20 +731,16 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 			return nil, errors.New("Token does not give doctor rights!")
 		}
 
-		// // Get holder
-		// doctorAsBytes, err := stub.GetState(doctorIndex)
-		// if err != nil {
-		// 	return nil, errors.New("Failed getting doctorIndex")
-		// }
+		// Store eCerrt in table
+		ok, err := t.SaveECertificate(stub, []string{DOCTOR_INDEX, username}, x509Cert.Signature)
 
-		// // Create tmp
-		// var tmpHolder []string
-		// json.Unmarshal(doctorAsBytes, &tmpHolder)
+		if err != nil {
+			return nil, errors.New("SaveECertificate Failed:")
+		}
+		if ok != 1 {
+			return nil, errors.New("SaveECertificate Failed")
+		}
 
-		// // Append this users eCert to the list
-		// tmpHolder = append(tmpHolder, ecertStr)
-		// jsonAsBytes, _ := json.Marshal(tmpHolder)
-		// err = stub.PutState(doctorIndex, jsonAsBytes)
 	case CLIENT:
 		fmt.Println("It's an CLIENT ACC")
 		// Check access code
@@ -751,20 +748,15 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 			return nil, errors.New("Token does not give client rights!")
 		}
 
-		// Get holder
-		// clientAsBytes, err := stub.GetState(clientIndex)
-		// if err != nil {
-		// 	return nil, errors.New("Failed getting doctorIndex")
-		// }
+		// Store eCerrt in table
+		ok, err := t.SaveECertificate(stub, []string{DOCTOR_INDEX, username}, x509Cert.Signature)
 
-		// // Create tmp
-		// var tmpHolder []string
-		// json.Unmarshal(clientAsBytes, &tmpHolder)
-
-		// // Append this users eCert to the list
-		// tmpHolder = append(tmpHolder, ecertStr)
-		// jsonAsBytes, _ := json.Marshal(tmpHolder)
-		// err = stub.PutState(clientIndex, jsonAsBytes)
+		if err != nil {
+			return nil, errors.New("SaveECertificate Failed:")
+		}
+		if ok != 1 {
+			return nil, errors.New("SaveECertificate Failed")
+		}
 	case HOSPITAL:
 		fmt.Println("It's an Hospital ACC")
 		// Check access code
@@ -772,20 +764,15 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 			return nil, errors.New("Token does not give hospital rights!")
 		}
 
-		// Get holder
-		// hospitalAsBytes, err := stub.GetState(hospitalIndex)
-		// if err != nil {
-		// 	return nil, errors.New("Failed getting hospitalIndex")
-		// }
+		// Store eCerrt in table
+		ok, err := t.SaveECertificate(stub, []string{HOSPITAL_INDEX, username}, x509Cert.Signature)
 
-		// // Create tmp
-		// var tmpHolder []string
-		// json.Unmarshal(hospitalAsBytes, &tmpHolder)
-
-		// // Append this users eCert to the list
-		// tmpHolder = append(tmpHolder, ecertStr)
-		// jsonAsBytes, _ := json.Marshal(tmpHolder)
-		// err = stub.PutState(hospitalIndex, jsonAsBytes)
+		if err != nil {
+			return nil, errors.New("SaveECertificate Failed:")
+		}
+		if ok != 1 {
+			return nil, errors.New("SaveECertificate Failed")
+		}
 	case BLOODBANK:
 		fmt.Println("It's an bloodbank ACC")
 		// Check access code
@@ -793,20 +780,15 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 			return nil, errors.New("Token does not give blood bank rights!")
 		}
 
-		// Get holder
-		// bloodBankAsBytes, err := stub.GetState(bloodbankIndex)
-		// if err != nil {
-		// 	return nil, errors.New("Failed getting doctorIndex")
-		// }
+		// Store eCerrt in table
+		ok, err := t.SaveECertificate(stub, []string{BLOODBANK_INDEX, username}, x509Cert.Signature)
 
-		// // Create tmp
-		// var tmpHolder []string
-		// json.Unmarshal(bloodBankAsBytes, &tmpHolder)
-
-		// // Append this users eCert to the list
-		// tmpHolder = append(tmpHolder, ecertStr)
-		// jsonAsBytes, _ := json.Marshal(tmpHolder)
-		// err = stub.PutState(bloodbankIndex, jsonAsBytes)
+		if err != nil {
+			return nil, errors.New("SaveECertificate Failed:")
+		}
+		if ok != 1 {
+			return nil, errors.New("SaveECertificate Failed")
+		}
 
 	default:
 		fmt.Println("User not supported. User has not been created!")
@@ -882,14 +864,13 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 }
 
 // ============================================================================================================================
-// Get ADMIN CERT HOLDER
+// Get ECERT HOLDER
 // ============================================================================================================================
-func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *SimpleChaincode) get_enrollment_cert(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
-	nCol := len(args)
-	if nCol < 1 {
-		fmt.Println("At least 1 Key must be provided\n")
-		return nil, errors.New("Get Admin Ecerts failed. Must include at least 1 key value")
+	if len(args) < 2 {
+		fmt.Println("At least 2 args must be provided\n")
+		return nil, errors.New("Get Admin Ecerts failed. Must include at least 2 args value")
 	}
 
 	// Initial repsonse
@@ -899,34 +880,26 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 	var columns []shim.Column
 	var tmpHolder []byte
 
-	for i := 0; i < nCol; i++ {
+	fmt.Println("Finding key/value pair key for key: ", args[0])
+	colNext := shim.Column{Value: &shim.Column_String_{String_: args[0]}}
+	columns = append(columns, colNext)
 
-		fmt.Println("Finding key/value pair key: ", i)
-		colNext := shim.Column{Value: &shim.Column_String_{String_: args[i]}}
-		columns = append(columns, colNext)
+	row, err := stub.GetRow(args[1], columns)
 
-		row, err := stub.GetRow(ADMIN_INDEX, columns)
+	if err != nil {
+		fmt.Println("Failed inserted row for ", args[1])
+		return nil, errors.New("Failed getting row")
+	}
 
-		if err != nil {
-			fmt.Println("Failed inserted row for admin")
-			return nil, errors.New("Failed getting rows for admin")
-		}
-
-		if len(row.GetColumns()) != 0 {
-			fmt.Println("Appending eCert")
-
-			tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
-			tmpHolder = append(tmpHolder, []byte(`,,,`)...)
-		}
+	if len(row.GetColumns()) != 0 {
+		fmt.Println("Appending eCert")
+		tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
 	}
 
 	finalList = append(finalList, tmpHolder...)
 	finalList = append(finalList, []byte(`]`)...)
 
-	fmt.Println("Number of Keys retrieved: ", len(args))
-	fmt.Println("Number of rows retrieved: ", nCol)
-
-	fmt.Println("End of admin ecerts!")
+	fmt.Println("End of get_enrollment_cert!")
 
 	return finalList, nil
 
