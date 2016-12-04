@@ -1074,6 +1074,10 @@ func (t *SimpleChaincode) CheckRole(stub shim.ChaincodeStubInterface, username s
 
 		// Compare callers ecert & that which is stored
 		fmt.Println("Checking signature")
+
+		fmt.Print("\nIn table: ", row.Columns[1].GetBytes())
+		fmt.Print("\nIn Signature: ", x509Cert.Signature)
+
 		if bytes.Compare(row.Columns[1].GetBytes(), x509Cert.Signature) == 0 {
 			return true
 		}
