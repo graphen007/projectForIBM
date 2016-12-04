@@ -698,7 +698,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 
 	// Set account permissons
 	// ADMIN | DOCTOR | CLIENT | HOSPITAL | BLOODBANK
-	fmt.Println("starting the permission")
+	fmt.Println("Checking the permission")
 	switch typeOfUser {
 	case ADMIN:
 		fmt.Println("It's an Admin ACC")
@@ -713,18 +713,18 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 
 		//  getting the row for username
 		var columns []shim.Column
-		col1 := shim.Column{Value: &shim.Column_String{String: username}}
+		col1 := shim.Column{Value: &shim.Column_String_{String_: username}}
 		columns = append(columns, col1)
 
 		adminRow, errs := stub.GetRow(ADMIN_INDEX, columns)
-		if errs != nil || adminRow == nil {
+		if errs != nil {
 			fmt.Println("Row for username not found [%s]", errs)
 
 			// Inserting rows
 			fmt.Println("Inserting user: ", username)
 			ok, err := stub.InsertRow(ADMIN_INDEX, shim.Row{
 				Columns: []*shim.Column{
-					&shim.Column{Value: &shim.Column_String{String: username}},
+					&shim.Column{Value: &shim.Column_String_{String_: username}},
 					&shim.Column{Value: &shim.Column_Bytes{Bytes: ecert}}},
 			})
 
@@ -925,17 +925,26 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 // ============================================================================================================================
 func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
+	nCol := len(args)
+	if nCol < 1 {
+		fmt.Println("At least 1 Key must be provided\n")
+		return nil, errors.New("Get Admin Ecerts failed. Must include at least 1 key value")
+	}
+
 	// Initial repsonse
 	var finalList []byte = []byte(`"admin_ecerts":[`)
 
 	// Getting the rows for admin
 	var columns []shim.Column
-	col1 := shim.Column{Value: &shim.Column_Bytes{Bytes: []byte(COLUMN_KEY)}}
-	columns = append(columns, col1)
+
+	for i := 0; i < nCol; i++ {
+		colNext := shim.Column{Value: &shim.Column_String_{String_: args[i]}}
+		columns = append(columns, colNext)
+	}
 
 	adminRows, err := stub.GetRows(ADMIN_INDEX, columns)
 	if err != nil {
-		fmt.Println("Failed getting rows for admin")
+		fmt.Println("Failed getting rows for admin\n")
 		return nil, errors.New("Failed getting rows for admin")
 	}
 
