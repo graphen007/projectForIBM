@@ -970,7 +970,7 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 
 		if len(row.GetColumns()) != 0 {
 			fmt.Println("Appending eCert")
-			tmpHolder = append(tmpHolder, []byte(row.Columns[1].GetString_())...)
+			tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
 			tmpHolder = append(tmpHolder, []byte(`,,,`)...)
 		}
 	}
