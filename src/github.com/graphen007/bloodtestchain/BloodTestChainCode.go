@@ -959,7 +959,7 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 				adminRows = nil
 			} else {
 				fmt.Println("Appending eCert")
-				tmpHolder = append(tmpHolder, row.Columns[2].GetBytes()...)
+				tmpHolder = append(tmpHolder, row.Columns[1].GetBytes()...)
 				tmpHolder = append(tmpHolder, []byte(`,`)...)
 			}
 		}
@@ -973,6 +973,9 @@ func (t *SimpleChaincode) get_admin_certs(stub shim.ChaincodeStubInterface, args
 	finalList = append(finalList, tmpHolder...)
 
 	finalList = append(finalList, []byte(`]`)...)
+
+	fmt.Println("Number of Keys retrieved: ", len(args))
+	fmt.Println("Number of rows retrieved: ", len(rows))
 
 	fmt.Println("End of admin ecerts!")
 
