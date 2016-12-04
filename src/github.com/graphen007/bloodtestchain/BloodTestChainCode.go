@@ -717,26 +717,14 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		}
 
 		// *Debugging*
-		logger.Debug("Peer CommonName ecert: [% x]", x509Cert.Signature)
-
-		logger.Debug("Peer saved as ecert: [% x]", x509Cert)
-
-		//  getting the row for username
-		//var columns []shim.Column
-		//col1 := shim.Column{Value: &shim.Column_String_{String_: username}}
-		//columns = append(columns, col1)
-
-		//adminRow, errs := stub.GetRow(ADMIN_INDEX, columns)
-		//fmt.Println("Row: ", adminRow)
-		//if errs != nil {
-		//fmt.Println("Row for username not found [%s]", errs)
+		logger.Debug("Peer ecert: [% x]", x509Cert.Signature)
 
 		// Inserting rows
 		fmt.Println("Inserting user: ", username)
 		ok, err := stub.InsertRow(ADMIN_INDEX, shim.Row{
 			Columns: []*shim.Column{
 				&shim.Column{Value: &shim.Column_String_{String_: username}},
-				&shim.Column{Value: &shim.Column_Bytes{Bytes: ecert}}},
+				&shim.Column{Value: &shim.Column_Bytes{Bytes: x509Cert.Signature}}},
 		})
 
 		if err != nil {
@@ -761,33 +749,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		}
 
 		if len(adminRow.GetColumns()) != 0 {
-			logger.Debug("Retrived ecert from table: [% x]", adminRow.Columns[1].GetBytes())
+			logger.Debug("Retrived ecert from table: [%x]", adminRow.Columns[1].GetBytes())
 		}
-
-		//}
-
-		//if !(bytes.Equal(adminRow.Columns[1].GetBytes(), ecert)) {
-
-		/*var found = 0
-
-		fmt.Println("Start for loop")
-		for {
-			select {
-			case row, ok := <-adminRows:
-				if !ok {
-					adminRows = nil
-				} else {
-					if !(bytes.Equal(row.Columns[1].GetBytes(), ecert)) {
-						fmt.Println("Not found!")
-						continue
-					} else {
-						fmt.Println("Found!")
-						found = 1
-						break
-					}
-				}
-			}
-		}*/
 
 	case DOCTOR:
 		fmt.Println("It's an doctor ACC")
