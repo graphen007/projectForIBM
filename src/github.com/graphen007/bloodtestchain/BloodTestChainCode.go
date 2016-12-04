@@ -88,7 +88,8 @@ const DOCTOR_INDEX = "doctorIndex"
 const CLIENT_INDEX = "clientIndex"
 const HOSPITAL_INDEX = "hospitalIndex"
 const BLOODBANK_INDEX = "bloodbankIndex"
-const COLUMN_KEY = "eCerts"
+const COLUMN_CERTS = "eCerts"
+const COLUMN_VALUE = "value"
 
 // ============================================================================================================================
 // Main
@@ -114,15 +115,13 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
 
-	var columnResTbl []*shim.ColumnDefinition
-	columnNewTbl := shim.ColumnDefinition{Name: COLUMN_KEY, Type: shim.ColumnDefinition_BYTES, Key: true}
-	columnResTbl = append(columnResTbl, &columnNewTbl)
-
-	// ADMIN_INDEX is name of the table
-	err := stub.CreateTable(ADMIN_INDEX, columnResTbl)
+	err := stub.CreateTable(ADMIN_INDEX, []*shim.ColumnDefinition{
+		&shim.ColumnDefinition{Name: COLUMN_CERTS, Type: shim.ColumnDefinition_STRING, Key: true},
+		&shim.ColumnDefinition{Name: COLUMN_VALUE, Type: shim.ColumnDefinition_BYTES, Key: false},
+	})
 
 	if err != nil {
-		fmt.Println("Table is already created! %s", err)
+		fmt.Println("Table is already created! Error: [%s]", err)
 	}
 
 	return nil, nil
@@ -428,7 +427,6 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 	   -------------------------------------------------------
 	*/
 
-	
 	bloodTestList, err := stub.GetState(bloodTestIndex)
 	if err != nil {
 		return nil, errors.New("Failed to get intList")
@@ -513,7 +511,6 @@ func (t *SimpleChaincode) change_hospital(stub shim.ChaincodeStubInterface, args
 	   "bloodTestID", "Status"
 	   -------------------------------------------------------
 	*/
-
 
 	bloodTestList, err := stub.GetState(bloodTestIndex)
 	if err != nil {
@@ -707,24 +704,44 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		fmt.Println("It's an Admin ACC")
 		// Check access code
 		if accessCode != 0 {
+			fmt.Println("Token does not give admin rights!")
 			return nil, errors.New("Token does not give admin rights!")
 		}
 
 		// *Debugging*
 		logger.Info("admin ecert: ", ecert)
 
-		//  getting the rows for admin
+		//  getting the row for username
 		var columns []shim.Column
-		col1 := shim.Column{Value: &shim.Column_Bytes{Bytes: []byte(COLUMN_KEY)}}
+		col1 := shim.Column{Value: &shim.Column_String{String: username}}
 		columns = append(columns, col1)
 
-		adminRows, errs := stub.GetRows(ADMIN_INDEX, columns)
-		if errs != nil {
-			fmt.Println("Failed getting rows for admin %s", errs)
-			return nil, errors.New("Failed getting rows for admin")
+		adminRow, errs := stub.GetRow(ADMIN_INDEX, columns)
+		if errs != nil || adminRow == nil {
+			fmt.Println("Row for username not found [%s]", errs)
+
+			// Inserting rows
+			fmt.Println("Inserting user: ", username)
+			ok, err := stub.InsertRow(ADMIN_INDEX, shim.Row{
+				Columns: []*shim.Column{
+					&shim.Column{Value: &shim.Column_String{String: username}},
+					&shim.Column{Value: &shim.Column_Bytes{Bytes: ecert}}},
+			})
+
+			if err != nil {
+				fmt.Println("Error: can't insert row! ", err)
+				return nil, errors.New("Error: can't insert row!")
+			} else if !ok {
+				fmt.Println("Failed inserting row!")
+				return nil, errors.New("Failed inserting row!")
+			}
+
+			fmt.Println("Insert successful!")
 		}
 
-		var found = 0
+		//if !(bytes.Equal(adminRow.Columns[1].GetBytes(), ecert)) {
+
+		/*var found = 0
 
 		fmt.Println("Start for loop")
 		for {
@@ -743,24 +760,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 					}
 				}
 			}
-		}
-
-		// Inserting rows
-		fmt.Println("Inserting")
-		if found == 0 {
-			ok, err := stub.InsertRow(ADMIN_INDEX, shim.Row{
-				Columns: []*shim.Column{
-					&shim.Column{Value: &shim.Column_Bytes{Bytes: ecert}}},
-			})
-
-			if err != nil {
-				return nil, errors.New("Error: can't insert row!")
-			} else if !ok {
-				return nil, errors.New("Failed inserting row!")
-			}
-		}
-
-		fmt.Println("After Insert")
+		}*/
 
 	case DOCTOR:
 		fmt.Println("It's an doctor ACC")
