@@ -1028,6 +1028,9 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 			fmt.Println("Table is already created! Error: [%s]", err)
 		}
 	}
+
+	value, errors := stub.GetCallerMetadata()
+	fmt.Print("Caller MetaData is: ", value)
 }
 
 // ============================================================================================================================
@@ -1095,6 +1098,6 @@ func (t *SimpleChaincode) CheckRole(stub shim.ChaincodeStubInterface, username s
 		}
 	}
 
-	fmt.Println("Maybe Empty eCert...Access denied!")
+	fmt.Println("\nMaybe Empty eCert...Access denied!")
 	return false
 }
