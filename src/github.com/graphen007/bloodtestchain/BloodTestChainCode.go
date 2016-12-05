@@ -496,7 +496,7 @@ func (t *SimpleChaincode) change_hospital(stub shim.ChaincodeStubInterface, args
 	   -------------------------------------------------------
 	*/
 	hospital := args[1]
-
+	fmt.Println("it might actually work now")
 	bloodTestList, err := stub.GetState(bloodTestIndex)
 	if err != nil {
 		return nil, errors.New("Failed to get intList")
