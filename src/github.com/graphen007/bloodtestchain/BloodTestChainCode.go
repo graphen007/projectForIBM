@@ -498,9 +498,10 @@ func (t *SimpleChaincode) change_hospital(stub shim.ChaincodeStubInterface, args
 	   Our model looks like
 	   -------------------------------------------------------
 	      0              1
-	   "bloodTestID", "Status"
+	   "bloodTestID", "Hospital"
 	   -------------------------------------------------------
 	*/
+	hospital := args[1]
 
 	bloodTestList, err := stub.GetState(bloodTestIndex)
 	if err != nil {
@@ -518,7 +519,8 @@ func (t *SimpleChaincode) change_hospital(stub shim.ChaincodeStubInterface, args
 		bloodAsBytes, err = stub.GetState(bloodInd[i])
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.BloodTestID == args[0] {
-			res.Hospital = args[1]
+			fmt.Println("found it")
+			res.Hospital = hospital
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes) //rewrite the marble with id as key
 			if err != nil {
