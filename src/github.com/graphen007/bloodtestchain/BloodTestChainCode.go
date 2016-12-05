@@ -56,14 +56,14 @@ var bloodTestIndex = "_bloodTestIndex"
 var accountIndex = "_accountIndex"
 
 type bloodTest struct {
-	TimeStamp   string `json:"timestamp"`
+	TimeStamp   string `json:"timeStamp"`
 	Name        string `json:"name"`
 	CPR         string `json:"CPR"`
 	Doctor      string `json:"doctor"`
 	Hospital    string `json:"hospital"`
 	Status      string `json:"status"`
 	Result      string `json:"result"`
-	BloodTestID string `json:"BloodTestID"`
+	BloodTestID string `json:"bloodTestID"`
 }
 
 //==============================================================================================================================
