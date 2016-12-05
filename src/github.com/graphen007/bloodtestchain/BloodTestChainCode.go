@@ -457,35 +457,23 @@ func (t *SimpleChaincode) change_doctor(stub shim.ChaincodeStubInterface, args [
 	   "bloodTestID", "Status"
 	   -------------------------------------------------------
 	*/
-
-	fmt.Println("changing doctor")
-	bloodTestList, err := stub.GetState(bloodTestIndex)
+	fmt.Println("- start set Doctor")
+	fmt.Println(args[0] + " - " + args[1])
+	doctorAsBytes, err := stub.GetState(args[0])
 	if err != nil {
-		return nil, errors.New("Failed to get intList")
-	}
-	fmt.Println("creating list")
-	var bloodIndForChangingDoctor []string
-
-	fmt.Println("Unmarshaling doctor")
-	err = json.Unmarshal(bloodTestList, &bloodIndForChangingDoctor)
-	if err != nil {
-		fmt.Println("you dun goofed")
+		return nil, errors.New("Failed to get thing")
 	}
 	res := bloodTest{}
-	var bloodAsBytes []byte
-	fmt.Println("running through list")
-	for i := range bloodIndForChangingDoctor {
-		bloodAsBytes, err = stub.GetState(bloodIndForChangingDoctor[i])
-		json.Unmarshal(bloodAsBytes, &res)
-		if res.BloodTestID == args[0] {
-			res.Doctor = args[1]
-			jsonAsBytes, _ := json.Marshal(res)
-			err = stub.PutState(args[0], jsonAsBytes) //rewrite the blodtest with id as key
-			if err != nil {
-				return nil, err
-			}
-		}
+	json.Unmarshal(doctorAsBytes, &res)
+	res.Doctor = args[1]
+
+	jsonAsBytes, _ := json.Marshal(res)
+	err = stub.PutState(args[0], jsonAsBytes)
+	if err != nil {
+		return nil, err
 	}
+
+	fmt.Println("- end set Doctor")
 	return nil, nil
 }
 
