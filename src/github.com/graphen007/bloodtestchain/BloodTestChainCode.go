@@ -536,9 +536,7 @@ func (t *SimpleChaincode) change_result(stub shim.ChaincodeStubInterface, args [
 	   "bloodTestID", "Status"
 	   -------------------------------------------------------
 	*/
-	if len(args) != 2 {
-		return nil, errors.New("Gimme more arguments, 2 to be exact, ID and status")
-	}
+	
 	bloodTestList, err := stub.GetState(bloodTestIndex)
 	if err != nil {
 		return nil, errors.New("Failed to get intList")
