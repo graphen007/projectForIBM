@@ -427,10 +427,10 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 	res := bloodTest{}
 	json.Unmarshal(marbleAsBytes, &res)
 	fmt.Println(res)
-	res.Status = args[1]														//change the user
+	res.Status = args[1] //change the user
 	fmt.Println(res)
 	jsonAsBytes, _ := json.Marshal(res)
-	err = stub.PutState(args[0], jsonAsBytes)								//rewrite the marble with id as key
+	err = stub.PutState(args[0], jsonAsBytes) //rewrite the marble with id as key
 	if err != nil {
 		return nil, err
 	}
@@ -1027,9 +1027,9 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 	value, errors := stub.GetCallerMetadata()
 
 	if errors != nil {
-		fmt.Print("error getting metadata: ", errors)
+		fmt.Println("error getting metadata: ", errors)
 	} else {
-		fmt.Print("Caller MetaData is: ", value)
+		fmt.Println("Caller MetaData is: ", value)
 	}
 }
 
