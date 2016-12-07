@@ -76,14 +76,8 @@ type account struct {
 }
 
 //==============================================================================================================================
-//	User_and_eCert - Struct for storing the JSON of a user and their ecert
+// Name for the key/value that will store a list of all known permissionholders
 //==============================================================================================================================
-type User_and_eCert struct {
-	Identity string `json:"identity"`
-	eCert    string `json:"ecert"`
-}
-
-//name for the key/value that will store a list of all known permissionholders
 const ADMIN_INDEX = "adminIndex"
 const DOCTOR_INDEX = "doctorIndex"
 const CLIENT_INDEX = "clientIndex"
@@ -427,10 +421,12 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 	res := bloodTest{}
 	json.Unmarshal(marbleAsBytes, &res)
 	fmt.Println(res)
-	res.Status = args[1] //change the user
+
+	// Change the user
+	res.Status = args[1]
 	fmt.Println(res)
 	jsonAsBytes, _ := json.Marshal(res)
-	err = stub.PutState(args[0], jsonAsBytes) //rewrite the marble with id as key
+	err = stub.PutState(args[0], jsonAsBytes)
 	if err != nil {
 		return nil, err
 	}
@@ -475,7 +471,7 @@ func (t *SimpleChaincode) change_doctor(stub shim.ChaincodeStubInterface, args [
 		if res.BloodTestID == args[0] {
 			res.Doctor = args[1]
 			jsonAsBytes, _ := json.Marshal(res)
-			err = stub.PutState(args[0], jsonAsBytes) //rewrite the blodtest with id as key
+			err = stub.PutState(args[0], jsonAsBytes)
 			if err != nil {
 				return nil, err
 			}
@@ -517,7 +513,7 @@ func (t *SimpleChaincode) change_hospital(stub shim.ChaincodeStubInterface, args
 			fmt.Println("found it")
 			res.Hospital = hospital
 			jsonAsBytes, _ := json.Marshal(res)
-			err = stub.PutState(args[0], jsonAsBytes) //rewrite the marble with id as key
+			err = stub.PutState(args[0], jsonAsBytes)
 			if err != nil {
 				return nil, err
 			}
@@ -556,7 +552,7 @@ func (t *SimpleChaincode) change_result(stub shim.ChaincodeStubInterface, args [
 		if res.BloodTestID == args[0] {
 			res.Result = args[1]
 			jsonAsBytes, _ := json.Marshal(res)
-			err = stub.PutState(args[0], jsonAsBytes) //rewrite the marble with id as key
+			err = stub.PutState(args[0], jsonAsBytes)
 			if err != nil {
 				return nil, err
 			}
@@ -650,10 +646,11 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("Gimme more arguments, 5 to be exact, User and number pliz")
 	}
 
+	// Create vars
+	ecert := args[0]
 	typeOfUser := args[1]
 	username := args[2]
 	password := args[3]
-	ecert := args[0]
 
 	accountAsBytes, err := stub.GetState(username)
 	if err != nil {
@@ -803,7 +800,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 }
 
 // ============================================================================================================================
-// Get User
+// Get User - Retreives a users data
 // ============================================================================================================================
 func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
@@ -829,6 +826,9 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 		fmt.Println("you dun goofed")
 	}
 
+	// Example of checking role
+	// Note how model looks like and keep it the same!
+	// Meaning "ecert" is always args[0]
 	if t.CheckRole(stub, args[1], ADMIN_INDEX, args[0]) != true {
 		fmt.Println("Access Denied!")
 		return nil, errors.New("Access Denied!")
@@ -852,11 +852,11 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 	finalListForUser = append(finalListForUser, []byte(`]`)...)
 
 	return finalListForUser, nil
-
 }
 
 // ============================================================================================================================
-// Get ECERT HOLDER
+// Get ECERT HOLDER - Function to retreive a enrollment certificate stored in tablename and key
+// @Params: tablename, key
 // ============================================================================================================================
 func (t *SimpleChaincode) get_enrollment_cert(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
@@ -906,11 +906,11 @@ func (t *SimpleChaincode) get_enrollment_cert(stub shim.ChaincodeStubInterface, 
 }
 
 // ============================================================================================================================
-// CheckToken - The args[3] should contain the token of user type
+// CheckToken - The args[4] should contain the token of user type
 // ============================================================================================================================
 func (t *SimpleChaincode) CheckToken(token string) (int, error) {
 
-	fmt.Println("checking token")
+	fmt.Println("Checking token")
 	if len(token) == 0 {
 		fmt.Println("Invalid token. Empty.")
 		return -1, errors.New("Invalid token. Empty.")
@@ -918,19 +918,19 @@ func (t *SimpleChaincode) CheckToken(token string) (int, error) {
 
 	switch token {
 	case ADMIN_TOKEN:
-		fmt.Println("return 0")
+		fmt.Println("Returned 0")
 		return 0, nil
 	case DOCTOR_TOKEN:
-		fmt.Println("return 1")
+		fmt.Println("Returned 1")
 		return 1, nil
 	case CLIENT_TOKEN:
-		fmt.Println("return 2")
+		fmt.Println("Returned 2")
 		return 2, nil
 	case HOSPITAL_TOKEN:
-		fmt.Println("return 3")
+		fmt.Println("Returned 3")
 		return 3, nil
 	case BLOODBANK:
-		fmt.Println("return 4")
+		fmt.Println("Returned 4")
 		return 4, nil
 	default:
 		fmt.Println("Invalid token. Not Correct.")
@@ -941,10 +941,9 @@ func (t *SimpleChaincode) CheckToken(token string) (int, error) {
 
 // ============================================================================================================================
 // SaveECertificate - Save Callers Enrollment Certificate
+// @Params: args[] -> 0 = tablename, 1 = username, 2 = ecert
 // ============================================================================================================================
 func (t *SimpleChaincode) SaveECertificate(stub shim.ChaincodeStubInterface, args []string) (int, error) {
-
-	// args: 0 = tablename, 1 = username, 2 = ecert
 
 	fmt.Println("SaveECertificate")
 
@@ -977,6 +976,8 @@ func (t *SimpleChaincode) SaveECertificate(stub shim.ChaincodeStubInterface, arg
 
 	fmt.Println("Insert successful!")
 
+	//------------
+	// DEBUGGING
 	fmt.Println("Checking for inserted data!")
 	var columns []shim.Column
 	colNext := shim.Column{Value: &shim.Column_String_{String_: args[1]}}
@@ -991,6 +992,7 @@ func (t *SimpleChaincode) SaveECertificate(stub shim.ChaincodeStubInterface, arg
 	if len(row.GetColumns()) != 0 {
 		logger.Debug("Retrived ecert from table: [%x]", row.Columns[1].GetString_())
 	}
+	//-------------
 
 	// Ran successfully!
 	return 1, nil
