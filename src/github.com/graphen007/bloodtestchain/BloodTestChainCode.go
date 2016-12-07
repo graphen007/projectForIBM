@@ -56,14 +56,14 @@ var bloodTestIndex = "_bloodTestIndex"
 var accountIndex = "_accountIndex"
 
 type bloodTest struct {
-	TimeStamp   string `json:"timestamp"`
+	TimeStamp   string `json:"timeStamp"`
 	Name        string `json:"name"`
 	CPR         string `json:"CPR"`
 	Doctor      string `json:"doctor"`
 	Hospital    string `json:"hospital"`
 	Status      string `json:"status"`
 	Result      string `json:"result"`
-	BloodTestID string `json:"BloodTestID"`
+	BloodTestID string `json:"bloodTestID"`
 }
 
 //==============================================================================================================================
@@ -416,32 +416,26 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 	   "bloodTestID", "Status"
 	   -------------------------------------------------------
 	*/
+	var err error
 
-	bloodTestList, err := stub.GetState(bloodTestIndex)
+	fmt.Println("- start set status")
+	fmt.Println(args[0] + " - " + args[1])
+	marbleAsBytes, err := stub.GetState(args[0])
 	if err != nil {
-		return nil, errors.New("Failed to get intList")
-	}
-	var bloodInd []string
-
-	err = json.Unmarshal(bloodTestList, &bloodInd)
-	if err != nil {
-		fmt.Println("you dun goofed")
+		return nil, errors.New("Failed to get thing")
 	}
 	res := bloodTest{}
-	var bloodAsBytes []byte
-	for i := range bloodInd {
-		bloodAsBytes, err = stub.GetState(bloodInd[i])
-		json.Unmarshal(bloodAsBytes, &res)
-		if res.BloodTestID == args[0] {
-			res.Status = args[1]
-			jsonAsBytes, _ := json.Marshal(res)
-			err = stub.PutState(args[0], jsonAsBytes) //rewrite the bloodtest with id as key
-			if err != nil {
-				return nil, err
-			}
-		}
+	json.Unmarshal(marbleAsBytes, &res)
+	fmt.Println(res)
+	res.Status = args[1]														//change the user
+	fmt.Println(res)
+	jsonAsBytes, _ := json.Marshal(res)
+	err = stub.PutState(args[0], jsonAsBytes)								//rewrite the marble with id as key
+	if err != nil {
+		return nil, err
 	}
 
+	fmt.Println("- end set status")
 	return nil, nil
 }
 
@@ -471,6 +465,7 @@ func (t *SimpleChaincode) change_doctor(stub shim.ChaincodeStubInterface, args [
 	if err != nil {
 		fmt.Println("you dun goofed")
 	}
+	fmt.Println("assigning to res")
 	res := bloodTest{}
 	var bloodAsBytes []byte
 	fmt.Println("running through list")
@@ -498,10 +493,11 @@ func (t *SimpleChaincode) change_hospital(stub shim.ChaincodeStubInterface, args
 	   Our model looks like
 	   -------------------------------------------------------
 	      0              1
-	   "bloodTestID", "Status"
+	   "bloodTestID", "Hospital"
 	   -------------------------------------------------------
 	*/
-
+	hospital := args[1]
+	fmt.Println("it might actually work now")
 	bloodTestList, err := stub.GetState(bloodTestIndex)
 	if err != nil {
 		return nil, errors.New("Failed to get intList")
@@ -518,7 +514,8 @@ func (t *SimpleChaincode) change_hospital(stub shim.ChaincodeStubInterface, args
 		bloodAsBytes, err = stub.GetState(bloodInd[i])
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.BloodTestID == args[0] {
-			res.Hospital = args[1]
+			fmt.Println("found it")
+			res.Hospital = hospital
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes) //rewrite the marble with id as key
 			if err != nil {
@@ -540,9 +537,7 @@ func (t *SimpleChaincode) change_result(stub shim.ChaincodeStubInterface, args [
 	   "bloodTestID", "Status"
 	   -------------------------------------------------------
 	*/
-	if len(args) != 2 {
-		return nil, errors.New("Gimme more arguments, 2 to be exact, ID and status")
-	}
+
 	bloodTestList, err := stub.GetState(bloodTestIndex)
 	if err != nil {
 		return nil, errors.New("Failed to get intList")
