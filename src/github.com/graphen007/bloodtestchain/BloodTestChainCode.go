@@ -646,8 +646,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	*/
 
 	fmt.Println("Creating the account")
-	if len(args) != 4 {
-		return nil, errors.New("Gimme more arguments, 4 to be exact, User and number pliz")
+	if len(args) != 5 {
+		return nil, errors.New("Gimme more arguments, 5 to be exact, User and number pliz")
 	}
 
 	typeOfUser := args[1]
