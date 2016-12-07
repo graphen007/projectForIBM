@@ -465,6 +465,7 @@ func (t *SimpleChaincode) change_doctor(stub shim.ChaincodeStubInterface, args [
 	if err != nil {
 		fmt.Println("you dun goofed")
 	}
+	fmt.Println("assigning to res")
 	res := bloodTest{}
 	var bloodAsBytes []byte
 	fmt.Println("running through list")
@@ -536,7 +537,7 @@ func (t *SimpleChaincode) change_result(stub shim.ChaincodeStubInterface, args [
 	   "bloodTestID", "Status"
 	   -------------------------------------------------------
 	*/
-	
+
 	bloodTestList, err := stub.GetState(bloodTestIndex)
 	if err != nil {
 		return nil, errors.New("Failed to get intList")
