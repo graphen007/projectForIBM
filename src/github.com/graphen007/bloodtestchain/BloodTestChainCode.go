@@ -1023,8 +1023,8 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 			fmt.Println("Table is already created! Error: [%s]", err)
 		}
 	}
-
-	value, errors := stub.GetCallerMetadata()
+	value, errors := stub.GetFunctionAndParameters()
+	//value, errors := stub.GetCallerMetadata()
 
 	if errors != nil {
 		fmt.Println("error getting metadata: ", errors)
