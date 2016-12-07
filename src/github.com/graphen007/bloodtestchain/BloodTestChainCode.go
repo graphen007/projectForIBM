@@ -948,7 +948,7 @@ func (t *SimpleChaincode) SaveECertificate(stub shim.ChaincodeStubInterface, arg
 
 	fmt.Println("SaveECertificate")
 
-	if len(args) != 2 {
+	if len(args) != 3 {
 		fmt.Println("Invaild number of arguments - 0 = tablename, 1 = username, 2 = ecert")
 		return -1, errors.New("Invaild number of arguments ")
 	}
