@@ -640,8 +640,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	/*
 	   Our model looks like
 	   -------------------------------------------------------
-	        0		       1	       2
-	   "typeOfUser"   "username"  "password"
+	      0  		1		       2	       3			4
+	   	"ecert"	"typeOfUser"   "username"  "password"  "accesstoken"
 	   -------------------------------------------------------
 	*/
 
@@ -650,9 +650,10 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("Gimme more arguments, 4 to be exact, User and number pliz")
 	}
 
-	typeOfUser := args[0]
-	username := args[1]
-	password := args[2]
+	typeOfUser := args[1]
+	username := args[2]
+	password := args[3]
+	ecert := args[0]
 
 	accountAsBytes, err := stub.GetState(username)
 	if err != nil {
@@ -668,28 +669,15 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 
 	// Check access token
 	fmt.Println("getting AccesToken")
-	accessCode, err := t.CheckToken(args[3])
+	accessCode, err := t.CheckToken(args[4])
 	if err != nil {
 		fmt.Println("Failed: during token approval")
 		return nil, errors.New("Failed: during token approval")
-	}
-	fmt.Println("getting callerCertificate")
-	ecert, err := stub.GetCallerCertificate()
-	if err != nil {
-		fmt.Println("Failed during ecert retrival")
-		return nil, errors.New("Failed during ecert retrival")
 	}
 
 	if len(ecert) == 0 {
 		fmt.Println("Caller has no eCert!")
 		return nil, errors.New("Caller has no eCert!")
-	}
-
-	// Extract Certificate from result of GetCallerCertificate
-	x509Cert, err := x509.ParseCertificate(ecert)
-
-	if err != nil {
-		return nil, errors.New("Couldn't parse certificate")
 	}
 
 	// Set account permissons
@@ -704,8 +692,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 			return nil, errors.New("Token does not give admin rights!")
 		}
 
-		// Store eCerrt in table
-		ok, err := t.SaveECertificate(stub, []string{ADMIN_INDEX, username}, ecert)
+		// Store eCert in table
+		ok, err := t.SaveECertificate(stub, []string{ADMIN_INDEX, username, ecert})
 
 		if err != nil {
 			return nil, errors.New("SaveECertificate Failed:")
@@ -721,8 +709,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 			return nil, errors.New("Token does not give doctor rights!")
 		}
 
-		// Store eCerrt in table
-		ok, err := t.SaveECertificate(stub, []string{DOCTOR_INDEX, username}, x509Cert.Signature)
+		// Store eCert in table
+		ok, err := t.SaveECertificate(stub, []string{DOCTOR_INDEX, username, ecert})
 
 		if err != nil {
 			return nil, errors.New("SaveECertificate Failed:")
@@ -738,8 +726,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 			return nil, errors.New("Token does not give client rights!")
 		}
 
-		// Store eCerrt in table
-		ok, err := t.SaveECertificate(stub, []string{DOCTOR_INDEX, username}, x509Cert.Signature)
+		// Store eCert in table
+		ok, err := t.SaveECertificate(stub, []string{DOCTOR_INDEX, username, ecert})
 
 		if err != nil {
 			return nil, errors.New("SaveECertificate Failed:")
@@ -754,8 +742,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 			return nil, errors.New("Token does not give hospital rights!")
 		}
 
-		// Store eCerrt in table
-		ok, err := t.SaveECertificate(stub, []string{HOSPITAL_INDEX, username}, x509Cert.Signature)
+		// Store eCert in table
+		ok, err := t.SaveECertificate(stub, []string{HOSPITAL_INDEX, username, ecert})
 
 		if err != nil {
 			return nil, errors.New("SaveECertificate Failed:")
@@ -770,8 +758,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 			return nil, errors.New("Token does not give blood bank rights!")
 		}
 
-		// Store eCerrt in table
-		ok, err := t.SaveECertificate(stub, []string{BLOODBANK_INDEX, username}, x509Cert.Signature)
+		// Store eCert in table
+		ok, err := t.SaveECertificate(stub, []string{BLOODBANK_INDEX, username, ecert})
 
 		if err != nil {
 			return nil, errors.New("SaveECertificate Failed:")
@@ -818,8 +806,17 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 // Get User
 // ============================================================================================================================
 func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	if len(args) != 2 {
-		return nil, errors.New("Gimme more arguments, 2 to be exact")
+
+	/*
+	   Our model looks like
+	   -------------------------------------------------------
+	       0         1	         2
+	   	"ecert"  "username"  "password"
+	   -------------------------------------------------------
+	*/
+
+	if len(args) != 3 {
+		return nil, errors.New("Gimme more arguments, 3 to be exact")
 	}
 	userList, err := stub.GetState(accountIndex)
 	if err != nil {
@@ -832,7 +829,8 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 		fmt.Println("you dun goofed")
 	}
 
-	if t.CheckRole(stub, args[0], ADMIN_INDEX, "test") != true {
+	if t.CheckRole(stub, args[1], ADMIN_INDEX, args[0]) != true {
+		fmt.Println("Access Denied!")
 		return nil, errors.New("Access Denied!")
 	}
 
@@ -843,7 +841,7 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 
 		accountAsBytes, err = stub.GetState(userIndex[i])
 		json.Unmarshal(accountAsBytes, &res)
-		if res.Username == args[0] && res.Password == args[1] {
+		if res.Username == args[1] && res.Password == args[2] {
 
 			finalListForUser = append(finalListForUser, accountAsBytes...)
 			if i < (len(userIndex) - 1) {
@@ -862,7 +860,15 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 // ============================================================================================================================
 func (t *SimpleChaincode) get_enrollment_cert(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
-	if len(args) < 2 {
+	/*
+	   Our model looks like
+	   -------------------------------------------------------
+	       0         1
+	   "tablename"  "key"
+	   -------------------------------------------------------
+	*/
+
+	if len(args) != 2 {
 		fmt.Println("At least 2 args must be provided\n")
 		return nil, errors.New("Get Admin Ecerts failed. Must include at least 2 args value")
 	}
@@ -874,14 +880,14 @@ func (t *SimpleChaincode) get_enrollment_cert(stub shim.ChaincodeStubInterface, 
 	var columns []shim.Column
 	var tmpHolder []byte
 
-	fmt.Println("Finding key/value pair key for key: ", args[0])
-	colNext := shim.Column{Value: &shim.Column_String_{String_: args[0]}}
+	fmt.Println("Finding key/value pair key for key: ", args[1])
+	colNext := shim.Column{Value: &shim.Column_String_{String_: args[1]}}
 	columns = append(columns, colNext)
 
-	row, err := stub.GetRow(args[1], columns)
+	row, err := stub.GetRow(args[0], columns)
 
 	if err != nil {
-		fmt.Println("Failed getting row for ", args[1])
+		fmt.Println("Failed getting row for ", args[0])
 		return nil, errors.New("Failed getting row")
 	}
 
@@ -936,15 +942,14 @@ func (t *SimpleChaincode) CheckToken(token string) (int, error) {
 // ============================================================================================================================
 // SaveECertificate - Save Callers Enrollment Certificate
 // ============================================================================================================================
-func (t *SimpleChaincode) SaveECertificate(stub shim.ChaincodeStubInterface, args []string, ecert []byte) (int, error) {
+func (t *SimpleChaincode) SaveECertificate(stub shim.ChaincodeStubInterface, args []string) (int, error) {
 
-	// args: 0 = tablename, 1 = username
-	// ecert = x509Cert.Signature
+	// args: 0 = tablename, 1 = username, 2 = ecert
 
 	fmt.Println("SaveECertificate")
 
 	if len(args) != 2 {
-		fmt.Println("Invaild number of arguments - 0 = tablename, 1 = username")
+		fmt.Println("Invaild number of arguments - 0 = tablename, 1 = username, 2 = ecert")
 		return -1, errors.New("Invaild number of arguments ")
 	}
 
@@ -952,14 +957,14 @@ func (t *SimpleChaincode) SaveECertificate(stub shim.ChaincodeStubInterface, arg
 	logger.Debug("Saving to table: ", args[0])
 
 	// *Debugging*
-	logger.Debug("Peer ecert: [% x]", ecert)
+	logger.Debug("Peer ecert: ", args[2])
 
 	// Inserting rows
 	fmt.Println("Inserting user: ", args[1])
 	ok, err := stub.InsertRow(args[0], shim.Row{
 		Columns: []*shim.Column{
 			&shim.Column{Value: &shim.Column_String_{String_: args[1]}},
-			&shim.Column{Value: &shim.Column_Bytes{Bytes: ecert}}},
+			&shim.Column{Value: &shim.Column_String_{String_: args[2]}}},
 	})
 
 	if err != nil {
@@ -984,7 +989,7 @@ func (t *SimpleChaincode) SaveECertificate(stub shim.ChaincodeStubInterface, arg
 	}
 
 	if len(row.GetColumns()) != 0 {
-		logger.Debug("Retrived ecert from table: [%x]", row.Columns[1].GetBytes())
+		logger.Debug("Retrived ecert from table: [%x]", row.Columns[1].GetString_())
 	}
 
 	// Ran successfully!
@@ -1016,20 +1021,12 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 
 		err := stub.CreateTable(tableName, []*shim.ColumnDefinition{
 			&shim.ColumnDefinition{Name: COLUMN_CERTS, Type: shim.ColumnDefinition_STRING, Key: true},
-			&shim.ColumnDefinition{Name: COLUMN_VALUE, Type: shim.ColumnDefinition_BYTES, Key: false},
+			&shim.ColumnDefinition{Name: COLUMN_VALUE, Type: shim.ColumnDefinition_STRING, Key: false},
 		})
 
 		if err != nil {
 			fmt.Println("Table is already created! Error: [%s]", err)
 		}
-	}
-	value, errors := stub.GetFunctionAndParameters()
-	//value, errors := stub.GetCallerMetadata()
-
-	if errors != nil {
-		fmt.Println("error getting metadata: ", errors)
-	} else {
-		fmt.Println("Caller MetaData is: ", value)
 	}
 }
 
@@ -1060,44 +1057,24 @@ func (t *SimpleChaincode) CheckRole(stub shim.ChaincodeStubInterface, username s
 
 	if len(row.GetColumns()) != 0 {
 
-		fmt.Println("Getting callerCertificate")
-		ecert, err := stub.GetCallerCertificate()
-		if err != nil || len(ecert) == 0 {
-			fmt.Println("Failed during ecert retrival")
-			return false
-		}
-
-		// Extract Certificate from result of GetCallerCertificate
-		x509Cert, err := x509.ParseCertificate(ecert)
-
-		if err != nil {
-			fmt.Println("Couldn't parse certificate")
-			return false
-		}
-
-		x509CertSaved, err := x509.ParseCertificate(row.Columns[1].GetBytes())
-
-		if err != nil {
-			fmt.Println("Couldn't parse certificate")
-			return false
-		}
+		fmt.Println("Getting saved callerCertificate")
+		ecertSaved := row.Columns[1].GetString_()
 
 		// Compare callers ecert & that which is stored
 		fmt.Println("Checking signature")
 
-		fmt.Print("\nIn table: ", x509CertSaved.Signature)
-		fmt.Print("\nIn Signature: ", x509Cert.Signature)
+		fmt.Print("\nIn table: ", ecertSaved)
+		fmt.Print("\nIn Signature: ", ecert)
 
-		/*if bytes.Compare(row.Columns[1].GetBytes(), x509Cert.Signature) == 0 {
-			return true
-		}*/
-
-		if x509Cert.Equal(x509CertSaved) {
+		if ecertSaved != ecert {
+			fmt.Println("Access denied!")
+			return false
+		} else {
 			fmt.Println("x509Cert signature matches!")
 			return true
 		}
 	}
 
-	fmt.Println("\nMaybe Empty eCert...Access denied!")
+	fmt.Println("Access denied! Last in function")
 	return false
 }
