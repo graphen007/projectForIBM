@@ -837,7 +837,7 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 		fmt.Println("you dun goofed")
 	}
 
-	if t.CheckRole(stub, args[0], ADMIN_INDEX) != true {
+	if t.CheckRole(stub, args[0], ADMIN_INDEX, "test") != true {
 		return nil, errors.New("Access Denied!")
 	}
 
@@ -1045,7 +1045,7 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 // Username should be pass from json input
 // Roles: ADMIN_INDEX, DOCTOR_INDEX, CLIENT_INDEX, HOSPITAL_INDEX, BLOODBANK_INDEX
 // ============================================================================================================================
-func (t *SimpleChaincode) CheckRole(stub shim.ChaincodeStubInterface, username string, role string) bool {
+func (t *SimpleChaincode) CheckRole(stub shim.ChaincodeStubInterface, username string, role string, ecert string) bool {
 
 	fmt.Println("Checking Role")
 	fmt.Println("Finding pair in table ", role)
