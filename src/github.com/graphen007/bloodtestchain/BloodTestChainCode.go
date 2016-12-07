@@ -657,7 +657,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 
 	accountAsBytes, err := stub.GetState(username)
 	if err != nil {
-		return nil, errors.New("")
+		return nil, errors.New("Error getting state for username")
 	}
 	res := account{}
 	fmt.Println("checking if account exists")
@@ -1067,10 +1067,10 @@ func (t *SimpleChaincode) CheckRole(stub shim.ChaincodeStubInterface, username s
 		fmt.Print("\nIn Signature: ", ecert)
 
 		if ecertSaved != ecert {
-			fmt.Println("Access denied!")
+			fmt.Println("\nAccess denied!")
 			return false
 		} else {
-			fmt.Println("x509Cert signature matches!")
+			fmt.Println("\nx509Cert signature matches!")
 			return true
 		}
 	}
