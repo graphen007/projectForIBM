@@ -829,7 +829,7 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 	// Example of checking role
 	// Note how model looks like and keep it the same!
 	// Meaning "ecert" is always args[0]
-	if t.CheckRole(stub, args[1], ADMIN_INDEX, args[0]) != true {
+	if t.CheckRole(stub, args[1], ADMIN_INDEX, args[0]) != true ||t.CheckRole(stub, args[1], DOCTOR_INDEX, args[0]) != true ||t.CheckRole(stub, args[1], HOSPITAL_INDEX, args[0]) != true||t.CheckRole(stub, args[1], CLIENT_INDEX, args[0]) != true ||t.CheckRole(stub, args[1], BLOODBANK_INDEX, args[0]) != true {
 		fmt.Println("Access Denied!")
 		return nil, errors.New("Access Denied!")
 	}
