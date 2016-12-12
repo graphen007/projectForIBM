@@ -807,13 +807,13 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 	/*
 	   Our model looks like
 	   -------------------------------------------------------
-	       0         1	         2
-	   	"ecert"  "username"  "password"
+	       0         1	         2				3
+	   	"ecert"  "username"  "password"   "typeOfUser"
 	   -------------------------------------------------------
 	*/
 
-	if len(args) != 3 {
-		return nil, errors.New("Gimme more arguments, 3 to be exact")
+	if len(args) != 4 {
+		return nil, errors.New("Gimme more arguments, 4 to be exact")
 	}
 	userList, err := stub.GetState(accountIndex)
 	if err != nil {
@@ -829,7 +829,7 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 	// Example of checking role
 	// Note how model looks like and keep it the same!
 	// Meaning "ecert" is always args[0]
-	if t.CheckRole(stub, args[1], DOCTOR_INDEX, args[0]) != true {
+	if t.CheckRole(stub, args[1], GetTable(args[3]), args[0]) != true {
 		fmt.Println("Access Denied!")
 		return nil, errors.New("Access Denied!")
 	}
@@ -936,6 +936,27 @@ func (t *SimpleChaincode) CheckToken(token string) (int, error) {
 		fmt.Println("Invalid token. Not Correct.")
 		return -1, errors.New("Invalid token. Not Correct.")
 
+	}
+}
+
+// ============================================================================================================================
+// GetTable - The args[3] should contain the table of user type
+// ============================================================================================================================
+func (t *SimpleChaincode) GetTable(name string) string {
+
+	fmt.Println("Getting table")
+
+	switch name {
+	case ADMIN:
+		return ADMIN_INDEX
+	case BLOODBANK:
+		return BLOODBANK_INDEX
+	case CLIENT:
+		return CLIENT_INDEX
+	case HOSPITAL:
+		return HOSPITAL_INDEX
+	default:
+		return DOCTOR_INDEX
 	}
 }
 
