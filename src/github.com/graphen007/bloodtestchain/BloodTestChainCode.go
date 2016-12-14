@@ -636,8 +636,8 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	/*
 	   Our model looks like
 	   -------------------------------------------------------
-	      0  		1		       2	       3			4
-	   	"ecert"	"typeOfUser"   "username"  "password"  "accesstoken"
+	      0  	     1		   2	       3	     4
+	   "ecert"	"typeOfUser"   "username"  "password"  "accesstoken"
 	   -------------------------------------------------------
 	*/
 
@@ -807,8 +807,8 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 	/*
 	   Our model looks like
 	   -------------------------------------------------------
-	       0         1	         2				3
-	   	"ecert"  "username"  "password"   "typeOfUser"
+	       0         1	       2	     3
+	     "ecert"  "username"  "password"   "typeOfUser"
 	   -------------------------------------------------------
 	*/
 
@@ -829,7 +829,6 @@ func (t *SimpleChaincode) get_user(stub shim.ChaincodeStubInterface, args []stri
 	// Example of checking role
 	// Note how model looks like and keep it the same!
 	// Meaning "ecert" is always args[0]
-
 	if t.CheckRole(stub, args[1], t.GetTable(args[3]), args[0]) != true {
 		fmt.Println("Access Denied!")
 		return nil, errors.New("Access Denied!")
@@ -930,7 +929,7 @@ func (t *SimpleChaincode) CheckToken(token string) (int, error) {
 	case HOSPITAL_TOKEN:
 		fmt.Println("Returned 3")
 		return 3, nil
-	case BLOODBANK:
+	case BLOODBANK_TOKEN:
 		fmt.Println("Returned 4")
 		return 4, nil
 	default:
