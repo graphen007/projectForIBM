@@ -36,7 +36,7 @@ const ADMIN = "admin"         // 0
 const DOCTOR = "doctor"       // 1
 const CLIENT = "client"       // 2
 const HOSPITAL = "hospital"   // 3
-const BLOODBANK = "bloodbank" // 4
+const LAB = "lab" // 4
 
 //==============================================================================================================================
 //	 Hardcoded access tokens
@@ -45,7 +45,7 @@ const ADMIN_TOKEN = "pNAQvsgTSz"
 const DOCTOR_TOKEN = "9Hk5e3rdR9"
 const CLIENT_TOKEN = "ERE4zwMnao"
 const HOSPITAL_TOKEN = "XpK9cGH22x"
-const BLOODBANK_TOKEN = "TdFeAzGlrI"
+const LAB_TOKEN = "TdFeAzGlrI"
 
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
@@ -82,14 +82,14 @@ const ADMIN_INDEX = "adminIndex"
 const DOCTOR_INDEX = "doctorIndex"
 const CLIENT_INDEX = "clientIndex"
 const HOSPITAL_INDEX = "hospitalIndex"
-const BLOODBANK_INDEX = "bloodbankIndex"
+const LAB_INDEX = "labIndex"
 const COLUMN_CERTS = "eCerts"
 const COLUMN_VALUE = "value"
 
 // ============================================================================================================================
 // Main
 // ============================================================================================================================
-func main() {
+func main(){
 
 	// maximize CPU usage for maximum performance
 	runtime.GOMAXPROCS(runtime.NumCPU())
@@ -161,6 +161,8 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		return t.doctor_read(stub, args)
 	} else if function == "hospital_read" {
 		return t.hospital_read(stub, args)
+	} else if function == "lab_read" {
+		return t.lab_read(stub, args)
 	} else if function == "get_user" {
 		return t.get_user(stub, args)
 	} else if function == "get_enrollment_cert" {
@@ -195,7 +197,7 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 // ============================================================================================================================
 // Read - read a variable from chaincode state
 // ============================================================================================================================
-func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error){
 	var name, jsonResp string
 	var err error
 
@@ -331,9 +333,9 @@ func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args [
 }
 
 // ============================================================================================================================
-// bloodbank Read !! HAS NOT BEEN ADDED YET AND IS NOT FULLY FUNCTIONAL!!!
+// lab Read !! HAS NOT BEEN ADDED YET AND IS NOT FULLY FUNCTIONAL!!!
 // ============================================================================================================================
-func (t *SimpleChaincode) bloodbank_read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *SimpleChaincode) lab_read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 	if len(args) != 1 {
 		return nil, errors.New("Gimme more arguments, 1 to be exact")
@@ -601,8 +603,6 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 
 	json.Unmarshal(bloodAsBytes, &res)
 
-	// "STILL TESTING! timeStamp": " + timeStamp + ", "name": " + name + ", "CPR": " + CPR + ", "doctor": " + doctor + ", "hospital": " + hospital + ", "status": " + status + ", "result": " + result + ", "bloodTestID": " + bloodTestID + "
-
 	str := []byte(`{"timeStamp": "` + timeStamp + `","name": "` + name + `","CPR": "` + CPR + `","doctor": "` + doctor + `","hospital": "` + hospital + `","status": "` + status + `","result": "` + result + `","bloodTestID": "` + bloodTestID + `"}`) //build the Json element
 
 	err = stub.PutState(bloodTestID, str)
@@ -678,7 +678,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 	}
 
 	// Set account permissons
-	// ADMIN | DOCTOR | CLIENT | HOSPITAL | BLOODBANK
+	// ADMIN | DOCTOR | CLIENT | HOSPITAL | LAB
 	fmt.Println("Checking the permission")
 	switch typeOfUser {
 	case ADMIN:
@@ -748,15 +748,15 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		if ok != 1 {
 			return nil, errors.New("SaveECertificate Failed")
 		}
-	case BLOODBANK:
-		fmt.Println("It's an bloodbank ACC")
+	case LAB:
+		fmt.Println("It's an laboratory ACC")
 		// Check access code
 		if accessCode != 4 {
 			return nil, errors.New("Token does not give blood bank rights!")
 		}
 
 		// Store eCert in table
-		ok, err := t.SaveECertificate(stub, []string{BLOODBANK_INDEX, username, ecert})
+		ok, err := t.SaveECertificate(stub, []string{LAB_INDEX, username, ecert})
 
 		if err != nil {
 			return nil, errors.New("SaveECertificate Failed:")
@@ -930,7 +930,7 @@ func (t *SimpleChaincode) CheckToken(token string) (int, error) {
 	case HOSPITAL_TOKEN:
 		fmt.Println("Returned 3")
 		return 3, nil
-	case BLOODBANK:
+	case LAB_TOKEN:
 		fmt.Println("Returned 4")
 		return 4, nil
 	default:
@@ -950,8 +950,8 @@ func (t *SimpleChaincode) GetTable(name string) string {
 	switch name {
 	case ADMIN:
 		return ADMIN_INDEX
-	case BLOODBANK:
-		return BLOODBANK_INDEX
+	case LAB:
+		return LAB_INDEX
 	case CLIENT:
 		return CLIENT_INDEX
 	case HOSPITAL:
@@ -1036,7 +1036,7 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 		case 3:
 			tableName = CLIENT_INDEX
 		case 4:
-			tableName = BLOODBANK_INDEX
+			tableName = LAB_INDEX
 		default:
 			tableName = ADMIN_INDEX
 		}
@@ -1059,7 +1059,7 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 // Access Control happens here
 // Params: username, role
 // Username should be pass from json input
-// Roles: ADMIN_INDEX, DOCTOR_INDEX, CLIENT_INDEX, HOSPITAL_INDEX, BLOODBANK_INDEX
+// Roles: ADMIN_INDEX, DOCTOR_INDEX, CLIENT_INDEX, HOSPITAL_INDEX, LAB_INDEX
 // ============================================================================================================================
 func (t *SimpleChaincode) CheckRole(stub shim.ChaincodeStubInterface, username string, role string, ecert string) bool {
 
