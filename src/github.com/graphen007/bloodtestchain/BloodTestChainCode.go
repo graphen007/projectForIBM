@@ -36,7 +36,7 @@ const ADMIN = "admin"         // 0
 const DOCTOR = "doctor"       // 1
 const CLIENT = "client"       // 2
 const HOSPITAL = "hospital"   // 3
-const LAB = "lab" // 4
+const LAB = "lab" 	      // 4
 
 //==============================================================================================================================
 //	 Hardcoded access tokens
@@ -752,7 +752,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		fmt.Println("It's an laboratory ACC")
 		// Check access code
 		if accessCode != 4 {
-			return nil, errors.New("Token does not give blood bank rights!")
+			return nil, errors.New("Token does not give LAB rights!")
 		}
 
 		// Store eCert in table
@@ -1023,6 +1023,8 @@ func (t *SimpleChaincode) SaveECertificate(stub shim.ChaincodeStubInterface, arg
 // CreateTables - Called from init
 // ============================================================================================================================
 func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
+
+	fmt.Print("Creating tables...")
 
 	var tableName string
 	for i := 0; i < 5; i++ {
