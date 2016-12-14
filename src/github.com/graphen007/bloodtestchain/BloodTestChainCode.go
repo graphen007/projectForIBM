@@ -155,8 +155,8 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		return t.read(stub, args)
 	} else if function == "read_list" {
 		return t.read_list(stub, args)
-	} else if function == "patient_read" {
-		return t.patient_read(stub, args)
+	} else if function == "client_read" {
+		return t.client_read(stub, args)
 	} else if function == "doctor_read" {
 		return t.doctor_read(stub, args)
 	} else if function == "hospital_read" {
@@ -216,9 +216,9 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 }
 
 // ============================================================================================================================
-// Patient Read
+// Client Read
 // ============================================================================================================================
-func (t *SimpleChaincode) patient_read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *SimpleChaincode) client_read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 	if len(args) != 1 {
 		return nil, errors.New("Gimme more arguments, 1 to be exact")
