@@ -677,7 +677,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("Caller has no eCert!")
 	}
 
-	// Set account permissons
+	// Set account permission
 	// ADMIN | DOCTOR | CLIENT | HOSPITAL | LAB
 	fmt.Println("Checking the permission")
 	switch typeOfUser {
