@@ -13,12 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-//commit this bullshit
 package main
 
 import (
-	//"bytes"
-	//"crypto/x509"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -29,7 +26,7 @@ import (
 var logger = shim.NewLogger("BTChaincode")
 
 //==============================================================================================================================
-//	 Participant types - Each participant type is mapped to an integer which we will use to compare to the value stored in a
+// Participant types - Each participant type is mapped to an integer which we will use to compare to the value stored in a
 //						 user's eCert
 //==============================================================================================================================
 const ADMIN = "admin"         // 0
@@ -39,7 +36,7 @@ const HOSPITAL = "hospital"   // 3
 const LAB = "lab" 	      // 4
 
 //==============================================================================================================================
-//	 Hardcoded access tokens
+// Hardcoded access tokens
 //==============================================================================================================================
 const ADMIN_TOKEN = "pNAQvsgTSz"
 const DOCTOR_TOKEN = "9Hk5e3rdR9"
@@ -67,7 +64,7 @@ type bloodTest struct {
 }
 
 //==============================================================================================================================
-//	account - Struct for storing the JSON of a account
+// account - Struct for storing the JSON of a account
 //==============================================================================================================================
 type account struct {
 	TypeOfUser string `json:"typeOfUser"`
@@ -146,8 +143,6 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 // Query - Our entry point for queries
 // ============================================================================================================================
 func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-	//for 0.6 stub shim.ChaincodeStubInterface
-
 	fmt.Println("query is running " + function)
 
 	// Handle different functions
