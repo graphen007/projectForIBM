@@ -292,6 +292,7 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 
 	var finalList []byte;
 	finalList, err = json.Marshal(bloodTestListStruct)
+	fmt.Println(finalList)
 	return finalList, err
 }
 
