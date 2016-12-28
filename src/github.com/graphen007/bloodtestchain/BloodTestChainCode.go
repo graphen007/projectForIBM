@@ -285,7 +285,7 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 		json.Unmarshal(bloodAsBytes, &bloodTest)
 		if bloodTest.Doctor == args[0] {
 
-			bloodTestListStruct.BloodTestList = append(bloodTestListStruct.BloodTestList, bloodTest)
+			(&bloodTestListStruct).BloodTestList = append(bloodTestListStruct.BloodTestList, bloodTest)
 
 		}
 	}
