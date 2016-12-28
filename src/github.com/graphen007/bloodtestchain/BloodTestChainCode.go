@@ -272,7 +272,7 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 
 
 	type doctorReadStruct struct {
-		bloodTestList []bloodTest `json:"returnedObjects"`
+		BloodTestList []bloodTest `json:"returnedObjects"`
 	}
 
 
@@ -285,7 +285,7 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 		json.Unmarshal(bloodAsBytes, &bloodTest)
 		if bloodTest.Doctor == args[0] {
 
-			bloodTestListStruct.bloodTestList = append(bloodTestListStruct.bloodTestList, bloodTest)
+			bloodTestListStruct.BloodTestList = append(bloodTestListStruct.BloodTestList, bloodTest)
 
 		}
 	}
