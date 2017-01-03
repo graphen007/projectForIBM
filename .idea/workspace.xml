@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d80bd710-649e-4d8c-b90a-bb8a52956ddc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/goProjects.iml" afterPath="$PROJECT_DIR$/.idea/goProjects.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go" afterPath="$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go" />
     </list>
     <ignored path="goProjects.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,8 +26,8 @@
       <file leaf-file-name="BloodTestChainCode.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" column="44" lean-forward="false" selection-start-line="1" selection-start-column="44" selection-end-line="1" selection-end-column="44" />
+            <state relative-caret-position="597">
+              <caret line="1099" column="1" lean-forward="false" selection-start-line="1099" selection-start-column="1" selection-end-line="1099" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -1141,8 +1142,8 @@
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" />
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="44" lean-forward="false" selection-start-line="1" selection-start-column="44" selection-end-line="1" selection-end-column="44" />
+        <state relative-caret-position="597">
+          <caret line="1099" column="1" lean-forward="false" selection-start-line="1099" selection-start-column="1" selection-end-line="1099" selection-end-column="1" />
           <folding />
         </state>
       </provider>
