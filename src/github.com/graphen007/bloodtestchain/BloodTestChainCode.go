@@ -1061,9 +1061,17 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 		"ecert"	"typeOfUser"   "username"  "password"  "accesstoken"
 		-------------------------------------------------------
 		*/
-		SSN := strconv.Itoa(i)
 
-		fmt.Println("Creating client: 010101-0", SSN)
+		lastFourSSN := strconv.Itoa(i+1)
+
+		if i+1 < 10 {
+			fmt.Println("Creating client: 010101-000",lastFourSSN)
+		} else if i+1 < 99 {
+			fmt.Println("Creating client: 010101-00",lastFourSSN)
+
+		} else {
+			fmt.Println("Creating client: 010101-0",lastFourSSN)
+		}
 
 		/*empty, err := t.create_user(stub, []string{"ecert", CLIENT, "010101-0" + , "0001", CLIENT_TOKEN})
 
