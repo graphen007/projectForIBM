@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"runtime"
+	"strconv"
 )
 
 var logger = shim.NewLogger("BTChaincode")
@@ -1048,6 +1049,30 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 			fmt.Println("Table is already created! Error: [%s]", err)
 		}
 	}
+
+	// Creating clients
+	fmt.Println("Creating clients")
+	for i := 0; i < 100; i++  {
+
+		/*
+		Our model looks like
+		-------------------------------------------------------
+		0  	     1		   2	       3	     4
+		"ecert"	"typeOfUser"   "username"  "password"  "accesstoken"
+		-------------------------------------------------------
+		*/
+		SSN := strconv.Itoa(i)
+
+		fmt.Println("Creating client: 010101-0", SSN)
+
+		/*empty, err := t.create_user(stub, []string{"ecert", CLIENT, "010101-0" + , "0001", CLIENT_TOKEN})
+
+		if err != nil{
+			fmt.Println("Table is already created! Error: [%s]", err)
+		}*/
+
+	}
+
 }
 
 // ============================================================================================================================
