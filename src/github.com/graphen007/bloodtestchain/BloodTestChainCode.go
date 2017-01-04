@@ -1054,30 +1054,34 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 	fmt.Println("Creating clients")
 	for i := 0; i < 100; i++  {
 
-		/*
-		Our model looks like
-		-------------------------------------------------------
-		0  	     1		   2	       3	     4
-		"ecert"	"typeOfUser"   "username"  "password"  "accesstoken"
-		-------------------------------------------------------
-		*/
-
 		lastFourSSN := strconv.Itoa(i+1)
+		clientEcert := "MIIBojCCAUegAwIBAgIBATAKBggqhkjOPQQDAzApMQswCQYDVQQGEwJVUzEMMAoGA1UEChMDSUJNMQwwCgYDVQQDEwNlY2EwHhcNMTcwMTA0MDk0NTM0WhcNMTcwNDA0MDk0NTM0WjA5MQswCQYDVQQGEwJVUzEMMAoGA1UEChMDSUJNMRwwGgYDVQQDDBN1c2VyX3R5cGUxXzRcZ3JvdXAxMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEd15f2TJmCH2JNiTi1ynfIt7BSUSO2CYnJj0UXWR+VQCpateEYL2paJ4TOXBDU7/lJ5U31Qs1RNQ4THShxfM4EqNQME4wDgYDVR0PAQH/BAQDAgeAMAwGA1UdEwEB/wQCMAAwDQYDVR0OBAYEBAECAwQwDwYDVR0jBAgwBoAEAQIDBDAOBgZRAwQFBgcBAf8EATEwCgYIKoZIzj0EAwMDSQAwRgIhAMbWttyQtIxi34ahBf31tNzYQNVj0RPRqPaudDmhzDkAAiEAvy/5+rCFQhB52gk2TYIbljMISnlrYuvFKD4TezlKsmM="
 
 		if i+1 < 10 {
-			fmt.Println("Creating client: 010101-000",lastFourSSN)
+			fmt.Println("Creating client: 010101-000" + lastFourSSN)
+			empty, err := t.create_user(stub, []string{clientEcert, CLIENT, "010101-000" + lastFourSSN , "000" + lastFourSSN, CLIENT_TOKEN})
+
+			if err != nil{
+				fmt.Println("Error creating client: 010101-000" + lastFourSSN, err)
+			}
 		} else if i+1 < 99 {
-			fmt.Println("Creating client: 010101-00",lastFourSSN)
+			fmt.Println("Creating client: 010101-00" + lastFourSSN)
+
+			empty, err := t.create_user(stub, []string{clientEcert, CLIENT, "010101-00" + lastFourSSN , "00" + lastFourSSN, CLIENT_TOKEN})
+
+			if err != nil{
+				fmt.Println("Error creating client: 010101-00" + lastFourSSN, err)
+			}
 
 		} else {
-			fmt.Println("Creating client: 010101-0",lastFourSSN)
+			fmt.Println("Creating client: 010101-0" + lastFourSSN)
+
+			empty, err := t.create_user(stub, []string{clientEcert, CLIENT, "010101-0" + lastFourSSN , "0" + lastFourSSN, CLIENT_TOKEN})
+
+			if err != nil{
+				fmt.Println("Error creating client: 010101-0" + lastFourSSN, err)
+			}
 		}
-
-		/*empty, err := t.create_user(stub, []string{"ecert", CLIENT, "010101-0" + , "0001", CLIENT_TOKEN})
-
-		if err != nil{
-			fmt.Println("Table is already created! Error: [%s]", err)
-		}*/
 
 	}
 

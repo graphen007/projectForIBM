@@ -25,8 +25,8 @@
       <file leaf-file-name="BloodTestChainCode.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="282">
-              <caret line="1080" column="0" lean-forward="true" selection-start-line="1080" selection-start-column="0" selection-end-line="1080" selection-end-column="0" />
+            <state relative-caret-position="273">
+              <caret line="1086" column="0" lean-forward="true" selection-start-line="1086" selection-start-column="0" selection-end-line="1086" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -782,7 +782,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.365625" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.365625" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2880259" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1123,8 +1123,8 @@
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" />
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="1080" column="0" lean-forward="true" selection-start-line="1080" selection-start-column="0" selection-end-line="1080" selection-end-column="0" />
+        <state relative-caret-position="273">
+          <caret line="1086" column="0" lean-forward="true" selection-start-line="1086" selection-start-column="0" selection-end-line="1086" selection-end-column="0" />
           <folding />
         </state>
       </provider>
