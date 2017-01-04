@@ -1059,7 +1059,7 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 
 		if i+1 < 10 {
 			fmt.Println("Creating client: 010101-000" + lastFourSSN)
-			empty, err := t.create_user(stub, []string{clientEcert, CLIENT, "010101-000" + lastFourSSN , "000" + lastFourSSN, CLIENT_TOKEN})
+			_, err := t.create_user(stub, []string{clientEcert, CLIENT, "010101-000" + lastFourSSN , "000" + lastFourSSN, CLIENT_TOKEN})
 
 			if err != nil{
 				fmt.Println("Error creating client: 010101-000" + lastFourSSN, err)
@@ -1067,7 +1067,7 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 		} else if i+1 < 99 {
 			fmt.Println("Creating client: 010101-00" + lastFourSSN)
 
-			empty, err := t.create_user(stub, []string{clientEcert, CLIENT, "010101-00" + lastFourSSN , "00" + lastFourSSN, CLIENT_TOKEN})
+			_, err := t.create_user(stub, []string{clientEcert, CLIENT, "010101-00" + lastFourSSN , "00" + lastFourSSN, CLIENT_TOKEN})
 
 			if err != nil{
 				fmt.Println("Error creating client: 010101-00" + lastFourSSN, err)
@@ -1076,7 +1076,7 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 		} else {
 			fmt.Println("Creating client: 010101-0" + lastFourSSN)
 
-			empty, err := t.create_user(stub, []string{clientEcert, CLIENT, "010101-0" + lastFourSSN , "0" + lastFourSSN, CLIENT_TOKEN})
+			_, err := t.create_user(stub, []string{clientEcert, CLIENT, "010101-0" + lastFourSSN , "0" + lastFourSSN, CLIENT_TOKEN})
 
 			if err != nil{
 				fmt.Println("Error creating client: 010101-0" + lastFourSSN, err)
