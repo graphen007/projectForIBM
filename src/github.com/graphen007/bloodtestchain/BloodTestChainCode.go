@@ -720,7 +720,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		}
 
 		// Store eCert in table
-		ok, err := t.SaveECertificate(stub, []string{DOCTOR_INDEX, username, ecert})
+		ok, err := t.SaveECertificate(stub, []string{CLIENT_INDEX, username, ecert})
 
 		if err != nil {
 			return nil, errors.New("SaveECertificate Failed:")
