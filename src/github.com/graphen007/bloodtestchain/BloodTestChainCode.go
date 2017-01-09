@@ -227,7 +227,7 @@ func (t *SimpleChaincode) client_read(stub shim.ChaincodeStubInterface, args []s
 
 	err = json.Unmarshal(bloodTestList, &bloodInd)
 	if err != nil {
-		fmt.Println("you dun goofed")
+		fmt.Println("you dun goofed", err)
 	}
 
 	var bloodAsBytes []byte
