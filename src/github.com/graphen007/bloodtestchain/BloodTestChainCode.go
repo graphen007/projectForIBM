@@ -22,7 +22,7 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"runtime"
 	"strconv"
-	"time"
+
 )
 
 var logger = shim.NewLogger("BTChaincode")
@@ -478,8 +478,6 @@ func (t *SimpleChaincode) change_doctor(stub shim.ChaincodeStubInterface, args [
 			json.Unmarshal(bloodAsBytes, &res)
 			if res.BloodTestID == args[0] {
 				res.Doctor = args[1]
-				t := time.Now()
-				res.TimeStampDoctor = t.String()
 				jsonAsBytes, _ := json.Marshal(res)
 				err = stub.PutState(args[0], jsonAsBytes)
 				if err != nil {
@@ -522,8 +520,6 @@ func (t *SimpleChaincode) change_hospital(stub shim.ChaincodeStubInterface, args
 		if res.BloodTestID == args[0] {
 			fmt.Println("found it")
 			res.Hospital = hospital
-			t := time.Now()
-			res.TimeStampHospital = t.String()
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)
 			if err != nil {
@@ -563,8 +559,6 @@ func (t *SimpleChaincode) change_result(stub shim.ChaincodeStubInterface, args [
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.BloodTestID == args[0] {
 			res.Result = args[1]
-			t := time.Now()
-			res.TimeStampResult = t.String()
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)
 			if err != nil {
@@ -616,7 +610,7 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 	json.Unmarshal(bloodAsBytes, &res)
 
 	str := []byte(`{"timeStampDoctor": "` + timeStamp  + `","timeStampHospital": "` +`null` + `","timeStampLab": "` + `null`  + `","timeStampAnalyse": "` + `null`  + `","timeStampResult": "` + `null`+ `","name": "` + name + `","CPR": "` + CPR + `","doctor": "` + doctor + `","hospital": "` + hospital + `","status": "` + status + `","result": "` + result + `","bloodTestID": "` + bloodTestID + `"}`) //build the Json element
-
+	fmt.Println("done formatting")
 	err = stub.PutState(bloodTestID, str)
 	if err != nil {
 		return nil, err
