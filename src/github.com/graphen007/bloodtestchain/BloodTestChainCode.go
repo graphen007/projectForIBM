@@ -430,7 +430,7 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 	fmt.Println(res)
 
 	// Change the user
-	if (args[1] == "Analysing"){
+	if args[1] == "Analysing"{
 		t := time.Now()
 		t.Format("20060102150405")
 		res.TimeStampAnalyse = t.String()
