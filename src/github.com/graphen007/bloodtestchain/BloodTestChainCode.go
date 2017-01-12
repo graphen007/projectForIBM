@@ -431,10 +431,7 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 
 	// Change the user
 	res.Status = args[1]
-	if args[1] == "Analysing"{
-		t := time.Now()
-		res.TimeStampAnalyse = t.String()
-	}
+	
 	fmt.Println(res)
 	jsonAsBytes, _ := json.Marshal(res)
 	err = stub.PutState(args[0], jsonAsBytes)
