@@ -607,7 +607,7 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 
 	json.Unmarshal(bloodAsBytes, &res)
 
-	str := []byte(`{"timeStampDoctor": "` + timeStamp  + `","timeStampHospital": "` +`` + `","timeStampLab": "` + ``  + `","timeStampAnalyse": "` + ``  + `","timeStampResult": "` + ``+ `","name": "` + name + `","CPR": "` + CPR + `","doctor": "` + doctor + `","hospital": "` + hospital + `","status": "` + status + `","result": "` + result + `","bloodTestID": "` + bloodTestID + `"}`) //build the Json element
+	str := []byte(`{"timeStampDoctor": "` + timeStamp  + `","timeStampHospital": "` +`null` + `","timeStampLab": "` + `null`  + `","timeStampAnalyse": "` + `null`  + `","timeStampResult": "` + `null`+ `","name": "` + name + `","CPR": "` + CPR + `","doctor": "` + doctor + `","hospital": "` + hospital + `","status": "` + status + `","result": "` + result + `","bloodTestID": "` + bloodTestID + `"}`) //build the Json element
 
 	err = stub.PutState(bloodTestID, str)
 	if err != nil {
