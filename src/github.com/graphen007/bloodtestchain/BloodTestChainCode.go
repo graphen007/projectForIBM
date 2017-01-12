@@ -456,38 +456,38 @@ func (t *SimpleChaincode) change_doctor(stub shim.ChaincodeStubInterface, args [
 	   -------------------------------------------------------
 	*/
 
-	fmt.Println("changing doctor")
-	bloodTestList, err := stub.GetState(bloodTestIndex)
-	if err != nil {
-		return nil, errors.New("Failed to get intList")
-	}
-	fmt.Println("creating list")
-	var bloodInd []string
-
-	fmt.Println("Unmarshaling doctor")
-	err = json.Unmarshal(bloodTestList, &bloodInd)
-	if err != nil {
-		fmt.Println("you dun goofed")
-	}
-	fmt.Println("assigning to res")
-	res := bloodTest{}
-	var bloodAsBytes []byte
-	fmt.Println("running through list")
-	for i := range bloodInd {
-		bloodAsBytes, err = stub.GetState(bloodInd[i])
-		json.Unmarshal(bloodAsBytes, &res)
-		if res.BloodTestID == args[0] {
-			res.Doctor = args[1]
-			t := time.Now()
-			res.TimeStampDoctor = t.String()
-			jsonAsBytes, _ := json.Marshal(res)
-			err = stub.PutState(args[0], jsonAsBytes)
-			if err != nil {
-				return nil, err
+		fmt.Println("changing doctor")
+		bloodTestList, err := stub.GetState(bloodTestIndex)
+		if err != nil {
+			return nil, errors.New("Failed to get intList")
+		}
+		fmt.Println("creating list")
+		var bloodInd []string
+		fmt.Println("refresh!")
+		fmt.Println("Unmarshaling doctor")
+		err = json.Unmarshal(bloodTestList, &bloodInd)
+		if err != nil {
+			fmt.Println("you dun goofed")
+		}
+		fmt.Println("assigning to res")
+		res := bloodTest{}
+		var bloodAsBytes []byte
+		fmt.Println("running through list")
+		for i := range bloodInd {
+			bloodAsBytes, err = stub.GetState(bloodInd[i])
+			json.Unmarshal(bloodAsBytes, &res)
+			if res.BloodTestID == args[0] {
+				res.Doctor = args[1]
+				t := time.Now()
+				res.TimeStampDoctor = t.String()
+				jsonAsBytes, _ := json.Marshal(res)
+				err = stub.PutState(args[0], jsonAsBytes)
+				if err != nil {
+					return nil, err
+				}
 			}
 		}
-	}
-	return nil, nil
+		return nil, nil
 }
 
 // ============================================================================================================================
