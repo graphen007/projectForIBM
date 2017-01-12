@@ -465,7 +465,6 @@ func (t *SimpleChaincode) change_doctor(stub shim.ChaincodeStubInterface, args [
 	var bloodInd []string
 
 	fmt.Println("Unmarshaling doctor")
-	fmt.Println("Lel")
 	err = json.Unmarshal(bloodTestList, &bloodInd)
 	if err != nil {
 		fmt.Println("you dun goofed")
