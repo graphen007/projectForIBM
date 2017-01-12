@@ -223,6 +223,9 @@ func (t *SimpleChaincode) client_read(stub shim.ChaincodeStubInterface, args []s
 	if err != nil {
 		return nil, errors.New("Failed to get bloodList")
 	}
+
+	fmt.Println(bloodTestList)
+
 	var bloodInd []string
 
 	err = json.Unmarshal(bloodTestList, &bloodInd)
