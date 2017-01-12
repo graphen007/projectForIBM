@@ -22,7 +22,7 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"runtime"
 	"strconv"
-
+	"time"
 )
 
 var logger = shim.NewLogger("BTChaincode")
@@ -431,7 +431,10 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 
 	// Change the user
 	res.Status = args[1]
-
+	if args[1] == "Analysing"{
+		t := time.Now()
+		res.TimeStampAnalyse = t.String()
+	}
 	fmt.Println(res)
 	jsonAsBytes, _ := json.Marshal(res)
 	err = stub.PutState(args[0], jsonAsBytes)
@@ -456,36 +459,38 @@ func (t *SimpleChaincode) change_doctor(stub shim.ChaincodeStubInterface, args [
 	   -------------------------------------------------------
 	*/
 
-		fmt.Println("changing doctor")
-		bloodTestList, err := stub.GetState(bloodTestIndex)
-		if err != nil {
-			return nil, errors.New("Failed to get intList")
-		}
-		fmt.Println("creating list")
-		var bloodInd []string
-		fmt.Println("refresh!")
-		fmt.Println("Unmarshaling doctor")
-		err = json.Unmarshal(bloodTestList, &bloodInd)
-		if err != nil {
-			fmt.Println("you dun goofed")
-		}
-		fmt.Println("assigning to res")
-		res := bloodTest{}
-		var bloodAsBytes []byte
-		fmt.Println("running through list")
-		for i := range bloodInd {
-			bloodAsBytes, err = stub.GetState(bloodInd[i])
-			json.Unmarshal(bloodAsBytes, &res)
-			if res.BloodTestID == args[0] {
-				res.Doctor = args[1]
-				jsonAsBytes, _ := json.Marshal(res)
-				err = stub.PutState(args[0], jsonAsBytes)
-				if err != nil {
-					return nil, err
-				}
+	fmt.Println("changing doctor")
+	bloodTestList, err := stub.GetState(bloodTestIndex)
+	if err != nil {
+		return nil, errors.New("Failed to get intList")
+	}
+	fmt.Println("creating list")
+	var bloodInd []string
+
+	fmt.Println("Unmarshaling doctor")
+	err = json.Unmarshal(bloodTestList, &bloodInd)
+	if err != nil {
+		fmt.Println("you dun goofed")
+	}
+	fmt.Println("assigning to res")
+	res := bloodTest{}
+	var bloodAsBytes []byte
+	fmt.Println("running through list")
+	for i := range bloodInd {
+		bloodAsBytes, err = stub.GetState(bloodInd[i])
+		json.Unmarshal(bloodAsBytes, &res)
+		if res.BloodTestID == args[0] {
+			res.Doctor = args[1]
+			t := time.Now()
+			res.TimeStampDoctor = t.String()
+			jsonAsBytes, _ := json.Marshal(res)
+			err = stub.PutState(args[0], jsonAsBytes)
+			if err != nil {
+				return nil, err
 			}
 		}
-		return nil, nil
+	}
+	return nil, nil
 }
 
 // ============================================================================================================================
@@ -520,6 +525,8 @@ func (t *SimpleChaincode) change_hospital(stub shim.ChaincodeStubInterface, args
 		if res.BloodTestID == args[0] {
 			fmt.Println("found it")
 			res.Hospital = hospital
+			t := time.Now()
+			res.TimeStampHospital = t.String()
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)
 			if err != nil {
@@ -559,6 +566,8 @@ func (t *SimpleChaincode) change_result(stub shim.ChaincodeStubInterface, args [
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.BloodTestID == args[0] {
 			res.Result = args[1]
+			t := time.Now()
+			res.TimeStampResult = t.String()
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)
 			if err != nil {
@@ -610,7 +619,7 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 	json.Unmarshal(bloodAsBytes, &res)
 
 	str := []byte(`{"timeStampDoctor": "` + timeStamp  + `","timeStampHospital": "` +`null` + `","timeStampLab": "` + `null`  + `","timeStampAnalyse": "` + `null`  + `","timeStampResult": "` + `null`+ `","name": "` + name + `","CPR": "` + CPR + `","doctor": "` + doctor + `","hospital": "` + hospital + `","status": "` + status + `","result": "` + result + `","bloodTestID": "` + bloodTestID + `"}`) //build the Json element
-	fmt.Println("done formatting")
+
 	err = stub.PutState(bloodTestID, str)
 	if err != nil {
 		return nil, err
