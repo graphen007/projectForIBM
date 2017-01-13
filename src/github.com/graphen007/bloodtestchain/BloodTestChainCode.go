@@ -431,7 +431,12 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 
 	// Change the user
 	res.Status = args[1]
-	
+	if args[1] == "Analysing" {
+		t:= time.Now()
+		t.Format("20060102150405")
+		res.TimeStampAnalyse = t.String()
+
+	}
 	fmt.Println(res)
 	jsonAsBytes, _ := json.Marshal(res)
 	err = stub.PutState(args[0], jsonAsBytes)
@@ -479,6 +484,7 @@ func (t *SimpleChaincode) change_doctor(stub shim.ChaincodeStubInterface, args [
 		if res.BloodTestID == args[0] {
 			res.Doctor = args[1]
 			t := time.Now()
+			t.Format("20060102150405")
 			res.TimeStampDoctor = t.String()
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)
@@ -523,6 +529,7 @@ func (t *SimpleChaincode) change_hospital(stub shim.ChaincodeStubInterface, args
 			fmt.Println("found it")
 			res.Hospital = hospital
 			t := time.Now()
+			t.Format("20060102150405")
 			res.TimeStampHospital = t.String()
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)
@@ -564,6 +571,7 @@ func (t *SimpleChaincode) change_result(stub shim.ChaincodeStubInterface, args [
 		if res.BloodTestID == args[0] {
 			res.Result = args[1]
 			t := time.Now()
+			t.Format("20060102150405")
 			res.TimeStampResult = t.String()
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)
