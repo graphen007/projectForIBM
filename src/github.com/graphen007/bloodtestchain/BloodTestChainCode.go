@@ -64,6 +64,7 @@ type bloodTest struct {
 	CPR         string `json:"CPR"`
 	Doctor      string `json:"doctor"`
 	Hospital    string `json:"hospital"`
+	Lab	    string `json:"lab"`
 	Status      string `json:"status"`
 	Result      string `json:"result"`
 	BloodTestID string `json:"bloodTestID"`
@@ -139,6 +140,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return t.change_result(stub, args)
 	} else if function == "create_user" {
 		return t.create_user(stub, args)
+	}else if function == "change_lab" {
+		return t.change_lab(stub, args)
 	}
 	fmt.Println("invoke did not find func: " + function)
 
@@ -405,10 +408,10 @@ func (t *SimpleChaincode) read_list(stub shim.ChaincodeStubInterface, args []str
 	return finalList, nil
 }
 
-// ============================================================================================================================
-// Change Status
-// ============================================================================================================================
-func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	// ============================================================================================================================
+	// Change Status
+	// ============================================================================================================================
+	func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 	/*
 	   Our model looks like
@@ -423,7 +426,7 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 	fmt.Println(args[0] + " - " + args[1])
 	marbleAsBytes, err := stub.GetState(args[0])
 	if err != nil {
-		return nil, errors.New("Failed to get thing")
+	return nil, errors.New("Failed to get thing")
 	}
 	res := bloodTest{}
 	json.Unmarshal(marbleAsBytes, &res)
@@ -432,9 +435,9 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 	// Change the user
 	res.Status = args[1]
 	if args[1] == "Analysing" {
-		t:= time.Now()
-		t.Format("20060102150405")
-		res.TimeStampAnalyse = t.String()
+	t:= time.Now()
+	t.Format("20060102150405")
+	res.TimeStampAnalyse = t.String()
 
 	}
 	fmt.Println(res)
@@ -486,6 +489,56 @@ func (t *SimpleChaincode) change_doctor(stub shim.ChaincodeStubInterface, args [
 			t := time.Now()
 			t.Format("20060102150405")
 			res.TimeStampDoctor = t.String()
+			jsonAsBytes, _ := json.Marshal(res)
+			err = stub.PutState(args[0], jsonAsBytes)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	return nil, nil
+}
+
+
+
+// ============================================================================================================================
+// Change Lab
+// ============================================================================================================================
+func (t *SimpleChaincode) change_lab(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	/*
+	   Our model looks like
+	   -------------------------------------------------------
+	      0              1
+	   "bloodTestID", "Lab"
+	   -------------------------------------------------------
+	*/
+
+	fmt.Println("changing lab")
+	bloodTestList, err := stub.GetState(bloodTestIndex)
+	if err != nil {
+		return nil, errors.New("Failed to get intList")
+	}
+	fmt.Println("creating list")
+	var bloodInd []string
+
+	fmt.Println("Unmarshaling lab")
+	err = json.Unmarshal(bloodTestList, &bloodInd)
+	if err != nil {
+		fmt.Println("you dun goofed")
+	}
+	fmt.Println("assigning to res")
+	res := bloodTest{}
+	var bloodAsBytes []byte
+	fmt.Println("running through list")
+	for i := range bloodInd {
+		bloodAsBytes, err = stub.GetState(bloodInd[i])
+		json.Unmarshal(bloodAsBytes, &res)
+		if res.BloodTestID == args[0] {
+			res.Lab = args[1]
+			t := time.Now()
+			t.Format("20060102150405")
+			res.TimeStampLab = t.String()
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)
 			if err != nil {
@@ -623,7 +676,7 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 
 	json.Unmarshal(bloodAsBytes, &res)
 
-	str := []byte(`{"timeStampDoctor": "` + timeStamp  + `","timeStampHospital": "` +`null` + `","timeStampLab": "` + `null`  + `","timeStampAnalyse": "` + `null`  + `","timeStampResult": "` + `null`+ `","name": "` + name + `","CPR": "` + CPR + `","doctor": "` + doctor + `","hospital": "` + hospital + `","status": "` + status + `","result": "` + result + `","bloodTestID": "` + bloodTestID + `"}`) //build the Json element
+	str := []byte(`{"timeStampDoctor": "` + timeStamp  + `","timeStampHospital": "` +`null` + `","timeStampLab": "` + `null`  + `","timeStampAnalyse": "` + `null`  + `","timeStampResult": "` + `null`+ `","name": "` + name + `","CPR": "` + CPR + `","doctor": "` + doctor + `","hospital": "` + hospital + `","lab": "` + `unassigned` + `","status": "` + status + `","result": "` + result + `","bloodTestID": "` + bloodTestID + `"}`) //build the Json element
 
 	err = stub.PutState(bloodTestID, str)
 	if err != nil {
