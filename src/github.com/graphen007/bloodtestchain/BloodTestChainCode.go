@@ -364,7 +364,7 @@ func (t *SimpleChaincode) lab_read(stub shim.ChaincodeStubInterface, args []stri
 
 		bloodAsBytes, err = stub.GetState(bloodInd[i])
 		json.Unmarshal(bloodAsBytes, &res)
-		if res.Result == args[0] {
+		if res.Lab == args[0] {
 
 			finalList = append(finalList, bloodAsBytes...)
 			if i < (len(bloodInd) - 1) {
