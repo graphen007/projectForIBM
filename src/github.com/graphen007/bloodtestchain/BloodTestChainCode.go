@@ -232,8 +232,6 @@ func (t *SimpleChaincode) client_read(stub shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("Failed to get bloodList")
 	}
 
-	fmt.Println("Fail:", bloodTestList)
-
 	var bloodInd []string
 
 	err = json.Unmarshal(bloodTestList, &bloodInd)
@@ -1132,7 +1130,7 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 	for i := 0; i < 100; i++  {
 
 		lastFourSSN := strconv.Itoa(i+1)
-		clientEcert := "MIIBojCCAUegAwIBAgIBATAKBggqhkjOPQQDAzApMQswCQYDVQQGEwJVUzEMMAoGA1UEChMDSUJNMQwwCgYDVQQDEwNlY2EwHhcNMTcwMTA0MDk0NTM0WhcNMTcwNDA0MDk0NTM0WjA5MQswCQYDVQQGEwJVUzEMMAoGA1UEChMDSUJNMRwwGgYDVQQDDBN1c2VyX3R5cGUxXzRcZ3JvdXAxMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEd15f2TJmCH2JNiTi1ynfIt7BSUSO2CYnJj0UXWR+VQCpateEYL2paJ4TOXBDU7/lJ5U31Qs1RNQ4THShxfM4EqNQME4wDgYDVR0PAQH/BAQDAgeAMAwGA1UdEwEB/wQCMAAwDQYDVR0OBAYEBAECAwQwDwYDVR0jBAgwBoAEAQIDBDAOBgZRAwQFBgcBAf8EATEwCgYIKoZIzj0EAwMDSQAwRgIhAMbWttyQtIxi34ahBf31tNzYQNVj0RPRqPaudDmhzDkAAiEAvy/5+rCFQhB52gk2TYIbljMISnlrYuvFKD4TezlKsmM="
+		clientEcert := "MIIBoTCCAUegAwIBAgIBATAKBggqhkjOPQQDAzApMQswCQYDVQQGEwJVUzEMMAoGA1UEChMDSUJNMQwwCgYDVQQDEwNlY2EwHhcNMTcwMTEzMTIyMjMwWhcNMTcwNDEzMTIyMjMwWjA5MQswCQYDVQQGEwJVUzEMMAoGA1UEChMDSUJNMRwwGgYDVQQDDBN1c2VyX3R5cGUxXzRcZ3JvdXAxMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDlr4qaGjUkt+dJK6vUGNXhhZVkc1KpX5hakJ/UVXV/wI7W8h6nLduKgCUe6k+Vw4eE5GrKmDiumOO8Tp1yviD6NQME4wDgYDVR0PAQH/BAQDAgeAMAwGA1UdEwEB/wQCMAAwDQYDVR0OBAYEBAECAwQwDwYDVR0jBAgwBoAEAQIDBDAOBgZRAwQFBgcBAf8EATEwCgYIKoZIzj0EAwMDSAAwRQIhAPRwlo3AyVyGMr+/VWgxPwiOznaExiHY1u211mQAC0a7AiBPScyn4GtDVE+HHiBYSCw5rY5DTAgXpSw0G+sfQ9YVHw=="
 
 		if i+1 < 10 {
 			fmt.Println("Creating client: 010101-000" + lastFourSSN)
@@ -1197,11 +1195,8 @@ func (t *SimpleChaincode) CheckRole(stub shim.ChaincodeStubInterface, username s
 		// Compare callers ecert & that which is stored
 		fmt.Println("Checking signature")
 
-		fmt.Print("\nIn table: ", ecertSaved)
-		fmt.Print("\nIn Signature: ", ecert)
-
 		if ecertSaved != ecert {
-			fmt.Println("\nAccess denied!")
+			fmt.Println("\nAccess denied! \n x509Cert not a match!")
 			return false
 		} else {
 			fmt.Println("\nx509Cert signature matches!")
