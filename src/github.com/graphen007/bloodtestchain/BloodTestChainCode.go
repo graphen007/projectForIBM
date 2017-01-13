@@ -22,6 +22,7 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"runtime"
 	"strconv"
+	"time"
 )
 
 var logger = shim.NewLogger("BTChaincode")
@@ -54,7 +55,11 @@ var bloodTestIndex = "_bloodTestIndex"
 var accountIndex = "_accountIndex"
 
 type bloodTest struct {
-	TimeStamp   string `json:"timeStamp"`
+	TimeStampDoctor   string `json:"timeStampDoctor"`
+	TimeStampHospital   string `json:"timeStampHospital"`
+	TimeStampLab   string `json:"timeStampLab"`
+	TimeStampAnalyse   string `json:"timeStampAnalyse"`
+	TimeStampResult   string `json:"timeStampResult"`
 	Name        string `json:"name"`
 	CPR         string `json:"CPR"`
 	Doctor      string `json:"doctor"`
@@ -114,7 +119,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 // ============================================================================================================================
 // Invoke - Our entry point to invoke a chaincode function
 // ============================================================================================================================
-func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error){
 	fmt.Println("invoke is running " + function)
 
 	// Handle different functions
@@ -319,6 +324,7 @@ func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args [
 		if res.Hospital == args[0] {
 
 			finalList = append(finalList, bloodAsBytes...)
+
 			if i < (len(bloodInd) - 1) {
 				finalList = append(finalList, []byte(`,`)...)
 			}
@@ -423,6 +429,12 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 
 	// Change the user
 	res.Status = args[1]
+	if args[1] == "Analysing" {
+		t:= time.Now()
+		t.Format("20060102150405")
+		res.TimeStampAnalyse = t.String()
+
+	}
 	fmt.Println(res)
 	jsonAsBytes, _ := json.Marshal(res)
 	err = stub.PutState(args[0], jsonAsBytes)
@@ -469,6 +481,9 @@ func (t *SimpleChaincode) change_doctor(stub shim.ChaincodeStubInterface, args [
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.BloodTestID == args[0] {
 			res.Doctor = args[1]
+			t := time.Now()
+			t.Format("20060102150405")
+			res.TimeStampDoctor = t.String()
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)
 			if err != nil {
@@ -511,6 +526,9 @@ func (t *SimpleChaincode) change_hospital(stub shim.ChaincodeStubInterface, args
 		if res.BloodTestID == args[0] {
 			fmt.Println("found it")
 			res.Hospital = hospital
+			t := time.Now()
+			t.Format("20060102150405")
+			res.TimeStampHospital = t.String()
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)
 			if err != nil {
@@ -550,6 +568,9 @@ func (t *SimpleChaincode) change_result(stub shim.ChaincodeStubInterface, args [
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.BloodTestID == args[0] {
 			res.Result = args[1]
+			t := time.Now()
+			t.Format("20060102150405")
+			res.TimeStampResult = t.String()
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)
 			if err != nil {
@@ -600,7 +621,7 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 
 	json.Unmarshal(bloodAsBytes, &res)
 
-	str := []byte(`{"timeStamp": "` + timeStamp + `","name": "` + name + `","CPR": "` + CPR + `","doctor": "` + doctor + `","hospital": "` + hospital + `","status": "` + status + `","result": "` + result + `","bloodTestID": "` + bloodTestID + `"}`) //build the Json element
+	str := []byte(`{"timeStampDoctor": "` + timeStamp  + `","timeStampHospital": "` +`null` + `","timeStampLab": "` + `null`  + `","timeStampAnalyse": "` + `null`  + `","timeStampResult": "` + `null`+ `","name": "` + name + `","CPR": "` + CPR + `","doctor": "` + doctor + `","hospital": "` + hospital + `","status": "` + status + `","result": "` + result + `","bloodTestID": "` + bloodTestID + `"}`) //build the Json element
 
 	err = stub.PutState(bloodTestID, str)
 	if err != nil {
@@ -866,7 +887,7 @@ func (t *SimpleChaincode) get_enrollment_cert(stub shim.ChaincodeStubInterface, 
 	*/
 
 	if len(args) != 2 {
-		fmt.Println("At least 2 args must be provided\n")
+		fmt.Println("At least 2 args must be provided")
 		return nil, errors.New("Get Admin Ecerts failed. Must include at least 2 args value")
 	}
 
