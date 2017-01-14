@@ -21,6 +21,8 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"runtime"
+	"strconv"
+	"time"
 )
 
 var logger = shim.NewLogger("BTChaincode")
@@ -53,11 +55,16 @@ var bloodTestIndex = "_bloodTestIndex"
 var accountIndex = "_accountIndex"
 
 type bloodTest struct {
-	TimeStamp   string `json:"timeStamp"`
+	TimeStampDoctor   string `json:"timeStampDoctor"`
+	TimeStampHospital   string `json:"timeStampHospital"`
+	TimeStampLab   string `json:"timeStampLab"`
+	TimeStampAnalyse   string `json:"timeStampAnalyse"`
+	TimeStampResult   string `json:"timeStampResult"`
 	Name        string `json:"name"`
 	CPR         string `json:"CPR"`
 	Doctor      string `json:"doctor"`
 	Hospital    string `json:"hospital"`
+	Lab	    string `json:"lab"`
 	Status      string `json:"status"`
 	Result      string `json:"result"`
 	BloodTestID string `json:"bloodTestID"`
@@ -113,7 +120,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 // ============================================================================================================================
 // Invoke - Our entry point to invoke a chaincode function
 // ============================================================================================================================
-func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error){
 	fmt.Println("invoke is running " + function)
 
 	// Handle different functions
@@ -133,6 +140,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return t.change_result(stub, args)
 	} else if function == "create_user" {
 		return t.create_user(stub, args)
+	}else if function == "change_lab" {
+		return t.change_lab(stub, args)
 	}
 	fmt.Println("invoke did not find func: " + function)
 
@@ -223,12 +232,11 @@ func (t *SimpleChaincode) client_read(stub shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("Failed to get bloodList")
 	}
 
-
 	var bloodInd []string
 
 	err = json.Unmarshal(bloodTestList, &bloodInd)
 	if err != nil {
-		fmt.Println("you dun goofed")
+		fmt.Println("you dun goofed", err)
 	}
 
 	var bloodAsBytes []byte
@@ -285,7 +293,7 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 		json.Unmarshal(bloodAsBytes, &bloodTest)
 		if bloodTest.Doctor == args[0] {
 
-			(&bloodTestListStruct).BloodTestList = append(bloodTestListStruct.BloodTestList, bloodTest)
+			bloodTestListStruct.BloodTestList = append(bloodTestListStruct.BloodTestList, bloodTest)
 
 		}
 	}
@@ -295,6 +303,7 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 	fmt.Println(finalList)
 	return finalList, err
 }
+
 
 // ============================================================================================================================
 // Hospital Read
@@ -325,6 +334,7 @@ func (t *SimpleChaincode) hospital_read(stub shim.ChaincodeStubInterface, args [
 		if res.Hospital == args[0] {
 
 			finalList = append(finalList, bloodAsBytes...)
+
 			if i < (len(bloodInd) - 1) {
 				finalList = append(finalList, []byte(`,`)...)
 			}
@@ -361,7 +371,7 @@ func (t *SimpleChaincode) lab_read(stub shim.ChaincodeStubInterface, args []stri
 
 		bloodAsBytes, err = stub.GetState(bloodInd[i])
 		json.Unmarshal(bloodAsBytes, &res)
-		if res.Result == args[0] {
+		if res.Lab == args[0] {
 
 			finalList = append(finalList, bloodAsBytes...)
 			if i < (len(bloodInd) - 1) {
@@ -403,10 +413,10 @@ func (t *SimpleChaincode) read_list(stub shim.ChaincodeStubInterface, args []str
 	return finalList, nil
 }
 
-// ============================================================================================================================
-// Change Status
-// ============================================================================================================================
-func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	// ============================================================================================================================
+	// Change Status
+	// ============================================================================================================================
+	func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 	/*
 	   Our model looks like
@@ -421,7 +431,7 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 	fmt.Println(args[0] + " - " + args[1])
 	marbleAsBytes, err := stub.GetState(args[0])
 	if err != nil {
-		return nil, errors.New("Failed to get thing")
+	return nil, errors.New("Failed to get thing")
 	}
 	res := bloodTest{}
 	json.Unmarshal(marbleAsBytes, &res)
@@ -429,6 +439,12 @@ func (t *SimpleChaincode) change_status(stub shim.ChaincodeStubInterface, args [
 
 	// Change the user
 	res.Status = args[1]
+	if args[1] == "Analysing" {
+	t:= time.Now()
+	t.Format("20060102150405")
+	res.TimeStampAnalyse = t.String()
+
+	}
 	fmt.Println(res)
 	jsonAsBytes, _ := json.Marshal(res)
 	err = stub.PutState(args[0], jsonAsBytes)
@@ -475,6 +491,59 @@ func (t *SimpleChaincode) change_doctor(stub shim.ChaincodeStubInterface, args [
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.BloodTestID == args[0] {
 			res.Doctor = args[1]
+			t := time.Now()
+			t.Format("20060102150405")
+			res.TimeStampDoctor = t.String()
+			jsonAsBytes, _ := json.Marshal(res)
+			err = stub.PutState(args[0], jsonAsBytes)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	return nil, nil
+}
+
+
+
+// ============================================================================================================================
+// Change Lab
+// ============================================================================================================================
+func (t *SimpleChaincode) change_lab(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	/*
+	   Our model looks like
+	   -------------------------------------------------------
+	      0              1
+	   "bloodTestID", "Lab"
+	   -------------------------------------------------------
+	*/
+
+	fmt.Println("changing lab")
+	bloodTestList, err := stub.GetState(bloodTestIndex)
+	if err != nil {
+		return nil, errors.New("Failed to get intList")
+	}
+	fmt.Println("creating list")
+	var bloodInd []string
+
+	fmt.Println("Unmarshaling lab")
+	err = json.Unmarshal(bloodTestList, &bloodInd)
+	if err != nil {
+		fmt.Println("you dun goofed")
+	}
+	fmt.Println("assigning to res")
+	res := bloodTest{}
+	var bloodAsBytes []byte
+	fmt.Println("running through list")
+	for i := range bloodInd {
+		bloodAsBytes, err = stub.GetState(bloodInd[i])
+		json.Unmarshal(bloodAsBytes, &res)
+		if res.BloodTestID == args[0] {
+			res.Lab = args[1]
+			t := time.Now()
+			t.Format("20060102150405")
+			res.TimeStampLab = t.String()
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)
 			if err != nil {
@@ -517,6 +586,9 @@ func (t *SimpleChaincode) change_hospital(stub shim.ChaincodeStubInterface, args
 		if res.BloodTestID == args[0] {
 			fmt.Println("found it")
 			res.Hospital = hospital
+			t := time.Now()
+			t.Format("20060102150405")
+			res.TimeStampHospital = t.String()
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)
 			if err != nil {
@@ -556,6 +628,9 @@ func (t *SimpleChaincode) change_result(stub shim.ChaincodeStubInterface, args [
 		json.Unmarshal(bloodAsBytes, &res)
 		if res.BloodTestID == args[0] {
 			res.Result = args[1]
+			t := time.Now()
+			t.Format("20060102150405")
+			res.TimeStampResult = t.String()
 			jsonAsBytes, _ := json.Marshal(res)
 			err = stub.PutState(args[0], jsonAsBytes)
 			if err != nil {
@@ -606,7 +681,7 @@ func (t *SimpleChaincode) init_bloodtest(stub shim.ChaincodeStubInterface, args 
 
 	json.Unmarshal(bloodAsBytes, &res)
 
-	str := []byte(`{"timeStamp": "` + timeStamp + `","name": "` + name + `","CPR": "` + CPR + `","doctor": "` + doctor + `","hospital": "` + hospital + `","status": "` + status + `","result": "` + result + `","bloodTestID": "` + bloodTestID + `"}`) //build the Json element
+	str := []byte(`{"timeStampDoctor": "` + timeStamp  + `","timeStampHospital": "` +`null` + `","timeStampLab": "` + `null`  + `","timeStampAnalyse": "` + `null`  + `","timeStampResult": "` + `null`+ `","name": "` + name + `","CPR": "` + CPR + `","doctor": "` + doctor + `","hospital": "` + hospital + `","lab": "` + `unassigned` + `","status": "` + status + `","result": "` + result + `","bloodTestID": "` + bloodTestID + `"}`) //build the Json element
 
 	err = stub.PutState(bloodTestID, str)
 	if err != nil {
@@ -727,7 +802,7 @@ func (t *SimpleChaincode) create_user(stub shim.ChaincodeStubInterface, args []s
 		}
 
 		// Store eCert in table
-		ok, err := t.SaveECertificate(stub, []string{DOCTOR_INDEX, username, ecert})
+		ok, err := t.SaveECertificate(stub, []string{CLIENT_INDEX, username, ecert})
 
 		if err != nil {
 			return nil, errors.New("SaveECertificate Failed:")
@@ -872,7 +947,7 @@ func (t *SimpleChaincode) get_enrollment_cert(stub shim.ChaincodeStubInterface, 
 	*/
 
 	if len(args) != 2 {
-		fmt.Println("At least 2 args must be provided\n")
+		fmt.Println("At least 2 args must be provided")
 		return nil, errors.New("Get Admin Ecerts failed. Must include at least 2 args value")
 	}
 
@@ -1056,6 +1131,42 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 			fmt.Println("Table is already created! Error: [%s]", err)
 		}
 	}
+
+	// Creating clients
+	fmt.Println("Creating clients")
+	for i := 0; i < 100; i++  {
+
+		lastFourSSN := strconv.Itoa(i+1)
+		clientEcert := "MIIBoTCCAUegAwIBAgIBATAKBggqhkjOPQQDAzApMQswCQYDVQQGEwJVUzEMMAoGA1UEChMDSUJNMQwwCgYDVQQDEwNlY2EwHhcNMTcwMTEzMTIyMjMwWhcNMTcwNDEzMTIyMjMwWjA5MQswCQYDVQQGEwJVUzEMMAoGA1UEChMDSUJNMRwwGgYDVQQDDBN1c2VyX3R5cGUxXzRcZ3JvdXAxMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDlr4qaGjUkt+dJK6vUGNXhhZVkc1KpX5hakJ/UVXV/wI7W8h6nLduKgCUe6k+Vw4eE5GrKmDiumOO8Tp1yviD6NQME4wDgYDVR0PAQH/BAQDAgeAMAwGA1UdEwEB/wQCMAAwDQYDVR0OBAYEBAECAwQwDwYDVR0jBAgwBoAEAQIDBDAOBgZRAwQFBgcBAf8EATEwCgYIKoZIzj0EAwMDSAAwRQIhAPRwlo3AyVyGMr+/VWgxPwiOznaExiHY1u211mQAC0a7AiBPScyn4GtDVE+HHiBYSCw5rY5DTAgXpSw0G+sfQ9YVHw=="
+
+		if i+1 < 10 {
+			fmt.Println("Creating client: 010101-000" + lastFourSSN)
+			_, err := t.create_user(stub, []string{clientEcert, CLIENT, "010101-000" + lastFourSSN , "000" + lastFourSSN, CLIENT_TOKEN})
+
+			if err != nil{
+				fmt.Println("Error creating client: 010101-000" + lastFourSSN, err)
+			}
+		} else if i+1 < 99 {
+			fmt.Println("Creating client: 010101-00" + lastFourSSN)
+
+			_, err := t.create_user(stub, []string{clientEcert, CLIENT, "010101-00" + lastFourSSN , "00" + lastFourSSN, CLIENT_TOKEN})
+
+			if err != nil{
+				fmt.Println("Error creating client: 010101-00" + lastFourSSN, err)
+			}
+
+		} else {
+			fmt.Println("Creating client: 010101-0" + lastFourSSN)
+
+			_, err := t.create_user(stub, []string{clientEcert, CLIENT, "010101-0" + lastFourSSN , "0" + lastFourSSN, CLIENT_TOKEN})
+
+			if err != nil{
+				fmt.Println("Error creating client: 010101-0" + lastFourSSN, err)
+			}
+		}
+
+	}
+
 }
 
 // ============================================================================================================================
@@ -1091,11 +1202,8 @@ func (t *SimpleChaincode) CheckRole(stub shim.ChaincodeStubInterface, username s
 		// Compare callers ecert & that which is stored
 		fmt.Println("Checking signature")
 
-		fmt.Print("\nIn table: ", ecertSaved)
-		fmt.Print("\nIn Signature: ", ecert)
-
 		if ecertSaved != ecert {
-			fmt.Println("\nAccess denied!")
+			fmt.Println("\nAccess denied! \n x509Cert not a match!")
 			return false
 		} else {
 			fmt.Println("\nx509Cert signature matches!")
