@@ -264,6 +264,8 @@ func (t *SimpleChaincode) client_read(stub shim.ChaincodeStubInterface, args []s
 // ============================================================================================================================
 func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
+	fmt.Println("doctor_read started")
+
 	if len(args) != 1 {
 		return nil, errors.New("Gimme more arguments, 1 to be exact")
 	}
@@ -275,7 +277,7 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 
 	err = json.Unmarshal(bloodTestList, &bloodInd)
 	if err != nil {
-		fmt.Println("you dun goofed")
+		fmt.Println("bloodTestList not array of strings")
 	}
 
 
@@ -290,7 +292,13 @@ func (t *SimpleChaincode) doctor_read(stub shim.ChaincodeStubInterface, args []s
 	for i := range bloodInd {
 
 		bloodAsBytes, err = stub.GetState(bloodInd[i])
-		json.Unmarshal(bloodAsBytes, &bloodTest)
+		if err != nil {
+			fmt.Println("could not get state")
+		}
+		err = json.Unmarshal(bloodAsBytes, &bloodTest)
+		if err != nil {
+			fmt.Println("bloodtest does not match doctorReadStruct")
+		}
 		if bloodTest.Doctor == args[0] {
 
 			bloodTestListStruct.BloodTestList = append(bloodTestListStruct.BloodTestList, bloodTest)
