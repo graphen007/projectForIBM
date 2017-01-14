@@ -1136,7 +1136,7 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 		})
 
 		if err != nil {
-			fmt.Println("Table is already created! Error: " +  err)
+			fmt.Println("Table is already created!")
 		}
 	}
 
