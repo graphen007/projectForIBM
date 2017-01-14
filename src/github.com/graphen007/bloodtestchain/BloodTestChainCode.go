@@ -1069,8 +1069,8 @@ func (t *SimpleChaincode) SaveECertificate(stub shim.ChaincodeStubInterface, arg
 	fmt.Println("Inserting user: ", args[1])
 	ok, err := stub.InsertRow(args[0], shim.Row{
 		Columns: []*shim.Column{
-			&shim.Column{Value: &shim.Column_String_{String_: args[1]}},
-			&shim.Column{Value: &shim.Column_String_{String_: args[2]}}},
+			{Value: &shim.Column_String_{String_: args[1]}},
+			{Value: &shim.Column_String_{String_: args[2]}}},
 	})
 
 	if err != nil {
@@ -1131,12 +1131,12 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 		fmt.Println("Creating table: ", tableName)
 
 		err := stub.CreateTable(tableName, []*shim.ColumnDefinition{
-			&shim.ColumnDefinition{Name: COLUMN_CERTS, Type: shim.ColumnDefinition_STRING, Key: true},
-			&shim.ColumnDefinition{Name: COLUMN_VALUE, Type: shim.ColumnDefinition_STRING, Key: false},
+			{Name: COLUMN_CERTS, Type: shim.ColumnDefinition_STRING, Key: true},
+			{Name: COLUMN_VALUE, Type: shim.ColumnDefinition_STRING, Key: false},
 		})
 
 		if err != nil {
-			fmt.Println("Table is already created! Error: [%s]", err)
+			fmt.Println("Table is already created! Error: " +  err)
 		}
 	}
 
