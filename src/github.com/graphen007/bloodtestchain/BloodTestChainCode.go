@@ -1097,7 +1097,7 @@ func (t *SimpleChaincode) SaveECertificate(stub shim.ChaincodeStubInterface, arg
 	}
 
 	if len(row.GetColumns()) != 0 {
-		fmt.Println("Check OK!")
+		fmt.Println("Check OK")
 	}
 	//-------------
 

@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d80bd710-649e-4d8c-b90a-bb8a52956ddc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go" afterPath="$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go" />
     </list>
     <ignored path="goProjects.iws" />
@@ -26,8 +25,8 @@
       <file leaf-file-name="BloodTestChainCode.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="387">
-              <caret line="1099" column="28" lean-forward="false" selection-start-line="1099" selection-start-column="28" selection-end-line="1099" selection-end-column="28" />
+            <state relative-caret-position="357">
+              <caret line="1099" column="37" lean-forward="false" selection-start-line="1099" selection-start-column="37" selection-end-line="1099" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -1102,8 +1101,8 @@
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/start/chaincode_start.go" />
     <entry file="file://$PROJECT_DIR$/src/github.com/graphen007/bloodtestchain/BloodTestChainCode.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="1099" column="28" lean-forward="false" selection-start-line="1099" selection-start-column="28" selection-end-line="1099" selection-end-column="28" />
+        <state relative-caret-position="357">
+          <caret line="1099" column="37" lean-forward="false" selection-start-line="1099" selection-start-column="37" selection-end-line="1099" selection-end-column="37" />
           <folding />
         </state>
       </provider>
