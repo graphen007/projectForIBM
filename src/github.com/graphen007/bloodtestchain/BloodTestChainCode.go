@@ -1097,7 +1097,7 @@ func (t *SimpleChaincode) SaveECertificate(stub shim.ChaincodeStubInterface, arg
 	}
 
 	if len(row.GetColumns()) != 0 {
-		logger.Debug("Retrived ecert from table: [%x]", row.Columns[1].GetString_())
+		logger.Debug("Check OK!")
 	}
 	//-------------
 
@@ -1145,7 +1145,7 @@ func (t *SimpleChaincode) CreateTables(stub shim.ChaincodeStubInterface) {
 	for i := 0; i < 100; i++  {
 
 		lastFourSSN := strconv.Itoa(i+1)
-		clientEcert := "MIIBoTCCAUegAwIBAgIBATAKBggqhkjOPQQDAzApMQswCQYDVQQGEwJVUzEMMAoGA1UEChMDSUJNMQwwCgYDVQQDEwNlY2EwHhcNMTcwMTEzMTIyMjMwWhcNMTcwNDEzMTIyMjMwWjA5MQswCQYDVQQGEwJVUzEMMAoGA1UEChMDSUJNMRwwGgYDVQQDDBN1c2VyX3R5cGUxXzRcZ3JvdXAxMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDlr4qaGjUkt+dJK6vUGNXhhZVkc1KpX5hakJ/UVXV/wI7W8h6nLduKgCUe6k+Vw4eE5GrKmDiumOO8Tp1yviD6NQME4wDgYDVR0PAQH/BAQDAgeAMAwGA1UdEwEB/wQCMAAwDQYDVR0OBAYEBAECAwQwDwYDVR0jBAgwBoAEAQIDBDAOBgZRAwQFBgcBAf8EATEwCgYIKoZIzj0EAwMDSAAwRQIhAPRwlo3AyVyGMr+/VWgxPwiOznaExiHY1u211mQAC0a7AiBPScyn4GtDVE+HHiBYSCw5rY5DTAgXpSw0G+sfQ9YVHw=="
+		clientEcert := "MIIBoDCCAUegAwIBAgIBATAKBggqhkjOPQQDAzApMQswCQYDVQQGEwJVUzEMMAoGA1UEChMDSUJNMQwwCgYDVQQDEwNlY2EwHhcNMTcwMTE2MTEzMjExWhcNMTcwNDE2MTEzMjExWjA5MQswCQYDVQQGEwJVUzEMMAoGA1UEChMDSUJNMRwwGgYDVQQDDBN1c2VyX3R5cGUxXzRcZ3JvdXAxMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEu2kaoRfbRs/frZ9rqN1wiePStRnIW1a5imtdkMXvv+eDxRHpFdDVR7D+KywGSzaGqvKQykhlO9I4sOq1ouGO36NQME4wDgYDVR0PAQH/BAQDAgeAMAwGA1UdEwEB/wQCMAAwDQYDVR0OBAYEBAECAwQwDwYDVR0jBAgwBoAEAQIDBDAOBgZRAwQFBgcBAf8EATEwCgYIKoZIzj0EAwMDRwAwRAIgP+J6JO5RL5cnYGgsgKjWbX5ew3Hrgj+L2qou8Q7amlUCIGDBFDyRghNriN1YG9TELvX8c97rBupLKsJOgmdaAloi"
 
 		if i+1 < 10 {
 			fmt.Println("Creating client: 010101-000" + lastFourSSN)
